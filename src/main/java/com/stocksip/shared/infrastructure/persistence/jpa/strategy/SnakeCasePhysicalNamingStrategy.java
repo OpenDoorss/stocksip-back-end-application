@@ -1,5 +1,5 @@
 
-package com.stocksip.shared.infrastructure.jpa.strategy;
+package com.stocksip.shared.infrastructure.persistence.jpa.strategy;
 
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
