@@ -2,25 +2,22 @@ package com.stocksip.inventorymanagement.domain.model.aggregates;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Product Aggregate Root
+ * Warehouse Aggregate
  *
  * @summary
- * The Product class is an aggregate root that represents a product in a warehouse.
- * It is responsible for handling the CreateProductCommand command.
+ * The Warehouse class is an aggregate that represents an inventory in a liquor shop.
+ * It is responsible for handling the CreateWarehouseCommand command.
  *
  * @since 1.0
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Product extends AbstractAggregateRoot<Product> {
+public class Warehouse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     private Long id;
-
-
 }
