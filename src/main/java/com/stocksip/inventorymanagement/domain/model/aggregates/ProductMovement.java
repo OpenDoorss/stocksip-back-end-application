@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,4 +21,11 @@ public class ProductMovement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     private Long id;
+
+    @Column(nullable = false)
+    private Long productId;
+
+    private int productAmount;
+
+    private String movementReason;
 }
