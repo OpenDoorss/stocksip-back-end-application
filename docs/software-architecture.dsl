@@ -336,7 +336,6 @@ workspace "Open-Source-StockSip" "Description" {
         Reporting -> DBSQL "Reads from and writes to"
         Notification -> DBSQL "Reads from and writes to"
         Profile -> DBSQL "Read from and writes to"
-        Shared -> DBSQL "Reads from and writes to"
 
         // Relations with external systems
         Authentication -> gmail "Sends e'mail via"
@@ -377,7 +376,7 @@ workspace "Open-Source-StockSip" "Description" {
         }
         component apiApplication {
             include *
-            autolayout
+            //autolayout
         }
         
     styles {
