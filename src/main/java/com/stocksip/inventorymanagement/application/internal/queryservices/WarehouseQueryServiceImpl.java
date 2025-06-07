@@ -5,7 +5,7 @@ import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.Warehouse
 import org.springframework.stereotype.Service;
 
 /**
- * @name WarehouseQueryServiceImpl
+ * This class implements the WarehouseQueryService interface to provide methods for querying warehouse data.
  *
  * @summary
  * Implementation of the WarehouseQueryService interface for handling queries related to warehouses.
@@ -18,7 +18,7 @@ public class WarehouseQueryServiceImpl implements WarehouseQueryService {
     /**
      * Repository for accessing warehouse data.
      */
-    private WarehouseRepository warehouseRepository;
+    private final WarehouseRepository warehouseRepository;
 
     /**
      * Dependency injection constructor for WarehouseQueryServiceImpl.
