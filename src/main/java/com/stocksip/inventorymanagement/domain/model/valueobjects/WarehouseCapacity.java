@@ -1,5 +1,7 @@
 package com.stocksip.inventorymanagement.domain.model.valueobjects;
 
+import jakarta.persistence.Embeddable;
+
 /**
  * This is a value object that represents the total capacity of a warehouse.
  * @summary
@@ -8,6 +10,7 @@ package com.stocksip.inventorymanagement.domain.model.valueobjects;
  * @param capacity The total capacity of the warehouse in cubic meters.
  * @since 1.0.0
  */
+@Embeddable
 public record WarehouseCapacity(Double capacity) {
 
     /**
