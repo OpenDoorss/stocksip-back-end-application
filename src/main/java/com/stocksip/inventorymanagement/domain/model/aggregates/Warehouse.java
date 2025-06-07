@@ -1,6 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
-import com.stocksip.inventorymanagement.domain.model.services.CreateWarehouseCommand;
+import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseCapacity;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseTemperature;
