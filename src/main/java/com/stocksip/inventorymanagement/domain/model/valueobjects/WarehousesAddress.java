@@ -1,6 +1,5 @@
 package com.stocksip.inventorymanagement.domain.model.valueobjects;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 /**

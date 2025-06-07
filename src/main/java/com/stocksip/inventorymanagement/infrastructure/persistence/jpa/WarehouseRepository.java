@@ -4,8 +4,6 @@ import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 /**
  * JPA repository for Warehouse entity.
  *
@@ -19,12 +17,12 @@ import java.util.Optional;
 public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
 
     /**
-     * Finds a Warehouse by its address details.
+     * Checks if a warehouse exists by its address details.
      *
      * @param street the street of the warehouse address
      * @param city the city of the warehouse address
      * @param postalCode the postal code of the warehouse address
-     * @return an Optional containing the Warehouse if found, or empty if not found
+     * @return true if a warehouse with the specified address exists, false otherwise
      */
     boolean existsByAddressStreetAndAddressCityAndAddressPostalCode(String street, String city, String postalCode);
 }

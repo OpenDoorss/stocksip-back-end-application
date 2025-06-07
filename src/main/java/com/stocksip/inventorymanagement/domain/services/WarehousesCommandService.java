@@ -6,7 +6,7 @@ import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCom
 import java.util.Optional;
 
 /**
- * @name WarehousesCommandService
+ * WarehousesCommandService is an interface that defines methods for handling commands related to warehouses.
  *
  * @summary
  * Service interface for handling commands related to warehouses.

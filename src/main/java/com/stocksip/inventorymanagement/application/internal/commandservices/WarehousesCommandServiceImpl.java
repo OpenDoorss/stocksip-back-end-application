@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 /**
- * @name WarehousesCommandServiceImpl
+ * WarehousesCommandServiceImpl is an implementation of the WarehousesCommandService interface.
  *
  * @summary
  * Implementation of the WarehousesCommandService interface for handling commands related to warehouses.
