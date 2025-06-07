@@ -20,17 +20,20 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @since 1.0.0
  */
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-public class Warehouse extends AuditableAbstractAggregateRoot<Warehouse> {
+public class Warehouse {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long warehouseId;
 
     /**
      * Unique identifier of the profile that owns this warehouse
      */
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "profileId", column = @Column(name = "profile_id", nullable = false))
+    })
     private ProfileId profileId;
 
     /**
@@ -51,7 +54,6 @@ public class Warehouse extends AuditableAbstractAggregateRoot<Warehouse> {
             @AttributeOverride(name = "postalCode", column = @Column(name = "postal_code", nullable = false)),
             @AttributeOverride(name = "country", column = @Column(name = "country", nullable = false))
     })
-    @Column(nullable = false)
     private WarehousesAddress address;
 
     @Embedded
@@ -59,7 +61,6 @@ public class Warehouse extends AuditableAbstractAggregateRoot<Warehouse> {
             @AttributeOverride(name = "minTemperature", column = @Column(name = "min_temperature", nullable = false)),
             @AttributeOverride(name = "maxTemperature", column = @Column(name = "max_temperature", nullable = false))
     })
-    @Column(nullable = false)
     private WarehouseTemperature temperature;
 
     /**
@@ -69,7 +70,6 @@ public class Warehouse extends AuditableAbstractAggregateRoot<Warehouse> {
     @AttributeOverrides({
             @AttributeOverride(name = "capacity", column = @Column(name = "capacity", nullable = false))
     })
-    @Column(nullable = false)
     private WarehouseCapacity capacity;
 
     /**
