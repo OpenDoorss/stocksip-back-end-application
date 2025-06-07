@@ -16,7 +16,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @since 1.0.0
  */
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 public class Warehouse extends AuditableAbstractAggregateRoot<Warehouse> {
 
     /**

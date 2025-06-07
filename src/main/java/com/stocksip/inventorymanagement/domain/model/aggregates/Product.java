@@ -20,7 +20,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @since 1.0.1
  */
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 public class Product extends AuditableAbstractAggregateRoot<Product> {
 
     /**
