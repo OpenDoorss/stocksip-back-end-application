@@ -1,6 +1,10 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
+import com.stocksip.inventorymanagement.domain.model.services.CreateWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseCapacity;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseTemperature;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
 import com.stocksip.shared.domain.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,7 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  *
  * @summary
  * The Warehouse class is an aggregate that represents an inventory in a liquor shop.
- * It is responsible for handling the CreateWarehouseCommand command.
+ * It contains information about the warehouse such as its name, address, temperature range, total capacity, and an image URL.
  *
  * @since 1.0.0
  */
@@ -19,10 +23,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Warehouse extends AuditableAbstractAggregateRoot<Warehouse> {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long warehouseId;
+
     /**
      * Unique identifier of the profile that owns this warehouse
      */
-    @Getter
     @Embedded
     private ProfileId profileId;
 
@@ -30,72 +37,76 @@ public class Warehouse extends AuditableAbstractAggregateRoot<Warehouse> {
      * Name the owner gives to this warehouse
      */
     @Column(nullable = false, length = 100)
+    @Getter
     private String name;
 
     /**
      * The location where this warehouse is located.
      */
+    @Embedded
     @Column(nullable = false)
-    private String location;
+    private WarehousesAddress address;
+
+    @Embedded
+    @Column(nullable = false)
+    private WarehouseTemperature temperature;
 
     /**
      * The total capacity of this warehouse in cubic meters.
      */
+    @Embedded
     @Column(nullable = false)
-    private double totalCapacity;
+    private WarehouseCapacity capacity;
 
     /**
      * The url of the image that shows with the warehouse
      */
     private String imageUrl;
 
-    protected Warehouse() {
-        // Default constructor for JPA
-    }
+    // Default constructor for JPA
+    protected Warehouse() {}
 
     /**
-     * @summary Constructor.
-     * It creates a new Warehouse instance based on the CreateWarehouseCommand command.
+     * Constructor to create a new Warehouse instance.
+     * This constructor initializes the warehouse with the provided command details.
      *
+     * @param command the command containing the details for creating a new warehouse.
      */
-    //TODO: Update this with the CreateWarehouseCommand
-    public Warehouse(String name, String location, double totalCapacity) {
-        this.name = name;
-        this.location = location;
-        this.totalCapacity = totalCapacity;
-    }
-
-    public Warehouse(String name, String location, double totalCapacity, String imageUrl) {
-        this.name = name;
-        this.location = location;
-        this.totalCapacity = totalCapacity;
-        this.imageUrl = imageUrl;
+    public Warehouse(CreateWarehouseCommand command) {
+        this.profileId = command.profileId();
+        this.name = command.name();
+        this.address = command.address();
+        this.temperature = command.temperature();
+        this.capacity = command.capacity();
+        this.imageUrl = command.imageUrl();
     }
 
     /**
      * Update the warehouse information.
-     *
+     * This method allows updating the warehouse's name, address, temperature, total capacity, and image URL.
      * @param name the new name of the warehouse.
-     * @param location the new location of the warehouse.
+     * @param address the new location of the warehouse.
      * @param newTotalCapacity the new total capacity of the warehouse.
      * @param imageUrl the url of the image.
      *
      * @return the updated Warehouse object
      */
-    public Warehouse updateInformation(String name, String location, double newTotalCapacity, String imageUrl) {
+    public Warehouse updateInformation(String name, WarehousesAddress address, WarehouseTemperature temperature, WarehouseCapacity newTotalCapacity, String imageUrl) {
         if (name != null && !name.isBlank()) {
             this.name = name;
         }
-        if (location != null && !location.isBlank()) {
-            this.location = location;
+        if (address != null) {
+            this.address = address;
         }
-        if (!(newTotalCapacity <= 0)) {
-            this.totalCapacity = newTotalCapacity;
+        if (temperature != null) {
+            this.temperature = temperature;
+        }
+        if (newTotalCapacity != null) {
+            this.capacity = newTotalCapacity;
         }
         if (!(imageUrl == null)) {
             this.imageUrl = imageUrl;
         }
-
         return this;
     }
 }
