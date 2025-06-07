@@ -35,7 +35,7 @@ public record WarehouseTemperature(double minTemperature, double maxTemperature)
      * or if maxTemperature is not greater than minTemperature.
      */
     public WarehouseTemperature {
-        validateTemperature(maxTemperature, minTemperature);
+        validateTemperature(minTemperature, maxTemperature);
     }
 
     /**
@@ -46,7 +46,7 @@ public record WarehouseTemperature(double minTemperature, double maxTemperature)
      *
      * @throws IllegalArgumentException if the temperatures are not within the specified range or if maxTemperature is not greater than minTemperature.
      */
-    private static void validateTemperature(double maxTemperature, double minTemperature) {
+    private static void validateTemperature(double minTemperature, double maxTemperature) {
 
         if (minTemperature >= maxTemperature) {
             throw new IllegalArgumentException("The maximum temperature must be greater than the minimum temperature.");
