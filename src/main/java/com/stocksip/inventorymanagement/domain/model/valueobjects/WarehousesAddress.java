@@ -17,11 +17,11 @@ import jakarta.persistence.Embeddable;
  * @since 1.0.0
  */
 @Embeddable
-public record WarehousesAddress(@Column(nullable = false) String street,
-                                @Column(nullable = false) String city,
-                                @Column(nullable = false) String state,
-                                @Column(nullable = false) String postalCode,
-                                @Column(nullable = false) String country) {
+public record WarehousesAddress(String street,
+                                String city,
+                                String state,
+                                String postalCode,
+                                String country) {
 
     /**
      * This constructor validates the input parameters to ensure that none of them are null or empty.
