@@ -37,7 +37,7 @@ public class WarehousesCommandServiceImpl implements WarehousesCommandService {
      */
     @Override
     public Optional<Warehouse> handle(CreateWarehouseCommand command) {
-        if (warehouseRepository.existByAddressByStreetAndCityAndPostalCode(command.address().street(), command.address().city(), command.address().postalCode()).isPresent())
+        if (warehouseRepository.existsByAddressStreetAndAddressCityAndAddressPostalCode(command.address().street(), command.address().city(), command.address().postalCode()))
             throw new IllegalArgumentException("Warehouse with the same address already exists.");
         var warehouse = new Warehouse(command);
         var createdWarehouse = warehouseRepository.save(warehouse);

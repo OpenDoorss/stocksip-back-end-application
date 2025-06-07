@@ -26,5 +26,5 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
      * @param postalCode the postal code of the warehouse address
      * @return an Optional containing the Warehouse if found, or empty if not found
      */
-    Optional<Warehouse> existByAddressByStreetAndCityAndPostalCode(String street, String city, String postalCode);
+    boolean existsByAddressStreetAndAddressCityAndAddressPostalCode(String street, String city, String postalCode);
 }
