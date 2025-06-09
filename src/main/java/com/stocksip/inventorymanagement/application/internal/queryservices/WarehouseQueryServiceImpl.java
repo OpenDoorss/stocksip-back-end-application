@@ -1,8 +1,12 @@
 package com.stocksip.inventorymanagement.application.internal.queryservices;
 
+import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
+import com.stocksip.inventorymanagement.domain.model.queries.GetWarehouseByIdQuery;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.WarehouseRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * This class implements the WarehouseQueryService interface to provide methods for querying warehouse data.
@@ -26,5 +30,10 @@ public class WarehouseQueryServiceImpl implements WarehouseQueryService {
      */
     public WarehouseQueryServiceImpl(WarehouseRepository warehouseRepository) {
         this.warehouseRepository = warehouseRepository;
+    }
+
+    @Override
+    public Optional<Warehouse> handle(GetWarehouseByIdQuery query) {
+        return warehouseRepository.findById(query.warehouseId());
     }
 }
