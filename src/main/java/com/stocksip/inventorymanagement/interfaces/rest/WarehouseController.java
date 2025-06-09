@@ -4,8 +4,10 @@ import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateWarehouseResource;
+import com.stocksip.inventorymanagement.interfaces.rest.resources.UpdateWarehouseResource;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.WarehouseResource;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.CreateWarehouseCommandFromResourceAssembler;
+import com.stocksip.inventorymanagement.interfaces.rest.transform.UpdateWarehouseCommandFromResourceAssembler;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.WarehouseResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -71,4 +73,32 @@ public class WarehouseController {
                 new ResponseEntity<>(WarehouseResourceFromEntityAssembler.toResourceFromEntity(source), CREATED))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
+
+    /**
+     * Get a warehouse by its ID.
+     * @param warehouseId ID of the warehouse to retrieve
+     * @param updateWarehouseResource The {@link UpdateWarehouseResource} containing the updated details of the warehouse
+     * @return ResponseEntity containing the WarehouseResource or a not found response if the warehouse does not exist
+     * @see WarehouseResource
+     *
+     * @since 1.0.0
+     */
+    @Operation(summary = "Update an existing warehouse",
+            description = "Updates the details of an existing warehouse identified by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Warehouse updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Bad request - invalid warehouse ID or resource")
+    })
+    @PutMapping("/{warehouseId}")
+    public ResponseEntity<WarehouseResource> updateWarehouse(@PathVariable Long warehouseId, @RequestBody UpdateWarehouseResource updateWarehouseResource) {
+        var updateWarehouseCommand = UpdateWarehouseCommandFromResourceAssembler.toCommandFromResource(warehouseId, updateWarehouseResource);
+        var updatedWarehouse = warehouseCommandService.handle(updateWarehouseCommand);
+        if (updatedWarehouse.isEmpty()) return ResponseEntity.badRequest().build();
+        var updatedWarehouseEntity = updatedWarehouse.get();
+        var updatedWarehouseResource = WarehouseResourceFromEntityAssembler.toResourceFromEntity(updatedWarehouseEntity);
+        return ResponseEntity.ok(updatedWarehouseResource);
+    }
+
+
+
 }
