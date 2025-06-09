@@ -101,27 +101,17 @@ public class Warehouse {
      * This method allows updating the warehouse's name, address, temperature, total capacity, and image URL.
      * @param name the new name of the warehouse.
      * @param address the new location of the warehouse.
-     * @param newTotalCapacity the new total capacity of the warehouse.
+     * @param capacity the new total capacity of the warehouse.
      * @param imageUrl the url of the image.
      *
      * @return the updated Warehouse object
      */
-    public Warehouse updateInformation(String name, WarehousesAddress address, WarehouseTemperature temperature, WarehouseCapacity newTotalCapacity, String imageUrl) {
-        if (name != null && !name.isBlank()) {
-            this.name = name;
-        }
-        if (address != null) {
-            this.address = address;
-        }
-        if (temperature != null) {
-            this.temperature = temperature;
-        }
-        if (newTotalCapacity != null) {
-            this.capacity = newTotalCapacity;
-        }
-        if (!(imageUrl == null)) {
-            this.imageUrl = imageUrl;
-        }
+    public Warehouse updateInformation(String name, WarehousesAddress address, WarehouseTemperature temperature, WarehouseCapacity capacity, String imageUrl) {
+        this.name = name;
+        this.address = address;
+        this.temperature = temperature;
+        this.capacity = capacity;
+        this.imageUrl = imageUrl;
         return this;
     }
 }
