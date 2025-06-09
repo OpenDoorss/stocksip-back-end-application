@@ -2,6 +2,7 @@ package com.stocksip.inventorymanagement.application.internal.commandservices;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
+import com.stocksip.inventorymanagement.domain.model.commands.UpdateWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.WarehouseRepository;
 import org.springframework.stereotype.Service;
@@ -42,5 +43,42 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
         var warehouse = new Warehouse(command);
         var createdWarehouse = warehouseRepository.save(warehouse);
         return Optional.of(createdWarehouse);
+    }
+
+    /**
+     * Handles the command to update an existing warehouse.
+     *
+     * @param command the command containing the updated details of the warehouse
+     * @return an Optional containing the updated Warehouse if successful, or empty if not
+     * @throws IllegalArgumentException if the warehouse with the given ID does not exist, or if a warehouse with the same name or address already exists
+     */
+    @Override
+    public Optional<Warehouse> handle(UpdateWarehouseCommand command) {
+        var warehouseToUpdate = warehouseRepository.findById(command.warehouseId())
+                .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.warehouseId())));
+
+        if (!warehouseToUpdate.getName().equals(command.name()) &&
+                warehouseRepository.existsByNameAndWarehouseIdIsNot(command.name(), command.warehouseId())) {
+            throw new IllegalArgumentException("Warehouse with name %s already exists".formatted(command.name()));
+        }
+
+        boolean isAddressChanged = !warehouseToUpdate.getAddress().equals(command.address());
+        if (isAddressChanged &&
+                warehouseRepository.existsByAddressStreetIgnoreCaseAndAddressCityIgnoreCaseAndAddressPostalCodeIgnoreCaseAndWarehouseIdIsNot(
+                        command.address().street(),
+                        command.address().city(),
+                        command.address().postalCode(),
+                        command.warehouseId())) {
+            throw new IllegalArgumentException("Another warehouse with the same address already exists.");
+        }
+
+        warehouseToUpdate.updateInformation(command.name(), command.address(), command.temperature(), command.capacity(), command.imageUrl());
+
+        try {
+            var updatedWarehouse = warehouseRepository.save(warehouseToUpdate);
+            return Optional.of(updatedWarehouse);
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating warehouse: " + e.getMessage(), e);
+        }
     }
 }
