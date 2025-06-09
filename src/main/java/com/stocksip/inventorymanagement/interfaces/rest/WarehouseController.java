@@ -1,6 +1,7 @@
 package com.stocksip.inventorymanagement.interfaces.rest;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
+import com.stocksip.inventorymanagement.domain.model.queries.GetWarehouseByIdQuery;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateWarehouseResource;
@@ -87,7 +88,7 @@ public class WarehouseController {
             description = "Updates the details of an existing warehouse identified by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Warehouse updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Bad request - invalid warehouse ID or resource")
+            @ApiResponse(responseCode = "404", description = "Course not found - invalid warehouse ID or resource")
     })
     @PutMapping("/{warehouseId}")
     public ResponseEntity<WarehouseResource> updateWarehouse(@PathVariable Long warehouseId, @RequestBody UpdateWarehouseResource updateWarehouseResource) {
@@ -99,6 +100,28 @@ public class WarehouseController {
         return ResponseEntity.ok(updatedWarehouseResource);
     }
 
-
+    /**
+     * Get a warehouse by its ID.
+     * @param warehouseId ID of the warehouse to retrieve
+     * @return ResponseEntity containing the WarehouseResource or a bad request if the warehouse does not exist
+     * @see WarehouseResource
+     *
+     * @since 1.0.0
+     */
+    @Operation(summary = "Get a warehouse by ID",
+            description = "Retrieves the details of a warehouse identified by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Warehouse found successfully"),
+            @ApiResponse(responseCode = "400", description = "Course not found - invalid warehouse ID")
+    })
+    @GetMapping("/{warehouseId}")
+    public ResponseEntity<WarehouseResource> getWarehouseById(@PathVariable Long warehouseId) {
+        var getWarehouseById = new GetWarehouseByIdQuery(warehouseId);
+        var warehouse = warehouseQueryService.handle(getWarehouseById);
+        if (warehouse.isEmpty()) return ResponseEntity.badRequest().build();
+        var warehouseEntity = warehouse.get();
+        var warehouseResource = WarehouseResourceFromEntityAssembler.toResourceFromEntity(warehouseEntity);
+        return ResponseEntity.ok(warehouseResource);
+    }
 
 }
