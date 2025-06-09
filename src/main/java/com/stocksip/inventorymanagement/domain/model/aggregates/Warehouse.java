@@ -20,11 +20,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @since 1.0.0
  */
 @Entity
+@Getter
 public class Warehouse {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
     private Long warehouseId;
 
     /**
@@ -75,6 +75,7 @@ public class Warehouse {
     /**
      * The url of the image that shows with the warehouse
      */
+    @Column(nullable = false)
     private String imageUrl;
 
     // Default constructor for JPA

@@ -26,11 +26,11 @@ public record CreateWarehouseCommand(ProfileId profileId,
      * Validates the input parameters to ensure that the profile ID and warehouse name are not null or blank.
      */
     public CreateWarehouseCommand {
-        if (profileId == null) {
-            throw new IllegalArgumentException("Profile ID cannot be null");
-        }
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Warehouse name cannot be null or blank");
+        }
+        if (imageUrl == null || imageUrl.isBlank()) {
+            throw new IllegalArgumentException("Image URL cannot be null or blank");
         }
     }
 }
