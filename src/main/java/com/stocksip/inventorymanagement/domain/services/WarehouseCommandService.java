@@ -13,7 +13,7 @@ import java.util.Optional;
  *
  * @since 1.0.0
  */
-public interface WarehousesCommandService {
+public interface WarehouseCommandService {
 
     /**
      * Handles the creation of a new warehouse.

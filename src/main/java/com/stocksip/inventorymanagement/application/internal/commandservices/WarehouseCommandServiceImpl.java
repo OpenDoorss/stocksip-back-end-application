@@ -2,7 +2,7 @@ package com.stocksip.inventorymanagement.application.internal.commandservices;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
-import com.stocksip.inventorymanagement.domain.services.WarehousesCommandService;
+import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.WarehouseRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +17,14 @@ import java.util.Optional;
  * @since 1.0.0
  */
 @Service
-public class WarehousesCommandServiceImpl implements WarehousesCommandService {
+public class WarehouseCommandServiceImpl implements WarehouseCommandService {
 
     /**
      * Repository for accessing warehouse data.
      */
     private final WarehouseRepository warehouseRepository;
 
-    public WarehousesCommandServiceImpl(WarehouseRepository warehouseRepository) {
+    public WarehouseCommandServiceImpl(WarehouseRepository warehouseRepository) {
         this.warehouseRepository = warehouseRepository;
     }
 
