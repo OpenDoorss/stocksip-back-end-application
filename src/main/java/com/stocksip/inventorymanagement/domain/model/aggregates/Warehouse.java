@@ -30,11 +30,13 @@ public class Warehouse {
     /**
      * Unique identifier of the profile that owns this warehouse
      */
+    /*
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "profileId", column = @Column(name = "profile_id", nullable = false))
+            @AttributeOverride(name = "profileId", column = @Column(name = "profile_id"))
     })
     private ProfileId profileId;
+     */
 
     /**
      * Name the owner gives to this warehouse
@@ -88,7 +90,6 @@ public class Warehouse {
      * @param command the command containing the details for creating a new warehouse.
      */
     public Warehouse(CreateWarehouseCommand command) {
-        this.profileId = command.profileId();
         this.name = command.name();
         this.address = command.address();
         this.temperature = command.temperature();
@@ -113,5 +114,14 @@ public class Warehouse {
         this.capacity = capacity;
         this.imageUrl = imageUrl;
         return this;
+    }
+
+    public String getFullAddress() {
+        return String.format("%s, %s, %s, %s, %s",
+                address.street(),
+                address.city(),
+                address.district(),
+                address.postalCode(),
+                address.country());
     }
 }

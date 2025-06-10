@@ -14,8 +14,7 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddr
  *
  * @since 1.0.0
  */
-public record CreateWarehouseCommand(ProfileId profileId,
-                                     String name,
+public record CreateWarehouseCommand(String name,
                                      WarehousesAddress address,
                                      WarehouseTemperature temperature,
                                      WarehouseCapacity capacity,

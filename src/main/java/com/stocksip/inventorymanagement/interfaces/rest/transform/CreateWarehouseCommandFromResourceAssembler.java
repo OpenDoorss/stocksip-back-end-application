@@ -19,8 +19,7 @@ public class CreateWarehouseCommandFromResourceAssembler {
      */
     public static CreateWarehouseCommand toCommandFromResource(CreateWarehouseResource resource) {
 
-        return new CreateWarehouseCommand(resource.profileId(),
-                                          resource.name(),
+        return new CreateWarehouseCommand(resource.name(),
                                           resource.address(),
                                           resource.temperature(),
                                           resource.capacity(),
