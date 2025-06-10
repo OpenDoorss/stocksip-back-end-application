@@ -1,8 +1,7 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseCapacity;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseTemperature;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
 
 /**
@@ -18,8 +17,8 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddr
  */
 public record UpdateWarehouseResource(String name,
                                       WarehousesAddress address,
-                                      WarehouseTemperature temperature,
-                                      WarehouseCapacity capacity,
+                                      Temperature temperature,
+                                      Capacity capacity,
                                       String imageUrl) {
 
     /**

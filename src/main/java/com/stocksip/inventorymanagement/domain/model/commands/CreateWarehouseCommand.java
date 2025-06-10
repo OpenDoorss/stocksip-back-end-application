@@ -1,8 +1,7 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseCapacity;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseTemperature;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
 
 /**
@@ -16,8 +15,8 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddr
  */
 public record CreateWarehouseCommand(String name,
                                      WarehousesAddress address,
-                                     WarehouseTemperature temperature,
-                                     WarehouseCapacity capacity,
+                                     Temperature temperature,
+                                     Capacity capacity,
                                      String imageUrl) {
 
     /**
