@@ -1,6 +1,7 @@
 package com.stocksip.inventorymanagement.interfaces.rest;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
+import com.stocksip.inventorymanagement.domain.model.commands.DeleteWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.queries.GetWarehouseByIdQuery;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
@@ -123,6 +124,19 @@ public class WarehouseController {
         var warehouseEntity = warehouse.get();
         var warehouseResource = WarehouseResourceFromEntityAssembler.toResourceFromEntity(warehouseEntity);
         return ResponseEntity.ok(warehouseResource);
+    }
+
+    /**
+     * Delete a warehouse by its ID.
+     * @param warehouseId ID of the warehouse to delete
+     * @return ResponseEntity indicating the result of the deletion operation
+     * @since 1.0.0
+     */
+    @DeleteMapping("/{warehouseId}")
+    public ResponseEntity<?> deleteWarehouse(@PathVariable Long warehouseId) {
+        var deleteWarehouseCommand = new DeleteWarehouseCommand(warehouseId);
+        warehouseCommandService.handle(deleteWarehouseCommand);
+        return ResponseEntity.ok("Warehouse with given Id deleted successfully.");
     }
 
 }
