@@ -2,6 +2,7 @@ package com.stocksip.inventorymanagement.domain.services;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
+import com.stocksip.inventorymanagement.domain.model.commands.DeleteWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateWarehouseCommand;
 
 import java.util.Optional;
@@ -33,4 +34,11 @@ public interface WarehouseCommandService {
      * @see UpdateWarehouseCommand
      */
     Optional<Warehouse> handle(UpdateWarehouseCommand command);
+
+    /**
+     * Handles the deletion of a warehouse.
+     *
+     * @param command the command containing the details for deleting a warehouse
+     */
+    void handle(DeleteWarehouseCommand command);
 }

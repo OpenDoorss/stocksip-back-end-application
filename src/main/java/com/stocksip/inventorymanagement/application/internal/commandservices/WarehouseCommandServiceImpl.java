@@ -2,9 +2,11 @@ package com.stocksip.inventorymanagement.application.internal.commandservices;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
+import com.stocksip.inventorymanagement.domain.model.commands.DeleteWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.WarehouseRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -93,6 +95,25 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
             return Optional.of(updatedWarehouse);
         } catch (Exception e) {
             throw new RuntimeException("Error updating warehouse: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Handles the command to delete a warehouse.
+     *
+     * @param command the command containing the ID of the warehouse to be deleted
+     * @throws IllegalArgumentException if the warehouse does not exist
+     */
+    @Transactional
+    @Override
+    public void handle(DeleteWarehouseCommand command) {
+        if (!warehouseRepository.existsById(command.warehouseId()))
+            throw new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.warehouseId()));
+
+        try {
+            warehouseRepository.deleteById(command.warehouseId());
+        } catch (Exception e) {
+            throw new RuntimeException("Error finding warehouse: " + e.getMessage(), e);
         }
     }
 }
