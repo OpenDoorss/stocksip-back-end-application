@@ -1,14 +1,14 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseCapacity;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseTemperature;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
-import com.stocksip.shared.domain.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Warehouse Aggregate
@@ -26,17 +26,6 @@ public class Warehouse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long warehouseId;
-
-    /**
-     * Unique identifier of the profile that owns this warehouse
-     */
-    /*
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "profileId", column = @Column(name = "profile_id"))
-    })
-    private ProfileId profileId;
-     */
 
     /**
      * Name the owner gives to this warehouse
@@ -63,7 +52,7 @@ public class Warehouse {
             @AttributeOverride(name = "minTemperature", column = @Column(name = "min_temperature", nullable = false)),
             @AttributeOverride(name = "maxTemperature", column = @Column(name = "max_temperature", nullable = false))
     })
-    private WarehouseTemperature temperature;
+    private Temperature temperature;
 
     /**
      * The total capacity of this warehouse in cubic meters.
@@ -72,7 +61,14 @@ public class Warehouse {
     @AttributeOverrides({
             @AttributeOverride(name = "capacity", column = @Column(name = "capacity", nullable = false))
     })
-    private WarehouseCapacity capacity;
+    private Capacity capacity;
+
+    /**
+     * The zones that are part of this warehouse.
+     * Each zone can have different temperature requirements and types.
+     */
+    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Zone> zones = new ArrayList<>();
 
     /**
      * The url of the image that shows with the warehouse
@@ -107,7 +103,7 @@ public class Warehouse {
      *
      * @return the updated Warehouse object
      */
-    public Warehouse updateInformation(String name, WarehousesAddress address, WarehouseTemperature temperature, WarehouseCapacity capacity, String imageUrl) {
+    public Warehouse updateInformation(String name, WarehousesAddress address, Temperature temperature, Capacity capacity, String imageUrl) {
         this.name = name;
         this.address = address;
         this.temperature = temperature;
