@@ -11,7 +11,7 @@ import jakarta.persistence.Embeddable;
  * @since 1.0.0
  */
 @Embeddable
-public record WarehouseCapacity(Double capacity) {
+public record Capacity(Double capacity) {
 
     /**
      * This constructor validates the input parameter to ensure that it is a positive number.
@@ -19,7 +19,7 @@ public record WarehouseCapacity(Double capacity) {
      * @param capacity The total capacity of the warehouse in cubic meters.
      * @throws IllegalArgumentException if the capacity is not a positive number.
      */
-    public WarehouseCapacity {
+    public Capacity {
         validateCapacity(capacity);
     }
 
