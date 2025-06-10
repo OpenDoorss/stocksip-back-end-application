@@ -6,7 +6,7 @@ import jakarta.persistence.Embeddable;
  * This is a value object that represents the address of a warehouse.
  * @param street The street address of the warehouse.
  * @param city The city where the warehouse is located.
- * @param state The state where the warehouse is located.
+ * @param district The district where the warehouse is located.
  * @param postalCode The postal code of the warehouse's address.
  * @param country The country where the warehouse is located.
  *
@@ -18,7 +18,7 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public record WarehousesAddress(String street,
                                 String city,
-                                String state,
+                                String district,
                                 String postalCode,
                                 String country) {
 
@@ -27,7 +27,7 @@ public record WarehousesAddress(String street,
      *
      * @param street The street address of the warehouse.
      * @param city The city where the warehouse is located.
-     * @param state The state where the warehouse is located.
+     * @param district The district where the warehouse is located.
      * @param postalCode The postal code of the warehouse's address.
      * @param country The country where the warehouse is located.
      *
@@ -42,7 +42,7 @@ public record WarehousesAddress(String street,
             throw new IllegalArgumentException("City cannot be null or empty");
         }
 
-        if (state == null || state.trim().isEmpty()) {
+        if (district == null || district.trim().isEmpty()) {
             throw new IllegalArgumentException("State cannot be null or empty");
         }
 
@@ -53,13 +53,5 @@ public record WarehousesAddress(String street,
         if (country == null || country.trim().isEmpty()) {
             throw new IllegalArgumentException("Country cannot be null or empty");
         }
-    }
-
-    /**
-     * Returns the full address as a formatted string.
-     * @return A string representation of the full address in the format "street, city, state, postalCode, country".
-     */
-    public String getFullAddress() {
-        return String.format("%s, %s, %s, %s, %s", street, city, state, postalCode, country);
     }
 }
