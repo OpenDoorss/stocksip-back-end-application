@@ -10,7 +10,6 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddr
  * @summary
  * This record represents the data required to create a new warehouse in the inventory management system.
  *
- * @param profileId the ID of the profile to which the warehouse belongs
  * @param name the name of the warehouse
  * @param address the address of the warehouse
  * @param temperature the temperature setting of the warehouse
@@ -19,8 +18,7 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddr
  *
  * @since 1.0.0
  */
-public record CreateWarehouseResource(ProfileId profileId,
-                                      String name,
+public record CreateWarehouseResource(String name,
                                       WarehousesAddress address,
                                       WarehouseTemperature temperature,
                                       WarehouseCapacity capacity,

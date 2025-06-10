@@ -38,8 +38,16 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
      */
     @Override
     public Optional<Warehouse> handle(CreateWarehouseCommand command) {
-        if (warehouseRepository.existsByAddressStreetAndAddressCityAndAddressPostalCode(command.address().street(), command.address().city(), command.address().postalCode()))
+        if (warehouseRepository.existsByNameIgnoreCase(command.name()))
+            throw new IllegalArgumentException("Warehouse with the same name already exists.");
+
+        if (warehouseRepository.existsByAddressStreetAndAddressCityAndAddressPostalCodeIgnoreCase(
+                command.address().street(),
+                command.address().city(),
+                command.address().postalCode())) {
             throw new IllegalArgumentException("Warehouse with the same address already exists.");
+        }
+
         var warehouse = new Warehouse(command);
         var createdWarehouse = warehouseRepository.save(warehouse);
         return Optional.of(createdWarehouse);
@@ -50,7 +58,7 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
      *
      * @param command the command containing the updated details of the warehouse
      * @return an Optional containing the updated Warehouse if successful, or empty if not
-     * @throws IllegalArgumentException if the warehouse with the given ID does not exist, or if a warehouse with the same name or address already exists
+     * @throws IllegalArgumentException if the warehouse does not exist, or if a warehouse with the same name or address already exists
      */
     @Override
     public Optional<Warehouse> handle(UpdateWarehouseCommand command) {
@@ -68,11 +76,17 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
                         command.address().street(),
                         command.address().city(),
                         command.address().postalCode(),
-                        command.warehouseId())) {
+                        command.warehouseId())){
             throw new IllegalArgumentException("Another warehouse with the same address already exists.");
         }
 
-        warehouseToUpdate.updateInformation(command.name(), command.address(), command.temperature(), command.capacity(), command.imageUrl());
+        warehouseToUpdate.updateInformation(
+                command.name(),
+                command.address(),
+                command.temperature(),
+                command.capacity(),
+                command.imageUrl()
+        );
 
         try {
             var updatedWarehouse = warehouseRepository.save(warehouseToUpdate);
