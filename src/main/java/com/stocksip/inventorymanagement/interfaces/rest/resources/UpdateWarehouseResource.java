@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
+import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseCapacity;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseTemperature;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;

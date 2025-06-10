@@ -2,6 +2,7 @@ package com.stocksip.inventorymanagement.interfaces.rest;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.queries.GetWarehouseByIdQuery;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateWarehouseResource;
