@@ -1,6 +1,8 @@
 package com.stocksip.analyticsreporting.interfaces.rest;
 
 import com.stocksip.analyticsreporting.domain.model.aggregates.CareGuide;
+import com.stocksip.analyticsreporting.domain.model.commands.DeleteCareGuideCommand;
+import com.stocksip.analyticsreporting.domain.model.commands.UpdateCareGuideCommand;
 import com.stocksip.analyticsreporting.domain.services.CareGuideCommandService;
 import com.stocksip.analyticsreporting.domain.services.CareGuideQueryService;
 import com.stocksip.analyticsreporting.interfaces.rest.resources.CareGuideResource;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
@@ -33,12 +36,27 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CareGuideController {
     private final CareGuideCommandService careGuideCommandService;
     private final CareGuideQueryService careGuideQueryService;
-
+    
+    /**
+     * Constructor for CareGuideController.
+     * @param careGuideCommandService CareGuide command service
+     * @param careGuideQueryService CareGuide query service
+     * @since 1.0
+     * @see CareGuideCommandService
+     * @see CareGuideQueryService
+     */
     public CareGuideController(CareGuideCommandService careGuideCommandService, CareGuideQueryService careGuideQueryService) {
         this.careGuideCommandService = careGuideCommandService;
         this.careGuideQueryService = careGuideQueryService;
     }
-
+    /**
+     * Creates a care guide.
+     * @param resource CreateCareGuideResource containing the attributes of the care guide to be created
+     * @return ResponseEntity with the created care guide resource, or bad request if the resource is invalid
+     * @since 1.0
+     * @see CreateCareGuideResource
+     * @see CareGuideResource
+     */
     @Operation(
             summary = "Create a new care guide",
             description = "Creates a new care guide based on the provided details in the request body.")
@@ -54,6 +72,12 @@ public class CareGuideController {
         return careGuide.map(careGuide1 -> new ResponseEntity<>(CareGuideResourceFromEntityAssembler.toResourceFromEntity(careGuide1), CREATED))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
+    /**
+     * Retrieves a list of all care guides.
+     * @return ResponseEntity with a list of care guide resources, or no content if there are no care guides
+     * @since 1.0
+     * @see CareGuideResource
+     */
     @Operation(summary = "Get all care guides", description = "Retrieves a list of all care guides")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved all care guides"),
@@ -70,7 +94,13 @@ public class CareGuideController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(careGuideResources);
     }
-
+    /**
+     * Retrieves a specific care guide by its ID.
+     * @param id The ID of the care guide to retrieve
+     * @return ResponseEntity with the care guide resource, or not found if the care guide is not found
+     * @since 1.0
+     * @see CareGuideResource
+     */
     @Operation(summary = "Get care guide by ID", description = "Retrieves a specific care guide by its ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the care guide"),
@@ -82,7 +112,15 @@ public class CareGuideController {
                 .map(careGuide -> ResponseEntity.ok(CareGuideResourceFromEntityAssembler.toResourceFromEntity(careGuide)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+    /**
+     * Updates an existing care guide.
+     * @param id The ID of the care guide to update
+     * @param resource The CreateCareGuideResource containing the updated care guide details
+     * @return ResponseEntity with the updated care guide resource, or not found if the care guide is not found
+     * @since 1.0
+     * @see CreateCareGuideResource
+     * @see CareGuideResource
+     */
     @Operation(summary = "Update an existing care guide", description = "Updates the details of an existing care guide")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully updated the care guide"),
@@ -92,11 +130,24 @@ public class CareGuideController {
     @PutMapping("/{id}")
     public ResponseEntity<CareGuideResource> updateCareGuide(
             @PathVariable Long id,
-            @RequestBody CreateCareGuideResource resource){
-        return careGuideCommandService.updateCareGuide(id, CreateCareGuideCommandFromResourceAssembler.toCommandFromResource(resource))
-                .map(updatedCareGuide -> ResponseEntity.ok(CareGuideResourceFromEntityAssembler.toResourceFromEntity(updatedCareGuide)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+            @Valid @RequestBody CreateCareGuideResource resource){
+        var updateCommand = new UpdateCareGuideCommand(
+                id,
+                resource.guideName(),
+                resource.type(),
+                resource.description()
+        );
+
+        return careGuideCommandService.handle(updateCommand).map(updateCareGuide->ResponseEntity.ok(
+                CareGuideResourceFromEntityAssembler.toResourceFromEntity(updateCareGuide)
+        )).orElseGet(()->ResponseEntity.badRequest().build());
     }
+    /**
+     * Deletes a specific care guide by its ID.
+     * @param id The ID of the care guide to delete
+     * @return ResponseEntity with no content, or not found if the care guide is not found
+     * @since 1.0
+     */
     @Operation(summary = "Delete a care guide", description = "Deletes a specific care guide by its ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Successfully deleted the care guide"),
@@ -104,7 +155,7 @@ public class CareGuideController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCareGuide(@PathVariable Long id) {
-        boolean deleted = careGuideCommandService.deleteCareGuide(id);
-        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        careGuideCommandService.handle(new DeleteCareGuideCommand(id));
+        return ResponseEntity.noContent().build();
     }
 }

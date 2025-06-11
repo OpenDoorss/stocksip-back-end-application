@@ -6,6 +6,14 @@ import java.util.Date;
  *
  * @summary
  * CreateReportCommand is a record class that represents the command to create a report in the analytics reporting system.
+ * @param productName The name or identifier of the product (required, non-empty)
+ * @param type The type/category of the report (required, non-empty)
+ * @param price The unit price of the product (must be non-negative)
+ * @param amount The quantity of the product (must be non-negative)
+ * @param reportDate The date of the report (required)
+ * @param lostAmount The amount of product lost (must be non-negative)
+ * @throws IllegalArgumentException if any validation rules are violated
+ * @since 1.0
  */
 public record CreateReportCommand(
                                    String productName,

@@ -5,6 +5,7 @@ package com.stocksip.analyticsreporting.domain.model.queries;
  * This class represents the query to get a care guide by type and description.
  * @param type- The tyope of the care guide.
  * @param description - The description of the care guide.
+ * @since 1.0
  */
 public record GetCareGuideByTypeAndDescriptionQuery(String type, String description) {
     public GetCareGuideByTypeAndDescriptionQuery {

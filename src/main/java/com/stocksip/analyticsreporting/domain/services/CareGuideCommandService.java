@@ -2,6 +2,8 @@ package com.stocksip.analyticsreporting.domain.services;
 
 import com.stocksip.analyticsreporting.domain.model.aggregates.CareGuide;
 import com.stocksip.analyticsreporting.domain.model.commands.CreateCareGuideCommand;
+import com.stocksip.analyticsreporting.domain.model.commands.DeleteCareGuideCommand;
+import com.stocksip.analyticsreporting.domain.model.commands.UpdateCareGuideCommand;
 
 import java.util.Optional;
 
@@ -20,6 +22,23 @@ public interface CareGuideCommandService {
      * @see CreateCareGuideCommand
      */
     Optional<CareGuide> handle(CreateCareGuideCommand command);
-    Optional<CareGuide> updateCareGuide(Long id, CreateCareGuideCommand command);
-    boolean deleteCareGuide(Long id);
+    
+    /**
+     * Handles the update care guide command.
+     * @param command The update care guide command.
+     * @return The updated care guide.
+     *
+     * @throws IllegalArgumentException If id, guideName, type or description is null
+     * @see UpdateCareGuideCommand
+     */
+    Optional<CareGuide> handle(UpdateCareGuideCommand command);
+    
+    /**
+     * Handles the delete care guide command.
+     * @param command The delete care guide command.
+     *
+     * @throws IllegalArgumentException If id is null or less than or equal to 0
+     * @see DeleteCareGuideCommand
+     */
+    void handle(DeleteCareGuideCommand command);
 }

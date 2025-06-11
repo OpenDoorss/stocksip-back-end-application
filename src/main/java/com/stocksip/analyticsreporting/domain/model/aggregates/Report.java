@@ -1,6 +1,7 @@
 package com.stocksip.analyticsreporting.domain.model.aggregates;
 
 import com.stocksip.analyticsreporting.domain.model.commands.CreateReportCommand;
+import com.stocksip.analyticsreporting.domain.model.valueobjects.ProductId;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
@@ -35,9 +36,9 @@ public class Report extends AbstractAggregateRoot<Report> {
      * @type String
      */
     @Column(nullable = false)
-    @Setter
+    @Embedded
     @Getter
-    private String productName;
+    private ProductId productId;
     /**
      * The type of the report.
      * @type String
@@ -86,7 +87,8 @@ public class Report extends AbstractAggregateRoot<Report> {
      * @param command - The CreateReportCommand command
      */
     public Report(CreateReportCommand command) {
-        this.productName = command.productName();
+        Long productIdValue = Long.parseLong(command.productName());
+        this.productId = new ProductId(productIdValue);
         this.type = command.type();
         this.price = command.price();
         this.amount = command.amount();
@@ -99,6 +101,46 @@ public class Report extends AbstractAggregateRoot<Report> {
         if (this.amount < 0) {
             throw new IllegalArgumentException("The amount not can be negative");
         }
+    }
+    /**
+     * Updates the report information with the provided values.
+     * Only non-null and valid values will be updated.
+     *
+     * @param productId The new product ID (optional)
+     * @param type The new report type (optional)
+     * @param price The new unit price (must be non-negative if provided)
+     * @param amount The new quantity (must be non-negative if provided)
+     * @param reportDate The new report date (optional)
+     * @param lostAmount The new lost amount (must be non-negative if provided)
+     * @return The updated report instance
+     */
+    public Report updateInformation(String productId, String type, double price, double amount, Date reportDate, double lostAmount) {
+        if(productId!=null && !productId.isBlank()){
+            Long productIdValue = Long.parseLong(productId);
+            this.productId = new ProductId(productIdValue);
+        }
+        if(type!=null && !type.isBlank()){
+            this.type=type;
+        }
+        if(price>=0){
+            this.price=price;
+        } else {
+            throw new IllegalArgumentException("The price not can be negative");
+        }
+        if(amount>=0){
+            this.amount=amount;
+        } else {
+            throw new IllegalArgumentException("The amount not can be negative");
+        }
+        if(reportDate!=null){
+            this.reportDate=reportDate;
+        }
+        if(lostAmount>=0){
+            this.lostAmount=lostAmount;
+        } else {
+            throw new IllegalArgumentException("The lost amount not can be negative");
+        }
+        return this;
     }
 }
 

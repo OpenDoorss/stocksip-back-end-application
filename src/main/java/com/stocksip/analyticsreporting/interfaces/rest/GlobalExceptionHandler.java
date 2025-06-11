@@ -13,14 +13,19 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * @summary
  * Global exception handler for the application.
  * Provides consistent error responses for different types of exceptions.
+ * @since 1.0
  */
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
      * Handles DuplicateReportException and returns a 409 Conflict response.
+     * @param ex the DuplicateReportException to handle
+     * @param request the WebRequest object
+     * @return ResponseEntity with the error details
      */
     @ExceptionHandler(DuplicateReportException.class)
     public ResponseEntity<Object> handleDuplicateReportException(
@@ -37,6 +42,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
      * Handles IllegalArgumentException and returns a 400 Bad Request response.
+     * @param ex the IllegalArgumentException to handle
+     * @param request the WebRequest object
+     * @return ResponseEntity with the error details
      */
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Object> handleIllegalArgumentException(

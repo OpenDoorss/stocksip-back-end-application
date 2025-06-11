@@ -1,6 +1,8 @@
 package com.stocksip.analyticsreporting.interfaces.rest;
 
 import com.stocksip.analyticsreporting.domain.model.aggregates.Report;
+import com.stocksip.analyticsreporting.domain.model.commands.DeleteReportCommand;
+import com.stocksip.analyticsreporting.domain.model.commands.UpdateReportCommand;
 import com.stocksip.analyticsreporting.domain.services.ReportCommandService;
 import com.stocksip.analyticsreporting.domain.services.ReportQueryService;
 import com.stocksip.analyticsreporting.interfaces.rest.resources.CreateReportResource;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
@@ -34,11 +37,26 @@ public class ReportController {
     private final ReportCommandService reportCommandService;
     private final ReportQueryService reportQueryService;
 
+    /**
+     * Constructor for ReportController.
+     * @param reportCommandService Report command service
+     * @param reportQueryService Report query service
+     * @since 1.0
+     * @see ReportCommandService
+     * @see ReportQueryService
+     */
     public ReportController(ReportCommandService reportCommandService, ReportQueryService reportQueryService) {
         this.reportCommandService = reportCommandService;
         this.reportQueryService = reportQueryService;
     }
-
+    /**
+     * Creates a report.
+     * @param resource CreateReportResource containing the attributes of the report to be created
+     * @return ResponseEntity with the created report resource, or bad request if the resource is invalid
+     * @since 1.0
+     * @see CreateFavoriteSourceResource
+     * @see FavoriteSourceResource
+     */
     @Operation(
             summary = "Create a new report",
             description = "Creates a new report based on the provided details in the request body.")
@@ -54,6 +72,12 @@ public class ReportController {
         return report.map(reporting -> new ResponseEntity<>(ReportResourceFromEntityAssembler.toResourceFromEntity(reporting),CREATED)).
                 orElseGet(()->ResponseEntity.badRequest().build());
     }
+    /**
+     * Retrieves a list of all reports.
+     * @return ResponseEntity with a list of report resources, or no content if there are no reports
+     * @since 1.0
+     * @see ReportResource
+     */
     @Operation(summary = "Get all reports", description = "Retrieves a list of all reports")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved all reports"),
@@ -70,7 +94,13 @@ public class ReportController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(reportResources);
     }
-
+    /**
+     * Retrieves a specific report by its ID.
+     * @param id The ID of the report to retrieve
+     * @return ResponseEntity with the report resource, or not found if the report is not found
+     * @since 1.0
+     * @see ReportResource
+     */
     @Operation(summary = "Get report by ID", description = "Retrieves a specific report by its ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the report"),
@@ -82,7 +112,14 @@ public class ReportController {
                 .map(report -> ResponseEntity.ok(ReportResourceFromEntityAssembler.toResourceFromEntity(report)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+    /**
+     * Updates an existing report.
+     * @param id The ID of the report to update
+     * @param resource The CreateReportResource containing the updated report details
+     * @return ResponseEntity with the updated report resource, or bad request if the report is not found or the input is invalid
+     * @since 1.0
+     * @see ReportResource
+     */
     @Operation(summary = "Update an existing report", description = "Updates the details of an existing report")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully updated the report"),
@@ -92,12 +129,27 @@ public class ReportController {
     @PutMapping("/{id}")
     public ResponseEntity<ReportResource> updateReport(
             @PathVariable Long id,
-            @RequestBody CreateReportResource resource) {
-        return reportCommandService.updateReport(id, CreateReportCommandFromResourceAssembler.toCommandFromResource(resource))
+            @Valid @RequestBody CreateReportResource resource) {
+        var updateCommand = new UpdateReportCommand(
+                id,
+                resource.productName(),
+                resource.type(),
+                resource.price(),
+                resource.amount(),
+                resource.reportDate(),
+                resource.lostAmount()
+        );
+        
+        return reportCommandService.handle(updateCommand)
                 .map(updatedReport -> ResponseEntity.ok(ReportResourceFromEntityAssembler.toResourceFromEntity(updatedReport)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+    /**
+     * Deletes a specific report by its ID.
+     * @param id The ID of the report to delete
+     * @return ResponseEntity with no content, or not found if the report is not found
+     * @since 1.0
+     */
     @Operation(summary = "Delete a report", description = "Deletes a specific report by its ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Successfully deleted the report"),
@@ -105,7 +157,7 @@ public class ReportController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
-        boolean deleted = reportCommandService.deleteReport(id);
-        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        reportCommandService.handle(new DeleteReportCommand(id));
+        return ResponseEntity.noContent().build();
     }
 }
