@@ -1,8 +1,11 @@
 package com.stocksip.inventorymanagement.infrastructure.persistence.jpa;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 /**
  * JPA repository for Warehouse entity.
@@ -53,4 +56,13 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
      * @return true if a warehouse with the given address exists and is not the specified warehouse, false otherwise
      */
     boolean existsByAddressStreetIgnoreCaseAndAddressCityIgnoreCaseAndAddressPostalCodeIgnoreCaseAndWarehouseIdIsNot(String street, String city, String postalCode, Long warehouseId);
+
+    /**
+     * Finds a warehouse by its ID and profile ID.
+     *
+     * @param warehouseId the ID of the warehouse to find
+     * @param profileId the ID of the profile associated with the warehouse
+     * @return an Optional containing the found Warehouse, or empty if not found
+     */
+    Optional<Warehouse> findWarehouseByWarehouseIdAndProfileId(Long warehouseId, ProfileId profileId);
 }

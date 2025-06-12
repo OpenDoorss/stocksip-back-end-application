@@ -4,6 +4,7 @@ import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateWarehouseCommand;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.WarehouseRepository;
 import jakarta.transaction.Transactional;
@@ -64,7 +65,8 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
      */
     @Override
     public Optional<Warehouse> handle(UpdateWarehouseCommand command) {
-        var warehouseToUpdate = warehouseRepository.findById(command.warehouseId())
+
+        var warehouseToUpdate = warehouseRepository.findWarehouseByWarehouseIdAndProfileId(command.warehouseId(), ProfileId.from(command.profileId()))
                 .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.warehouseId())));
 
         if (!warehouseToUpdate.getName().equals(command.name()) &&

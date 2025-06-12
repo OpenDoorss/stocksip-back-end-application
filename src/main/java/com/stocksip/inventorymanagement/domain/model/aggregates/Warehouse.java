@@ -1,10 +1,7 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ImageUrl;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -65,13 +62,6 @@ public class Warehouse {
     private Capacity capacity;
 
     /**
-     * The zones that are part of this warehouse.
-     * Each zone can have different temperature requirements and types.
-     */
-    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Zone> zones = new ArrayList<>();
-
-    /**
      * The url of the image that shows with the warehouse
      */
     @Embedded
@@ -79,6 +69,12 @@ public class Warehouse {
             @AttributeOverride(name = "imageUrl", column = @Column(name = "image_url"))
     })
     private ImageUrl imageUrl;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "profileId", column = @Column(name = "profile_id", nullable = false))
+    })
+    private ProfileId profileId;
 
     // Default constructor for JPA
     protected Warehouse() {}
@@ -95,6 +91,7 @@ public class Warehouse {
         this.temperature = command.temperature();
         this.capacity = command.capacity();
         this.imageUrl = this.setDefaultImageUrlIfNotProvided(command.imageUrl());
+        this.profileId = new ProfileId(command.profileId());
     }
 
     /**
