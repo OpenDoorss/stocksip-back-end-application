@@ -2,6 +2,7 @@ package com.stocksip.inventorymanagement.domain.model.aggregates;
 
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.ImageUrl;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
 import jakarta.persistence.*;
@@ -73,8 +74,11 @@ public class Warehouse {
     /**
      * The url of the image that shows with the warehouse
      */
-    @Column(nullable = false)
-    private String imageUrl;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "imageUrl", column = @Column(name = "image_url"))
+    })
+    private ImageUrl imageUrl;
 
     // Default constructor for JPA
     protected Warehouse() {}
@@ -90,7 +94,7 @@ public class Warehouse {
         this.address = command.address();
         this.temperature = command.temperature();
         this.capacity = command.capacity();
-        this.imageUrl = command.imageUrl();
+        this.imageUrl = this.setDefaultImageUrlIfNotProvided(command.imageUrl());
     }
 
     /**
@@ -108,10 +112,16 @@ public class Warehouse {
         this.address = address;
         this.temperature = temperature;
         this.capacity = capacity;
-        this.imageUrl = imageUrl;
+        this.imageUrl = setDefaultImageUrlIfNotProvided(imageUrl);
         return this;
     }
 
+    /**
+     * Get the full address of the warehouse.
+     * This method formats the address components into a single string.
+     *
+     * @return a string representing the full address of the warehouse.
+     */
     public String getFullAddress() {
         return String.format("%s, %s, %s, %s, %s",
                 address.street(),
@@ -120,4 +130,18 @@ public class Warehouse {
                 address.postalCode(),
                 address.country());
     }
+
+    /**
+     * Set the image URL for the warehouse.
+     * If the provided image URL is null or blank, it sets a default image URL.
+     *
+     * @param imageUrl the URL of the image representing the warehouse
+     * @return an ImageUrl object containing the image URL
+     */
+    private ImageUrl setDefaultImageUrlIfNotProvided(String imageUrl) {
+        return imageUrl == null || imageUrl.isBlank()
+                ? ImageUrl.defaultImageUrl()
+                : new ImageUrl(imageUrl);
+    }
+
 }
