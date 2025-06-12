@@ -1,9 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ImageUrl;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
 
 /**
  * Command to create a new warehouse.
@@ -18,7 +15,8 @@ public record CreateWarehouseCommand(String name,
                                      WarehousesAddress address,
                                      Temperature temperature,
                                      Capacity capacity,
-                                     String imageUrl) {
+                                     String imageUrl,
+                                     Long profileId) {
 
     /**
      * Constructor for CreateWarehouseCommand.

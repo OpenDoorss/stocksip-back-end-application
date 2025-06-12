@@ -14,6 +14,7 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddr
  * @param temperature the temperature setting of the warehouse
  * @param capacity the capacity of the warehouse
  * @param imageUrl the URL of the image representing the warehouse
+ * @param profileId the ID of the profile associated with the warehouse
  *
  * @since 1.0.0
  */
@@ -22,7 +23,8 @@ public record UpdateWarehouseCommand(Long warehouseId,
                                      WarehousesAddress address,
                                      Temperature temperature,
                                      Capacity capacity,
-                                     String imageUrl) {
+                                     String imageUrl,
+                                     Long profileId) {
     /**
      * Constructor for UpdateWarehouseCommand.
      * Validates the input parameters to ensure that the warehouse ID is not null or less than or equal to 0,

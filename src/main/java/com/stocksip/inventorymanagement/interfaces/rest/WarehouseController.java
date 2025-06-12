@@ -68,8 +68,8 @@ public class WarehouseController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping
-    public ResponseEntity<WarehouseResource> createWarehouse(@RequestBody CreateWarehouseResource resource) {
-        Optional<Warehouse> warehouse = warehouseCommandService.handle(CreateWarehouseCommandFromResourceAssembler.toCommandFromResource(resource));
+    public ResponseEntity<WarehouseResource> createWarehouse(@RequestBody CreateWarehouseResource resource, @RequestHeader("X-Profile-Id") Long profileId) {
+        Optional<Warehouse> warehouse = warehouseCommandService.handle(CreateWarehouseCommandFromResourceAssembler.toCommandFromResource(resource, profileId));
 
         return warehouse.map(source ->
                 new ResponseEntity<>(WarehouseResourceFromEntityAssembler.toResourceFromEntity(source), CREATED))
@@ -92,8 +92,8 @@ public class WarehouseController {
             @ApiResponse(responseCode = "404", description = "Course not found - invalid warehouse ID or resource")
     })
     @PutMapping("/{warehouseId}")
-    public ResponseEntity<WarehouseResource> updateWarehouse(@PathVariable Long warehouseId, @RequestBody UpdateWarehouseResource updateWarehouseResource) {
-        var updateWarehouseCommand = UpdateWarehouseCommandFromResourceAssembler.toCommandFromResource(warehouseId, updateWarehouseResource);
+    public ResponseEntity<WarehouseResource> updateWarehouse(@PathVariable Long warehouseId, @RequestBody UpdateWarehouseResource updateWarehouseResource, @RequestHeader("X-Profile-Id") Long profileId) {
+        var updateWarehouseCommand = UpdateWarehouseCommandFromResourceAssembler.toCommandFromResource(warehouseId, updateWarehouseResource, profileId);
         var updatedWarehouse = warehouseCommandService.handle(updateWarehouseCommand);
         if (updatedWarehouse.isEmpty()) return ResponseEntity.badRequest().build();
         var updatedWarehouseEntity = updatedWarehouse.get();

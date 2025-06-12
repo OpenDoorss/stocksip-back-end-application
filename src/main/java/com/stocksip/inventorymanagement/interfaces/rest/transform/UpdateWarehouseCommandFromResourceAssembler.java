@@ -21,14 +21,15 @@ public class UpdateWarehouseCommandFromResourceAssembler {
      *                                  or if the resource contains invalid data
      * @since 1.0.0
      */
-    public static UpdateWarehouseCommand toCommandFromResource(Long warehouseId, UpdateWarehouseResource resource) {
+    public static UpdateWarehouseCommand toCommandFromResource(Long warehouseId, UpdateWarehouseResource resource, Long profileId) {
         return new UpdateWarehouseCommand(
                 warehouseId,
                 resource.name(),
                 resource.address(),
                 resource.temperature(),
                 resource.capacity(),
-                resource.imageUrl()
+                resource.imageUrl(),
+                profileId
         );
     }
 }
