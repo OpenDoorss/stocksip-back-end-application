@@ -1,7 +1,6 @@
 package com.stocksip.inventorymanagement.interfaces.rest.transform;
 
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateWarehouseResource;
 
 /**
