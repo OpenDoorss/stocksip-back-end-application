@@ -1,6 +1,7 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
 import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.ImageUrl;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
 
@@ -21,14 +22,11 @@ public record CreateWarehouseCommand(String name,
 
     /**
      * Constructor for CreateWarehouseCommand.
-     * Validates the input parameters to ensure that the profile ID and warehouse name are not null or blank.
+     * Validates the input parameters to ensure that the warehouse name is not null or blank.
      */
     public CreateWarehouseCommand {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Warehouse name cannot be null or blank");
-        }
-        if (imageUrl == null || imageUrl.isBlank()) {
-            throw new IllegalArgumentException("Image URL cannot be null or blank");
         }
     }
 }

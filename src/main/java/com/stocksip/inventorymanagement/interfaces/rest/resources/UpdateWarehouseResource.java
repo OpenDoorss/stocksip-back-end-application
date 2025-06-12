@@ -1,6 +1,7 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
 import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.ImageUrl;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
 
@@ -29,8 +30,14 @@ public record UpdateWarehouseResource(String name,
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Warehouse name cannot be null or blank");
         }
-        if (imageUrl == null || imageUrl.isBlank()) {
-            throw new IllegalArgumentException("Image URL cannot be null or blank");
+        if (address == null) {
+            throw new IllegalArgumentException("Address cannot be null");
+        }
+        if (temperature == null) {
+            throw new IllegalArgumentException("Temperature cannot be null");
+        }
+        if (capacity == null) {
+            throw new IllegalArgumentException("Capacity cannot be null");
         }
     }
 }
