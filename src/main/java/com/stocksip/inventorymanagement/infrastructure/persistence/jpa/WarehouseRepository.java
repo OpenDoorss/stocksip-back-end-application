@@ -73,15 +73,6 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
     Optional<Warehouse> findWarehouseByWarehouseIdAndProfileId(Long warehouseId, ProfileId profileId);
 
     /**
-     * Checks if a warehouse exists by its ID and profile ID.
-     *
-     * @param warehouseId the ID of the warehouse to check
-     * @param profileId the ID of the profile associated with the warehouse
-     * @return true if a warehouse with the given ID exists for the specified profile, false otherwise
-     */
-    boolean existsByWarehouseIdAndProfileId(Long warehouseId, ProfileId profileId);
-
-    /**
      * Finds all warehouses associated with a specific profile ID.
      *
      * @param profileId the ID of the profile to find warehouses for
