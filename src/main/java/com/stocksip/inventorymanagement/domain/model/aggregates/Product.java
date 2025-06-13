@@ -25,7 +25,6 @@ import java.util.Date;
 public class Product extends AbstractAggregateRoot<Product> {
     /**
      * The unique identifier of the product.
-     * @type Long
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +42,6 @@ public class Product extends AbstractAggregateRoot<Product> {
     protected Product() {}
     /**
      * The name of the product.
-     * @type String
      */
     @Column(nullable = false)
     @Setter
@@ -52,7 +50,6 @@ public class Product extends AbstractAggregateRoot<Product> {
 
     /**
      * The type of liquor the product is made of.
-     * @type String
      */
     @Column(nullable = false)
     @Getter
@@ -60,14 +57,12 @@ public class Product extends AbstractAggregateRoot<Product> {
 
     /**
      * The date from which the product will no longer be consumable.
-     * @type Date
      */
     @Column(nullable = false, updatable = false)
     private Date expirationDate;
 
     /**
      * The price the product can be sold to the customers of the liquor shop.
-     * @type double
      */
     @Column(nullable = false)
     @Setter
@@ -75,7 +70,6 @@ public class Product extends AbstractAggregateRoot<Product> {
 
     /**
      * The number that represents the current stock of the product in the warehouse.
-     * @type int
      */
     @Column(nullable = false)
     @Setter
@@ -84,7 +78,6 @@ public class Product extends AbstractAggregateRoot<Product> {
     /**
      * The minimum number of products which can exist in a warehouse before generating an alert to the user.
      * It's used to generate alerts in the platform.
-     * @type int
      */
     @Column(nullable = false)
     @Setter
@@ -92,7 +85,6 @@ public class Product extends AbstractAggregateRoot<Product> {
 
     /**
      * The identifier of the warehouse where the product is stored.
-     * @type Long
      */
     @Column(nullable = false, updatable = false)
     @Getter
@@ -100,7 +92,6 @@ public class Product extends AbstractAggregateRoot<Product> {
 
     /**
      * The identifier of the user who provided this product to the liquor store owner.
-     * @type Long
      */
     @Column(nullable = false, updatable = false)
     @Getter
