@@ -1,5 +1,7 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
+import com.stocksip.inventorymanagement.domain.model.entities.Brand;
+import com.stocksip.inventorymanagement.domain.model.entities.ProductType;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -28,8 +30,17 @@ public class Product extends AbstractAggregateRoot<Product> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
-    private Long id;
+    private Long productId;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "brand_id", nullable = false)
+    private Brand brand;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_type_id")
+    private ProductType productType;
+
+    protected Product() {}
     /**
      * The name of the product.
      * @type String
@@ -95,15 +106,13 @@ public class Product extends AbstractAggregateRoot<Product> {
     @Getter
     private Long providerId;
 
-    protected Product() {}
-
     /**
      * @summary Constructor.
      * This creates a new Product instance based on the CreateProductCommand command.
      * @param command - the CreateProductCommand command
      */
     public Product(CreateProductCommand command) {
-        this.id = command.id();
+        this.productId = command.id();
         this.name = command.name();
         this.liquorType = command.liquorType();
         this.expirationDate = command.expirationDate();
