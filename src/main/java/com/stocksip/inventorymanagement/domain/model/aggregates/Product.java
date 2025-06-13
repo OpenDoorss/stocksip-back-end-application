@@ -74,7 +74,7 @@ public class Product extends AbstractAggregateRoot<Product> {
     private double price;
 
     /**
-     * The number of the current stock of the product in the warehouse.
+     * The number that represents the current stock of the product in the warehouse.
      * @type int
      */
     @Column(nullable = false)
@@ -83,7 +83,7 @@ public class Product extends AbstractAggregateRoot<Product> {
 
     /**
      * The minimum number of products which can exist in a warehouse before generating an alert to the user.
-     * It's used to generates alerts in the platform.
+     * It's used to generate alerts in the platform.
      * @type int
      */
     @Column(nullable = false)
