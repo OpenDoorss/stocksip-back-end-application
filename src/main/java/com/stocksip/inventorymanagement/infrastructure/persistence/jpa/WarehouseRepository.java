@@ -5,6 +5,7 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,43 +20,48 @@ import java.util.Optional;
 @Repository
 public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
 
-    /**
-     * Checks if a warehouse with the given name exists, ignoring case.
-     *
-     * @param name the name of the warehouse to check
-     * @return true if a warehouse with the given name exists, false otherwise
-     */
-    boolean existsByNameIgnoreCase(String name);
 
     /**
-     * Checks if a warehouse with the given name exists, excluding the warehouse with the specified ID.
+     * Checks if a warehouse with the given name exists for the specified profile ID, ignoring case.
      *
      * @param name the name of the warehouse to check
+     * @param profileId the ID of the profile associated with the warehouse
+     * @return true if a warehouse with the given name exists for the specified profile, false otherwise
+     */
+    boolean existsByNameIgnoreCaseAndProfileId(String name, ProfileId profileId);
+
+    /**
+     * Checks if a warehouse with the given name exists for the specified profile ID, excluding a specific warehouse ID.
+     *
+     * @param name the name of the warehouse to check
+     * @param profile the ID of the profile associated with the warehouse
      * @param warehouseId the ID of the warehouse to exclude from the check
-     * @return true if a warehouse with the given name exists and is not the specified warehouse, false otherwise
+     * @return true if a warehouse with the given name exists for the specified profile, excluding the specified warehouse ID, false otherwise
      */
-    boolean existsByNameAndWarehouseIdIsNot(String name, Long warehouseId);
+    boolean existsByNameAndProfileIdAndWarehouseIdIsNot(String name, ProfileId profile, Long warehouseId);
 
     /**
-     * Checks if a warehouse exists by its address components, ignoring case.
+     * Checks if a warehouse exists by its address components and profile ID, ignoring case.
      *
      * @param street the street of the warehouse address
      * @param city the city of the warehouse address
      * @param postalCode the postal code of the warehouse address
-     * @return true if a warehouse with the given address exists, false otherwise
+     * @param profileId the ID of the profile associated with the warehouse
+     * @return true if a warehouse with the given address exists for the specified profile, false otherwise
      */
-    boolean existsByAddressStreetAndAddressCityAndAddressPostalCodeIgnoreCase(String street, String city, String postalCode);
+    boolean existsByAddressStreetAndAddressCityAndAddressPostalCodeIgnoreCaseAndProfileId(String street, String city, String postalCode, ProfileId profileId);
 
     /**
-     * Checks if a warehouse exists by its address components, excluding the warehouse with the specified ID.
+     * Checks if a warehouse exists by its address components, profile ID, and excludes a specific warehouse ID.
      *
      * @param street the street of the warehouse address
      * @param city the city of the warehouse address
      * @param postalCode the postal code of the warehouse address
+     * @param profileId the ID of the profile associated with the warehouse
      * @param warehouseId the ID of the warehouse to exclude from the check
-     * @return true if a warehouse with the given address exists and is not the specified warehouse, false otherwise
+     * @return true if a warehouse with the given address exists, excluding the specified warehouse ID, false otherwise
      */
-    boolean existsByAddressStreetIgnoreCaseAndAddressCityIgnoreCaseAndAddressPostalCodeIgnoreCaseAndWarehouseIdIsNot(String street, String city, String postalCode, Long warehouseId);
+    boolean existsByAddressStreetIgnoreCaseAndAddressCityIgnoreCaseAndAddressPostalCodeIgnoreCaseAndProfileIdAndWarehouseIdIsNot(String street, String city, String postalCode, ProfileId profileId, Long warehouseId);
 
     /**
      * Finds a warehouse by its ID and profile ID.
@@ -65,4 +71,21 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
      * @return an Optional containing the found Warehouse, or empty if not found
      */
     Optional<Warehouse> findWarehouseByWarehouseIdAndProfileId(Long warehouseId, ProfileId profileId);
+
+    /**
+     * Checks if a warehouse exists by its ID and profile ID.
+     *
+     * @param warehouseId the ID of the warehouse to check
+     * @param profileId the ID of the profile associated with the warehouse
+     * @return true if a warehouse with the given ID exists for the specified profile, false otherwise
+     */
+    boolean existsByWarehouseIdAndProfileId(Long warehouseId, ProfileId profileId);
+
+    /**
+     * Finds all warehouses associated with a specific profile ID.
+     *
+     * @param profileId the ID of the profile to find warehouses for
+     * @return a List of Warehouses associated with the specified profile ID
+     */
+    List<Warehouse> findAllByProfileId(ProfileId profileId);
 }
