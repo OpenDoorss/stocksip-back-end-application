@@ -1,11 +1,13 @@
 package com.stocksip.inventorymanagement.application.internal.queryservices;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
+import com.stocksip.inventorymanagement.domain.model.queries.GetAllWarehousesByProfileIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetWarehouseByIdQuery;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.WarehouseRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -35,5 +37,10 @@ public class WarehouseQueryServiceImpl implements WarehouseQueryService {
     @Override
     public Optional<Warehouse> handle(GetWarehouseByIdQuery query) {
         return warehouseRepository.findById(query.warehouseId());
+    }
+
+    @Override
+    public List<Warehouse> handle(GetAllWarehousesByProfileIdQuery query) {
+        return warehouseRepository.findAllByProfileId(query.profileId());
     }
 }
