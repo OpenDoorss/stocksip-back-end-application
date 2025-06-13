@@ -2,7 +2,9 @@ package com.stocksip.inventorymanagement.interfaces.rest;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteWarehouseCommand;
+import com.stocksip.inventorymanagement.domain.model.queries.GetAllWarehousesByProfileIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetWarehouseByIdQuery;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateWarehouseResource;
@@ -18,6 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -117,6 +120,7 @@ public class WarehouseController {
     })
     @GetMapping("/{warehouseId}")
     public ResponseEntity<WarehouseResource> getWarehouseById(@PathVariable Long warehouseId) {
+
         var getWarehouseById = new GetWarehouseByIdQuery(warehouseId);
         var warehouse = warehouseQueryService.handle(getWarehouseById);
         if (warehouse.isEmpty()) return ResponseEntity.badRequest().build();
@@ -126,11 +130,40 @@ public class WarehouseController {
     }
 
     /**
+     * Get all warehouses associated with a specific profile ID.
+     * @param profileId ID of the profile to retrieve warehouses for
+     * @return ResponseEntity containing a list of WarehouseResources
+     * @see WarehouseResource
+     *
+     * @since 1.0.0
+     */
+    @Operation(summary = "Get all warehouses by profile ID",
+        description = "Retrieves all warehouses associated with a specific profile ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Warehouses retrieved successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request - invalid profile ID")
+    })
+    @GetMapping
+    public ResponseEntity<List<WarehouseResource>> getAllWarehouses(@RequestHeader("X-Profile-Id") Long profileId)
+    {
+        var getAllWarehousesByProfileIdQuery = new GetAllWarehousesByProfileIdQuery(new ProfileId(profileId));
+        var warehouses = warehouseQueryService.handle(getAllWarehousesByProfileIdQuery);
+        var warehouseResources = warehouses.stream().map(WarehouseResourceFromEntityAssembler::toResourceFromEntity).toList();
+        return ResponseEntity.ok(warehouseResources);
+    }
+
+    /**
      * Delete a warehouse by its ID.
      * @param warehouseId ID of the warehouse to delete
      * @return ResponseEntity indicating the result of the deletion operation
      * @since 1.0.0
      */
+    @Operation(summary = "Delete a warehouse by ID",
+            description = "Deletes a warehouse identified by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Warehouse deleted successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request - invalid warehouse ID")
+    })
     @DeleteMapping("/{warehouseId}")
     public ResponseEntity<?> deleteWarehouse(@PathVariable Long warehouseId) {
         var deleteWarehouseCommand = new DeleteWarehouseCommand(warehouseId);
