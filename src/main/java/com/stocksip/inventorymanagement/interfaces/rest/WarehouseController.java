@@ -116,14 +116,14 @@ public class WarehouseController {
             description = "Retrieves the details of a warehouse identified by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Warehouse found successfully"),
-            @ApiResponse(responseCode = "400", description = "Course not found - invalid warehouse ID")
+            @ApiResponse(responseCode = "404", description = "Course not found - invalid warehouse ID")
     })
     @GetMapping("/{warehouseId}")
     public ResponseEntity<WarehouseResource> getWarehouseById(@PathVariable Long warehouseId) {
 
         var getWarehouseById = new GetWarehouseByIdQuery(warehouseId);
         var warehouse = warehouseQueryService.handle(getWarehouseById);
-        if (warehouse.isEmpty()) return ResponseEntity.badRequest().build();
+        if (warehouse.isEmpty()) return ResponseEntity.notFound().build();
         var warehouseEntity = warehouse.get();
         var warehouseResource = WarehouseResourceFromEntityAssembler.toResourceFromEntity(warehouseEntity);
         return ResponseEntity.ok(warehouseResource);
