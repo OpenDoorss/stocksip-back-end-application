@@ -1,5 +1,14 @@
 package com.stocksip.inventorymanagement.domain.model.valueobjects;
 
+import jakarta.persistence.Embeddable;
+
+/**
+ * Represents the stock of a product in the inventory management system.
+ * This value object encapsulates the stock quantity and provides methods to manipulate it.
+ *
+ * @param stock The stock of the product, must be a non-negative integer.
+ */
+@Embeddable
 public record ProductStock(int stock) {
 
     /**

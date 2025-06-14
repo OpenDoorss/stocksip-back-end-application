@@ -1,5 +1,14 @@
 package com.stocksip.inventorymanagement.domain.model.valueobjects;
 
+import jakarta.persistence.Embeddable;
+
+/**
+ * Represents the content of a product in the inventory management system.
+ * This value object encapsulates the content quantity and provides methods to manipulate it.
+ *
+ * @param content The content of the product in cubic meters, must be a positive number.
+ */
+@Embeddable
 public record ProductContent(Double content) {
 
     /**
