@@ -1,7 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
 import com.stocksip.inventorymanagement.domain.model.entities.Brand;
-import com.stocksip.inventorymanagement.domain.model.entities.ProductType;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -35,9 +34,7 @@ public class Product extends AbstractAggregateRoot<Product> {
     @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "product_type_id")
-    private ProductType productType;
+
 
     protected Product() {}
     /**
