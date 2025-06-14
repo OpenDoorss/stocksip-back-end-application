@@ -19,11 +19,11 @@ public record Temperature(double minTemperature, double maxTemperature) {
     /*
      * The minimum temperature limit for the warehouse.
      */
-    private static final double MIN_TEMPERATURE = -50.0;
+    private static final double MIN_TEMPERATURE = -30.0;
     /*
      * The maximum temperature limit for the warehouse.
      */
-    private static final double MAX_TEMPERATURE = 50.0;
+    private static final double MAX_TEMPERATURE = 30.0;
 
     /**
      * This constructor validates the input parameters to ensure that they are within the specified range.
