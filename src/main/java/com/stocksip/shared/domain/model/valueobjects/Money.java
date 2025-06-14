@@ -1,19 +1,22 @@
 package com.stocksip.shared.domain.model.valueobjects;
 
-import lombok.Getter;
+import jakarta.persistence.Embeddable;
 
-@Getter
-public class Money {
-    private final double amount;
-    private final Currency currency;
-
-    public Money(double amount, Currency currency) {
-        this.amount = amount;
-        this.currency = currency;
-    }
+/**
+ * Represents a monetary value with an amount and a currency.
+ * This class is immutable and can be used as a value object in domain models.
+ *
+ * @summary
+ * The Money class encapsulates a monetary amount and its associated currency.
+ * It is designed to be used in financial calculations and transactions.
+ *
+ * @since 1.0.0
+ */
+@Embeddable
+public record Money(double amount, String code) {
 
     @Override
     public String toString() {
-        return String.format("%.2f %s", amount, currency.getCode());
+        return String.format("%.2f %s", amount, code);
     }
 }
