@@ -1,6 +1,7 @@
 package com.stocksip.orderoperationandmonitoring.domain.model.aggregates;
 
 import com.stocksip.orderoperationandmonitoring.domain.model.commands.CreateCatalogItemCommand;
+import com.stocksip.shared.domain.model.valueobjects.Money;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
