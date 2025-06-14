@@ -1,7 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
-import com.stocksip.inventorymanagement.domain.model.commands.UploadImageCommand;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
 import jakarta.persistence.*;
 import lombok.Getter;
