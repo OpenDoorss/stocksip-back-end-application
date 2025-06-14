@@ -59,4 +59,13 @@ public record ProductStock(int stock) {
         }
         return new ProductStock(this.stock - subtractedStock);
     }
+
+    /**
+     * Gets the current stock of the product.
+     *
+     * @return The stock of the product.
+     */
+    public int getStock() {
+        return stock;
+    }
 }
