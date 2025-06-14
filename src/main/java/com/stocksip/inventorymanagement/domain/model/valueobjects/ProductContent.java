@@ -18,7 +18,7 @@ public record ProductContent(Double content) {
      * Validates the content.
      *
      * @param content The content of the product in cubic meters.
-     * @throws IllegalArgumentException if the content is not a positive number.
+     * @return true if the content is a positive number, false otherwise.
      */
     private static boolean isContentValidate(Double content) {
         return !(content.isNaN() || content <= 0);
