@@ -1,4 +1,5 @@
 package com.stocksip.orderoperationandmonitoring.domain.model.aggregates;
+import com.stocksip.orderoperationandmonitoring.domain.model.commands.CreateCatalogCommand;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.*;
@@ -20,7 +21,7 @@ public class Catalog {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long catalogId;
+    private Long id;
 
     /**
      * @type String
@@ -37,7 +38,7 @@ public class Catalog {
      * This field is required and initialize in false.
      */
     @Column(nullable = false)
-    private boolean active = false;
+    private boolean isPublished = false;
 
     /**
      * @type String
@@ -48,6 +49,32 @@ public class Catalog {
     @Getter
     private String profileId;
 
+    /**
+     * Default constructor for JPA.
+     * It is protected to prevent instantiation from outside the package.
+     */
+    protected Catalog() {}
 
+
+    public Catalog(CreateCatalogCommand command) {}
+
+
+    /**
+     * Updates the information of the catalog.
+     * This method allows updating the catalog's name, profile ID, and publication state.
+     * @param catalogId
+     * @param name
+     * @param profileId
+     * @param isPublished
+     * @return
+     */
+
+    public Catalog updateInformation(long catalogId, String name, String profileId, boolean isPublished) {
+        this.id = catalogId;
+        this.name = name;
+        this.profileId = profileId;
+        this.isPublished = isPublished;
+        return this;
+    }
 
 }
