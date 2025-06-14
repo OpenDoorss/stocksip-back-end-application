@@ -1,4 +1,4 @@
-package com.stocksip.shared.domain.aggregates;
+package com.stocksip.shared.domain.model.aggregates;
 
 import jakarta.persistence.*;
 import lombok.Getter;

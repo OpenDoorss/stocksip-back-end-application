@@ -1,4 +1,4 @@
-package com.stocksip.shared.domain.entities;
+package com.stocksip.shared.domain.model.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
