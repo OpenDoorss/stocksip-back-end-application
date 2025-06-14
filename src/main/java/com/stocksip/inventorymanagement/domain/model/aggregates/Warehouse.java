@@ -20,7 +20,6 @@ public class Warehouse {
 
     /**
      * The unique identifier of the warehouse.
-     * @type Long
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +50,7 @@ public class Warehouse {
             @AttributeOverride(name = "minTemperature", column = @Column(name = "min_temperature", nullable = false)),
             @AttributeOverride(name = "maxTemperature", column = @Column(name = "max_temperature", nullable = false))
     })
-    private Temperature temperature;
+    private WarehouseTemperature warehouseTemperature;
 
     /**
      * The total capacity of this warehouse in cubic meters.
@@ -60,7 +59,7 @@ public class Warehouse {
     @AttributeOverrides({
             @AttributeOverride(name = "capacity", column = @Column(name = "capacity", nullable = false))
     })
-    private Capacity capacity;
+    private WarehouseCapacity warehouseCapacity;
 
     /**
      * The url of the image that shows with the warehouse
@@ -80,18 +79,19 @@ public class Warehouse {
     // Default constructor for JPA
     protected Warehouse() {}
 
+
     /**
      * Constructor to create a new Warehouse instance.
      * This constructor initializes the warehouse with the provided command details.
      *
      * @param command the command containing the details for creating a new warehouse.
      */
-    public Warehouse(CreateWarehouseCommand command) {
+    public Warehouse(CreateWarehouseCommand command, String imageUrl) {
         this.name = command.name();
         this.address = command.address();
-        this.temperature = command.temperature();
-        this.capacity = command.capacity();
-        this.imageUrl = this.setDefaultImageUrlIfNotProvided(command.imageUrl());
+        this.warehouseTemperature = command.warehouseTemperature();
+        this.warehouseCapacity = command.warehouseCapacity();
+        this.imageUrl = this.setDefaultImageUrlIfNotProvided(imageUrl);
         this.profileId = new ProfileId(command.profileId());
     }
 
@@ -100,16 +100,16 @@ public class Warehouse {
      * This method allows updating the warehouse's name, address, temperature, total capacity, and image URL.
      * @param name the new name of the warehouse.
      * @param address the new location of the warehouse.
-     * @param capacity the new total capacity of the warehouse.
+     * @param warehouseCapacity the new total capacity of the warehouse.
      * @param imageUrl the url of the image.
      *
      * @return the updated Warehouse object
      */
-    public Warehouse updateInformation(String name, WarehousesAddress address, Temperature temperature, Capacity capacity, String imageUrl) {
+    public Warehouse updateInformation(String name, WarehousesAddress address, WarehouseTemperature warehouseTemperature, WarehouseCapacity warehouseCapacity, String imageUrl) {
         this.name = name;
         this.address = address;
-        this.temperature = temperature;
-        this.capacity = capacity;
+        this.warehouseTemperature = warehouseTemperature;
+        this.warehouseCapacity = warehouseCapacity;
         this.imageUrl = setDefaultImageUrlIfNotProvided(imageUrl);
         return this;
     }
@@ -141,5 +141,4 @@ public class Warehouse {
                 ? ImageUrl.defaultImageUrl()
                 : new ImageUrl(imageUrl);
     }
-
 }

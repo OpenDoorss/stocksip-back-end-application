@@ -12,19 +12,21 @@ import com.stocksip.inventorymanagement.interfaces.rest.resources.UpdateWarehous
 import com.stocksip.inventorymanagement.interfaces.rest.resources.WarehouseResource;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.CreateWarehouseCommandFromResourceAssembler;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.UpdateWarehouseCommandFromResourceAssembler;
+import com.stocksip.inventorymanagement.interfaces.rest.transform.UploadImageCommandFromResource;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.WarehouseResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
  * REST controller for Warehouses.
@@ -33,7 +35,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping(value = "api/v1/warehouses", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "api/v1/warehouses", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Warehouses", description = "Endpoints for managing warehouses.")
 public class WarehouseController {
 
@@ -55,9 +57,10 @@ public class WarehouseController {
 
     /**
      * Create a new warehouse.
-     * @param resource CreateWarehouseResource containing the details of the warehouse to be created
-     * @return ResponseEntity containing the created WarehouseResource or a bad request if the resource is invalid
-     * @see CreateWarehouseResource
+     * @param resource The {@link CreateWarehouseResource} containing the details of the warehouse to create
+     * @param imageFile Optional image file to upload for the warehouse
+     * @param profileId ID of the profile creating the warehouse
+     * @return ResponseEntity containing the created WarehouseResource or a bad request response if creation fails
      * @see WarehouseResource
      *
      * @since 1.0.0
@@ -70,12 +73,17 @@ public class WarehouseController {
             @ApiResponse(responseCode = "201", description = "Warehouse created successfully"),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
-    @PostMapping
-    public ResponseEntity<WarehouseResource> createWarehouse(@RequestBody CreateWarehouseResource resource, @RequestHeader("X-Profile-Id") Long profileId) {
-        Optional<Warehouse> warehouse = warehouseCommandService.handle(CreateWarehouseCommandFromResourceAssembler.toCommandFromResource(resource, profileId));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<WarehouseResource> createWarehouse(@RequestPart("warehouse") CreateWarehouseResource resource,
+                                                             @RequestPart(value = "image", required = false) MultipartFile imageFile,
+                                                             @RequestHeader("X-Profile-Id") Long profileId) {
+
+        var uploadImageResource = UploadImageCommandFromResource.toCommandFromResource(imageFile);
+
+        Optional<Warehouse> warehouse = warehouseCommandService.handle(CreateWarehouseCommandFromResourceAssembler.toCommandFromResource(resource, profileId), uploadImageResource);
 
         return warehouse.map(source ->
-                new ResponseEntity<>(WarehouseResourceFromEntityAssembler.toResourceFromEntity(source), CREATED))
+                        new ResponseEntity<>(WarehouseResourceFromEntityAssembler.toResourceFromEntity(source), CREATED))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 

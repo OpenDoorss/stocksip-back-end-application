@@ -4,12 +4,15 @@ import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateWarehouseCommand;
+import com.stocksip.inventorymanagement.domain.model.commands.UploadImageCommand;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.WarehouseRepository;
+import com.stocksip.shared.infrastructure.cloudstorage.cloudinary.CloudinaryService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -27,32 +30,47 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
      * Repository for accessing warehouse data.
      */
     private final WarehouseRepository warehouseRepository;
+    private final CloudinaryService cloudinaryService;
 
-    public WarehouseCommandServiceImpl(WarehouseRepository warehouseRepository) {
+    public WarehouseCommandServiceImpl(WarehouseRepository warehouseRepository, CloudinaryService cloudinaryService) {
         this.warehouseRepository = warehouseRepository;
+        this.cloudinaryService = cloudinaryService;
     }
 
     /**
      * Handles the command to create a new warehouse.
      *
-     * @param command the command containing the details of the warehouse to be created
+     * @param warehouseCommand the command containing the details of the warehouse to create
+     * @param imageCommand the command containing the image file to upload
      * @return an Optional containing the created Warehouse if successful, or empty if not
      * @throws IllegalArgumentException if a warehouse with the same name or address already exists
      */
     @Override
-    public Optional<Warehouse> handle(CreateWarehouseCommand command) {
-        if (warehouseRepository.existsByNameIgnoreCaseAndProfileId(command.name(), ProfileId.from(command.profileId())))
+    public Optional<Warehouse> handle(CreateWarehouseCommand warehouseCommand, UploadImageCommand imageCommand) {
+
+        if (warehouseRepository.existsByNameIgnoreCaseAndProfileId(warehouseCommand.name(), ProfileId.from(warehouseCommand.profileId())))
             throw new IllegalArgumentException("Warehouse with the same name already exists.");
 
         if (warehouseRepository.existsByAddressStreetAndAddressCityAndAddressPostalCodeIgnoreCaseAndProfileId(
-                command.address().street(),
-                command.address().city(),
-                command.address().postalCode(),
-                ProfileId.from(command.profileId()))) {
+                warehouseCommand.address().street(),
+                warehouseCommand.address().city(),
+                warehouseCommand.address().postalCode(),
+                ProfileId.from(warehouseCommand.profileId()))) {
             throw new IllegalArgumentException("Warehouse with the same address already exists.");
         }
 
-        var warehouse = new Warehouse(command);
+        String imageUrl;
+
+        try {
+            imageUrl = cloudinaryService.uploadImage(imageCommand.imageFile());
+        } catch (IOException e) {
+            throw new RuntimeException("Error uploading image: " + e.getMessage(), e);
+        }
+
+        var warehouse = new Warehouse(
+                warehouseCommand,
+                imageUrl
+        );
         var createdWarehouse = warehouseRepository.save(warehouse);
         return Optional.of(createdWarehouse);
     }
@@ -89,8 +107,8 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
         warehouseToUpdate.updateInformation(
                 command.name(),
                 command.address(),
-                command.temperature(),
-                command.capacity(),
+                command.warehouseTemperature(),
+                command.warehouseCapacity(),
                 command.imageUrl()
         );
 

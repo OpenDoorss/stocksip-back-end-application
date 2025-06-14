@@ -26,8 +26,8 @@ public class UpdateWarehouseCommandFromResourceAssembler {
                 warehouseId,
                 resource.name(),
                 resource.address(),
-                resource.temperature(),
-                resource.capacity(),
+                resource.warehouseTemperature(),
+                resource.warehouseCapacity(),
                 resource.imageUrl(),
                 profileId
         );

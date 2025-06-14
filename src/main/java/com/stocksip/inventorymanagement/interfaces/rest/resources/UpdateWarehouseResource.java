@@ -1,8 +1,7 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ImageUrl;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseCapacity;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseTemperature;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
 
 /**
@@ -10,16 +9,16 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddr
  *
  * @param name the name of the warehouse
  * @param address the address of the warehouse
- * @param temperature the temperature setting of the warehouse
- * @param capacity the capacity of the warehouse
+ * @param warehouseTemperature the temperature setting of the warehouse
+ * @param warehouseCapacity the capacity of the warehouse
  * @param imageUrl the URL of the image representing the warehouse
  *
  * @since 1.0.0
  */
 public record UpdateWarehouseResource(String name,
                                       WarehousesAddress address,
-                                      Temperature temperature,
-                                      Capacity capacity,
+                                      WarehouseTemperature warehouseTemperature,
+                                      WarehouseCapacity warehouseCapacity,
                                       String imageUrl) {
 
     /**
@@ -33,10 +32,10 @@ public record UpdateWarehouseResource(String name,
         if (address == null) {
             throw new IllegalArgumentException("Address cannot be null");
         }
-        if (temperature == null) {
+        if (warehouseTemperature == null) {
             throw new IllegalArgumentException("Temperature cannot be null");
         }
-        if (capacity == null) {
+        if (warehouseCapacity == null) {
             throw new IllegalArgumentException("Capacity cannot be null");
         }
     }

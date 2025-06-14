@@ -4,6 +4,7 @@ import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateWarehouseCommand;
+import com.stocksip.inventorymanagement.domain.model.commands.UploadImageCommand;
 
 import java.util.Optional;
 
@@ -20,11 +21,13 @@ public interface WarehouseCommandService {
     /**
      * Handles the creation of a new warehouse.
      *
-     * @param command the command containing the details for creating a warehouse
+     * @param warehouseCommand the command containing the details for creating a warehouse
+     * @param imageCommand the command containing the image upload details
      * @return an Optional containing the created Warehouse if successful, or empty if not
      * @see CreateWarehouseCommand
+     * @see UploadImageCommand
      */
-    Optional<Warehouse> handle(CreateWarehouseCommand command);
+    Optional<Warehouse> handle(CreateWarehouseCommand warehouseCommand, UploadImageCommand imageCommand);
 
     /**
      * Handles the update of an existing warehouse.

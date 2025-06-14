@@ -21,9 +21,8 @@ public class CreateWarehouseCommandFromResourceAssembler {
 
         return new CreateWarehouseCommand(resource.name(),
                                           resource.address(),
-                                          resource.temperature(),
-                                          resource.capacity(),
-                                          resource.imageUrl(),
+                                          resource.warehouseTemperature(),
+                                          resource.warehouseCapacity(),
                                           profileId);
     }
 
