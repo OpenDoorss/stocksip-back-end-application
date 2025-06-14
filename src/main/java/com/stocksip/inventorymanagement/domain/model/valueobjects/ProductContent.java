@@ -9,7 +9,9 @@ public record ProductContent(Double content) {
      * @throws IllegalArgumentException if the content is not a positive number.
      */
     public ProductContent {
-        validateContent(content);
+        if (!isContentValidate(content)) {
+            throw new IllegalArgumentException("Content must be a positive number.");
+        }
     }
 
     /**
@@ -18,9 +20,21 @@ public record ProductContent(Double content) {
      * @param content The content of the product in cubic meters.
      * @throws IllegalArgumentException if the content is not a positive number.
      */
-    private static void validateContent(Double content) {
-        if (content == null || content <= 0) {
-            throw new IllegalArgumentException("Content must be a positive number.");
+    private static boolean isContentValidate(Double content) {
+        return !(content.isNaN() || content <= 0);
+    }
+
+    /**
+     * Updates the content of the product.
+     *
+     * @param content The new content of the product in cubic meters.
+     * @return A new instance of ProductContent with the updated content.
+     * @throws IllegalArgumentException if the content is not a positive number.
+     */
+    public ProductContent updateContent(Double content) {
+        if (!isContentValidate(content)) {
+            throw new IllegalArgumentException("Updated content must be a positive number.");
         }
+        return new ProductContent(content);
     }
 }
