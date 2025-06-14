@@ -1,6 +1,7 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
+import com.stocksip.inventorymanagement.domain.model.commands.UploadImageCommand;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -80,19 +81,20 @@ public class Warehouse {
     // Default constructor for JPA
     protected Warehouse() {}
 
+
     /**
      * Constructor to create a new Warehouse instance.
      * This constructor initializes the warehouse with the provided command details.
      *
      * @param command the command containing the details for creating a new warehouse.
      */
-    public Warehouse(CreateWarehouseCommand command) {
+    public Warehouse(CreateWarehouseCommand command, String imageUrl) {
         this.name = command.name();
         this.address = command.address();
         this.temperature = command.temperature();
         this.capacity = command.capacity();
-        this.imageUrl = this.setDefaultImageUrlIfNotProvided(command.imageUrl());
-        this.profileId = new ProfileId(command.profileId());
+        this.imageUrl = this.setDefaultImageUrlIfNotProvided(imageUrl);
+        this.profileId = new ProfileId(command.profileId());;
     }
 
     /**
@@ -141,5 +143,4 @@ public class Warehouse {
                 ? ImageUrl.defaultImageUrl()
                 : new ImageUrl(imageUrl);
     }
-
 }
