@@ -1,14 +1,15 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.CatalogId;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.LiquorType;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductState;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ProviderId;
-import com.stocksip.shared.domain.aggregates.AuditableAbstractAggregateRoot;
+import com.stocksip.inventorymanagement.domain.model.entities.Brand;
+import com.stocksip.inventorymanagement.domain.model.entities.ProductType;
+import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.Date;
 
 /**
  * Product Aggregate Root
@@ -17,240 +18,99 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * The Product class is an aggregate root that represents a product in a warehouse.
  * It is responsible for handling the CreateProductCommand command.
  *
- * @since 1.0.1
+ * @since 1.0
  */
 @Entity
-public class Product extends AuditableAbstractAggregateRoot<Product> {
-
+@EntityListeners(AuditingEntityListener.class)
+public class Product extends AbstractAggregateRoot<Product> {
     /**
-     * Unique identifier of the warehouse in which this product is stored.
+     * The unique identifier of the product.
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
-    @ManyToOne
-    @JoinColumn(name = "warehouse_id", nullable = false)
-    private Warehouse warehouse;
+    private Long productId;
 
-    /**
-     * Unique identifier of the user that provided this product to the liquor store owner. It can be null.
-     */
-    @Getter
-    @Embedded
-    private ProviderId providerId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "brand_id", nullable = false)
+    private Brand brand;
 
-    /**
-     * Unique identifier of the catalog in which this product is shown. It can be null.
-     */
-    @Getter
-    @Embedded
-    private CatalogId catalogId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_type_id")
+    private ProductType productType;
 
+    protected Product() {}
     /**
-     * Name the owner gives to this product. It can be null.
+     * The name of the product.
      */
+    @Column(nullable = false)
     @Setter
+    @Getter
     private String name;
 
     /**
-     * Name of the brand to which this product belongs to.
+     * The type of liquor the product is made of.
      */
     @Column(nullable = false)
-    private String brandName;
+    @Getter
+    private String liquorType;
 
     /**
-     * The liquor type of the product.
+     * The date from which the product will no longer be consumable.
      */
-    @Column(nullable = false)
-    private LiquorType productType;
+    @Column(nullable = false, updatable = false)
+    private Date expirationDate;
 
     /**
-     * The current state of the product.
+     * The price the product can be sold to the customers of the liquor shop.
      */
     @Column(nullable = false)
-    private ProductState productState;
+    @Setter
+    private double price;
 
     /**
-     * The price which one product costs.
+     * The number that represents the current stock of the product in the warehouse.
      */
     @Column(nullable = false)
-    private double unitPrice;
-
-    /**
-     * The liquid content of this product. In milliliters.
-     */
-    @Column(nullable = false)
-    private double productContent;
-
-    /**
-     * The current stock of the product. It can update to show the current stock to the liquor store owner.
-     */
-    @Column(nullable = false)
+    @Setter
     private int currentStock;
 
     /**
-     * A configuration which is used to set alarms when the currentStock reaches this amount.
+     * The minimum number of products which can exist in a warehouse before generating an alert to the user.
+     * It's used to generate alerts in the platform.
      */
-    @Setter
     @Column(nullable = false)
+    @Setter
     private int minimumStock;
 
     /**
-     * The url of the image that shows with the product.
+     * The identifier of the warehouse where the product is stored.
      */
-    @Column(nullable = false)
-    private String imageUrl;
+    @Column(nullable = false, updatable = false)
+    @Getter
+    private Long warehouseId;
 
-    protected Product() {
-        // Default constructor for JPA.
-    }
+    /**
+     * The identifier of the user who provided this product to the liquor store owner.
+     */
+    @Column(nullable = false, updatable = false)
+    @Getter
+    private Long providerId;
 
     /**
      * @summary Constructor.
-     * It creates a new Product instance based on the CreateProductCommand command.
-     *
+     * This creates a new Product instance based on the CreateProductCommand command.
+     * @param command - the CreateProductCommand command
      */
-    public Product(Warehouse warehouse, ProviderId providerId, String imageUrl,
-                   String name, String brandName, LiquorType productType, double unitPrice,
-                   double productContent, int currentStock, int minimumStock) {
-
-        this.warehouse = warehouse;
-        this.providerId = providerId;
-        this.imageUrl = imageUrl;
-        this.name = name;
-        this.brandName = brandName;
-        this.productType = productType;
-        this.unitPrice = unitPrice;
-        this.productContent = productContent;
-        this.currentStock = currentStock;
-        this.minimumStock = minimumStock;
-        if (currentStock > 0) {
-            this.productState = ProductState.WITH_STOCK;
-        } else {
-            this.productState = ProductState.OUT_OF_STOCK;
-        }
-        // this.addDomainEvent(new ProductRequestedEvent(this));
+    public Product(CreateProductCommand command) {
+        this.productId = command.id();
+        this.name = command.name();
+        this.liquorType = command.liquorType();
+        this.expirationDate = command.expirationDate();
+        this.price = command.price();
+        this.currentStock = command.currentStock();
+        this.minimumStock = command.minimumStock();
+        this.warehouseId = command.warehouseId();
+        this.providerId = command.providerId();
     }
-
-    public Product(Warehouse warehouse, String imageUrl,
-                   String name, String brandName, LiquorType productType, double unitPrice,
-                   double productContent, int currentStock, int minimumStock) {
-
-        this.warehouse = warehouse;
-        this.providerId = null;
-        this.catalogId = null;
-        this.imageUrl = imageUrl;
-        this.name = name;
-        this.brandName = brandName;
-        this.productType = productType;
-        this.unitPrice = unitPrice;
-        this.productContent = productContent;
-        this.currentStock = currentStock;
-        this.minimumStock = minimumStock;
-        if (currentStock > 0) {
-            this.productState = ProductState.WITH_STOCK;
-        } else {
-            this.productState = ProductState.OUT_OF_STOCK;
-        }
-        // this.addDomainEvent(new ProductRequestedEvent(this));
-    }
-
-    /**
-     * Method to get the current state of the product.
-     * @return It returns the current state of the product.
-     */
-    public String getStatus() {
-        return this.productState.name().toLowerCase();
-    }
-
-    /**
-     * Method to update the product information.
-     * @param imageUrl The new image url of the product.
-     * @param name The new name of the product.
-     * @param brandName The new brand name of the product.
-     * @param productType The new liquor type of the product.
-     * @param unitPrice The new unit price of the product.
-     * @param productContent The new liquid amount of content of the product.
-     * @return The updated product instance.
-     */
-    public Product updateInformation(String imageUrl, String name, String brandName, LiquorType productType,
-                                     double unitPrice, double productContent) {
-        if (imageUrl != null) {
-            this.imageUrl = imageUrl;
-        }
-        if (name != null) {
-            this.name = name;
-        }
-        if (brandName != null) {
-            this.brandName = brandName;
-        }
-        if (productType != null) {
-            this.productType = productType;
-        }
-        if (unitPrice >= 0) {
-            this.unitPrice = unitPrice;
-        }
-        if (productContent >= 0) {
-            this.productContent = productContent;
-        }
-
-        return this;
-    }
-
-    /**
-     * Method to get the complete name of the product.
-     * Example 1: Whisky JOHNNIE WALKER Blue Label.
-     * Example 2: Cerveza Cristal.
-     * @return The full name of the product.
-     */
-    public String getProductFullName() {
-        if (name != null)
-        {
-            return this.productType + " " + this.brandName + " " + this.name;
-        } else {
-            return this.productType + " " + this.brandName;
-        }
-
-    }
-
-    /**
-     * Method to add stock to the product.
-     * It assures the input quantity is always a positive integer number.
-     * It also changes the product state to WITH STOCK.
-     * @param quantity The stock of this product to add.
-     */
-    public void addStock(int quantity) {
-        if (quantity > 0) {
-            this.currentStock += quantity;
-            this.productState = ProductState.WITH_STOCK;
-        }
-        // this.addDomainEvent(new ProductConfirmedEvent(this));
-    }
-
-    /**
-     * Method to remove stock of this product.
-     * It assures that the input quantity is always a positive integer number and is equal or less than the current stock.
-     * It also changes the product state to OUT OF STOCK if the resulting number of the stock of this product is zero.
-     * @param quantity The stock of this product to remove.
-     */
-    public void removeStock(int quantity) {
-        if (quantity > 0 && quantity <= this.currentStock) {
-            this.currentStock -= quantity;
-        }
-
-        if (this.currentStock == 0) {
-            this.productState = ProductState.OUT_OF_STOCK;
-        }
-        // this.addDomainEvent(new ProductConfirmedEvent(this));
-    }
-
-    /**
-     * Method when the product is added to a catalog.
-     * @param catalogId The Identifier of the catalog in which this product will be shown.
-     */
-    public void addProductToCatalog(CatalogId catalogId) {
-        if (this.catalogId == null && !(catalogId == null)) {
-            this.catalogId = catalogId;
-        }
-        // this.addDomainEvent(new ProductConfirmedEvent(this));
-    }
-
 }

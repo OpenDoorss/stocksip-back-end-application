@@ -17,9 +17,26 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public record ProfileId(Long profileId) {
 
+    /**
+     * Constructs a ProfileId with the given ID.
+     *
+     * @param profileId the unique identifier for the profile. Must be a positive number.
+     * @throws IllegalArgumentException if the profileId is null or not positive.
+     */
     public ProfileId {
         if (profileId == null || profileId <= 0) {
             throw new IllegalArgumentException("Profile ID must be a positive number.");
         }
+    }
+
+    /**
+     * Factory method to create a ProfileId from a Long value.
+     *
+     * @param id the unique identifier for the profile. Must be a positive number.
+     * @return a new ProfileId instance.
+     * @throws IllegalArgumentException if the id is null or not positive.
+     */
+    public static ProfileId from(Long id) {
+        return new ProfileId(id);
     }
 }
