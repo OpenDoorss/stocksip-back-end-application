@@ -4,6 +4,7 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ImageUrl;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Resource record for creating a new warehouse.
@@ -15,14 +16,12 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddr
  * @param temperature the temperature setting of the warehouse
  * @param capacity the capacity of the warehouse
  * @param imageUrl the URL of the image representing the warehouse
- *
  * @since 1.0.0
  */
 public record CreateWarehouseResource(String name,
                                       WarehousesAddress address,
                                       Temperature temperature,
-                                      Capacity capacity,
-                                      String imageUrl) {
+                                      Capacity capacity) {
 
     /**
      * Validates the resource.

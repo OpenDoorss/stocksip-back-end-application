@@ -23,7 +23,6 @@ public class CreateWarehouseCommandFromResourceAssembler {
                                           resource.address(),
                                           resource.temperature(),
                                           resource.capacity(),
-                                          resource.imageUrl(),
                                           profileId);
     }
 
