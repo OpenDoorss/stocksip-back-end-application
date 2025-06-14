@@ -21,7 +21,6 @@ public class Warehouse {
 
     /**
      * The unique identifier of the warehouse.
-     * @type Long
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -94,7 +93,7 @@ public class Warehouse {
         this.temperature = command.temperature();
         this.capacity = command.capacity();
         this.imageUrl = this.setDefaultImageUrlIfNotProvided(imageUrl);
-        this.profileId = new ProfileId(command.profileId());;
+        this.profileId = new ProfileId(command.profileId());
     }
 
     /**

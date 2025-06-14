@@ -59,7 +59,7 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
             throw new IllegalArgumentException("Warehouse with the same address already exists.");
         }
 
-        String imageUrl = null;
+        String imageUrl;
 
         try {
             imageUrl = cloudinaryService.uploadImage(imageCommand.imageFile());

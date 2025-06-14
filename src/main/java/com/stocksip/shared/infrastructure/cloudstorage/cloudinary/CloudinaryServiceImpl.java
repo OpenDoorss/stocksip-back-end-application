@@ -15,15 +15,7 @@ import java.util.UUID;
 public class CloudinaryServiceImpl implements CloudinaryService {
 
 
-    private Cloudinary cloudinary;
-
-    private static final Set<String> ALLOWED_MIME_TYPES = Set.of(
-            "image/jpeg",  // JPEG
-            "image/jpg",   // JPG (alias)
-            "image/png",   // PNG
-            "image/webp",  // WebP
-            "image/avif"   // AVIF
-    );
+    private final Cloudinary cloudinary;
 
     public CloudinaryServiceImpl(Cloudinary cloudinary) {
         this.cloudinary = cloudinary;

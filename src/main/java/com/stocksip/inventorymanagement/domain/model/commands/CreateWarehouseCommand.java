@@ -1,7 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
 import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Command to create a new warehouse.
