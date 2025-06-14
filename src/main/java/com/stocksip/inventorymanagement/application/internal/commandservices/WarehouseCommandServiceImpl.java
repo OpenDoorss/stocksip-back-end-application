@@ -52,9 +52,9 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
             throw new IllegalArgumentException("Warehouse with the same name already exists.");
 
         if (warehouseRepository.existsByAddressStreetAndAddressCityAndAddressPostalCodeIgnoreCaseAndProfileId(
-                warehouseCommand.address().street(),
-                warehouseCommand.address().city(),
-                warehouseCommand.address().postalCode(),
+                warehouseCommand.street(),
+                warehouseCommand.city(),
+                warehouseCommand.postalCode(),
                 ProfileId.from(warehouseCommand.profileId()))) {
             throw new IllegalArgumentException("Warehouse with the same address already exists.");
         }

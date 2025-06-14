@@ -12,9 +12,14 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
  * @since 1.0.0
  */
 public record CreateWarehouseCommand(String name,
-                                     WarehousesAddress address,
-                                     Temperature temperature,
-                                     Capacity capacity,
+                                     String street,
+                                     String city,
+                                     String district,
+                                     String postalCode,
+                                     String country,
+                                     Double minTemperature,
+                                     Double maxTemperature,
+                                     Double capacity,
                                      Long profileId) {
 
     /**

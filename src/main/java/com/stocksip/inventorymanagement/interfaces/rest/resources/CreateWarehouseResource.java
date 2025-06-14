@@ -1,24 +1,29 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
-
 /**
- * Resource record for creating a new warehouse.
- * @summary
- * This record represents the data required to create a new warehouse in the inventory management system.
+ * Resource for creating a new warehouse.
  *
  * @param name the name of the warehouse
- * @param address the address of the warehouse
- * @param temperature the temperature setting of the warehouse
- * @param capacity the capacity of the warehouse
+ * @param street the street address of the warehouse
+ * @param city the city where the warehouse is located
+ * @param district the district of the warehouse
+ * @param postalCode the postal code of the warehouse
+ * @param country the country where the warehouse is located
+ * @param minTemperature the minimum temperature setting for the warehouse
+ * @param maxTemperature the maximum temperature setting for the warehouse
+ * @param capacity the capacity of the warehouse in cubic meters
+ *
  * @since 1.0.0
  */
 public record CreateWarehouseResource(String name,
-                                      WarehousesAddress address,
-                                      Temperature temperature,
-                                      Capacity capacity) {
+                                      String street,
+                                      String city,
+                                      String district,
+                                      String postalCode,
+                                      String country,
+                                      Double minTemperature,
+                                      Double maxTemperature,
+                                      Double capacity) {
 
     /**
      * Validates the resource.
@@ -27,15 +32,6 @@ public record CreateWarehouseResource(String name,
     public CreateWarehouseResource {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Warehouse name cannot be null or blank");
-        }
-        if (address == null) {
-            throw new IllegalArgumentException("Address cannot be null");
-        }
-        if (temperature == null) {
-            throw new IllegalArgumentException("Temperature cannot be null");
-        }
-        if (capacity == null) {
-            throw new IllegalArgumentException("Capacity cannot be null");
         }
     }
 }

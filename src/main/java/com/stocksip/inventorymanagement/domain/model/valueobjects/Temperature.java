@@ -13,7 +13,7 @@ import jakarta.persistence.Embeddable;
  * @since 1.0.0
  */
 @Embeddable
-public record Temperature(double minTemperature, double maxTemperature) {
+public record Temperature(Double minTemperature, Double maxTemperature) {
 
 
     /*

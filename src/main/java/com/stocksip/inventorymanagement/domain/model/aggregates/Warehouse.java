@@ -89,9 +89,9 @@ public class Warehouse {
      */
     public Warehouse(CreateWarehouseCommand command, String imageUrl) {
         this.name = command.name();
-        this.address = command.address();
-        this.temperature = command.temperature();
-        this.capacity = command.capacity();
+        this.address = new WarehousesAddress(command.street(), command.city(), command.district(), command.postalCode(), command.country());
+        this.temperature = new Temperature(command.minTemperature(), command.maxTemperature());
+        this.capacity = new Capacity(command.capacity());
         this.imageUrl = this.setDefaultImageUrlIfNotProvided(imageUrl);
         this.profileId = new ProfileId(command.profileId());
     }
