@@ -2,6 +2,7 @@ package com.stocksip.inventorymanagement.interfaces.rest.transform;
 
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateWarehouseCommand;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.UpdateWarehouseResource;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Assembler for converting UpdateWarehouseResource to UpdateWarehouseCommand.
