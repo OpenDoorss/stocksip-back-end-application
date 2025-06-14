@@ -47,6 +47,7 @@ public class ProductExit extends AuditableModel {
      * The date which this exit is being registered.
      */
     @Column(nullable = false, updatable = false)
+    @Getter
     @CreatedDate
     private Date exitDate;
 
@@ -69,6 +70,7 @@ public class ProductExit extends AuditableModel {
 
     /**
      * Method to get the reason of the exit of these products.
+     *
      * @return The reason of exiting of these products.
      */
     public String getReason() {
