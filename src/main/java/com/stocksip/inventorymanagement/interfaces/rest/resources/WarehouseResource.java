@@ -1,8 +1,8 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseCapacity;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ImageUrl;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseTemperature;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
 
 /**
@@ -16,7 +16,7 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddr
  */
 public record WarehouseResource(String name,
                                 WarehousesAddress address,
-                                Temperature temperature,
-                                Capacity capacity,
+                                WarehouseTemperature warehouseTemperature,
+                                WarehouseCapacity warehouseCapacity,
                                 ImageUrl imageUrl) {
 }

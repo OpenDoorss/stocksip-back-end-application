@@ -107,8 +107,8 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
         warehouseToUpdate.updateInformation(
                 command.name(),
                 command.address(),
-                command.temperature(),
-                command.capacity(),
+                command.warehouseTemperature(),
+                command.warehouseCapacity(),
                 command.imageUrl()
         );
 

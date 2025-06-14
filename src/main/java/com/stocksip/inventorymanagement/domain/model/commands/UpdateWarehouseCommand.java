@@ -1,7 +1,7 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseCapacity;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseTemperature;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
 
 /**
@@ -10,8 +10,8 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddr
  * @param warehouseId the ID of the warehouse to update
  * @param name the name of the warehouse
  * @param address the address of the warehouse
- * @param temperature the temperature setting of the warehouse
- * @param capacity the capacity of the warehouse
+ * @param warehouseTemperature the temperature setting of the warehouse
+ * @param warehouseCapacity the capacity of the warehouse
  * @param imageUrl the URL of the image representing the warehouse
  * @param profileId the ID of the profile associated with the warehouse
  *
@@ -20,8 +20,8 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddr
 public record UpdateWarehouseCommand(Long warehouseId,
                                      String name,
                                      WarehousesAddress address,
-                                     Temperature temperature,
-                                     Capacity capacity,
+                                     WarehouseTemperature warehouseTemperature,
+                                     WarehouseCapacity warehouseCapacity,
                                      String imageUrl,
                                      Long profileId) {
     /**
@@ -45,10 +45,10 @@ public record UpdateWarehouseCommand(Long warehouseId,
         if (address == null) {
             throw new IllegalArgumentException("Address cannot be null");
         }
-        if (temperature == null) {
+        if (warehouseTemperature == null) {
             throw new IllegalArgumentException("Temperature cannot be null");
         }
-        if (capacity == null) {
+        if (warehouseCapacity == null) {
             throw new IllegalArgumentException("Capacity cannot be null");
         }
     }
