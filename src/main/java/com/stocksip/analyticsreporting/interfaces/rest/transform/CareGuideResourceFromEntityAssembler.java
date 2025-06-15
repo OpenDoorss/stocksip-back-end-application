@@ -15,7 +15,12 @@ public class CareGuideResourceFromEntityAssembler {
      * @return The CareGuide resource.
      */
     public static CareGuideResource toResourceFromEntity(CareGuide entity){
-        return new CareGuideResource(entity.getId(),entity.getGuideName(),entity.getType(),
-                entity.getDescription());
+        return new CareGuideResource(
+            entity.getId(),
+            entity.getGuideName(),
+            entity.getType(),
+            entity.getDescription(),
+            entity.getImageUrl() != null ? entity.getImageUrl().imageUrl() : null
+        );
     }
 }

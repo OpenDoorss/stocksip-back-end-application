@@ -1,5 +1,6 @@
 package com.stocksip.analyticsreporting.domain.model.commands;
 
+
 /**
  * UpdateCareGuideCommand
  *
@@ -11,7 +12,7 @@ package com.stocksip.analyticsreporting.domain.model.commands;
  * @param description The detailed content of the care guide (required, non-empty)
  * @since 1.0
  */
-public record UpdateCareGuideCommand(Long id, String guideName, String type, String description) {
+public record UpdateCareGuideCommand(Long id, String guideName, String type, String description, String imageUrl) {
 
     public UpdateCareGuideCommand {
         if (id == null || id <= 0) {
@@ -25,6 +26,9 @@ public record UpdateCareGuideCommand(Long id, String guideName, String type, Str
         }
         if (description == null || description.isBlank()) {
             throw new IllegalArgumentException("Description cannot be null or blank.");
+        }
+        if (imageUrl == null) {
+            throw new IllegalArgumentException("Image URL cannot be null.");
         }
     }
 }

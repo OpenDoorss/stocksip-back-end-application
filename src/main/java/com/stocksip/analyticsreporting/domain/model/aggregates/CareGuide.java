@@ -1,6 +1,7 @@
 package com.stocksip.analyticsreporting.domain.model.aggregates;
 
 import com.stocksip.analyticsreporting.domain.model.commands.CreateCareGuideCommand;
+import com.stocksip.analyticsreporting.domain.model.valueobjects.ImageUrl;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,6 +53,24 @@ public class CareGuide extends AbstractAggregateRoot<CareGuide> {
     @Column(nullable = false)
     @Getter
     private String description;
+    
+    /**
+     * Gets the image URL of the care guide.
+     * @return The image URL value object
+     */
+    public ImageUrl getImageUrl() {
+        return imageUrl;
+    }
+
+    /**
+     * The image URL of the care guide.
+     * @imageUrl ImageUrl
+     */
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "imageUrl", column = @Column(name = "image_url"))
+    })
+    private ImageUrl imageUrl;
 
     protected CareGuide(){}
 
@@ -60,10 +79,11 @@ public class CareGuide extends AbstractAggregateRoot<CareGuide> {
      * This a create new CareGuide instance based on the CreateCareGuideCommand command.
      * @param command - The CreateCareGuideCommand command
      */
-    public CareGuide(CreateCareGuideCommand command) {
+    public CareGuide(CreateCareGuideCommand command , String imageUrl) {
         this.guideName = command.guideName();
         this.type = command.type();
         this.description = command.description();
+        this.imageUrl = this.setDefaultImageUrlIfNotProvided(imageUrl);
     }
     /**
      * Updates the care guide information with the provided values.
@@ -74,7 +94,7 @@ public class CareGuide extends AbstractAggregateRoot<CareGuide> {
      * @param description The new description/content for the care guide (optional)
      * @return The updated care guide instance
      */
-    public CareGuide updateInformation(String guideName, String type, String description) {
+    public CareGuide updateInformation(String guideName, String type, String description, String imageUrl) {
         if (guideName != null && !guideName.isBlank()) {
             this.guideName = guideName;
         }
@@ -84,6 +104,12 @@ public class CareGuide extends AbstractAggregateRoot<CareGuide> {
         if (description != null && !description.isBlank()) {
             this.description = description;
         }
+        this.imageUrl = this.setDefaultImageUrlIfNotProvided(imageUrl);
         return this;
+    }
+    private ImageUrl setDefaultImageUrlIfNotProvided(String imageUrl) {
+        return imageUrl == null || imageUrl.isBlank()
+                ? ImageUrl.ImageUrlForDefault()
+                : new ImageUrl(imageUrl);
     }
 }

@@ -50,7 +50,8 @@ public class CareGuideCommandServiceImpl implements CareGuideCommandService {
                 command.description())){
             throw new DuplicateReportException(REPORT_EXISTS_MSG);
         }
-        CareGuide careGuide = new CareGuide(command);
+        // Create a new CareGuide with the command and default image URL
+        CareGuide careGuide = new CareGuide(command, command.imageUrl());
         CareGuide savedCareGuide = careGuideRepository.save(careGuide);
 
         return Optional.of(savedCareGuide);
@@ -74,7 +75,8 @@ public class CareGuideCommandServiceImpl implements CareGuideCommandService {
                 throw new DuplicateReportException("A care guide with the same name already exists");
             }   
         }
-        careGuide.updateInformation(command.guideName(),command.type(),command.description());
+        // Update the care guide with all fields including imageUrl
+        careGuide.updateInformation(command.guideName(), command.type(), command.description(), command.imageUrl());
 
         CareGuide updatedCareGuide = careGuideRepository.save(careGuide);
         return Optional.of(updatedCareGuide);
