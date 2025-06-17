@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
+import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
 import com.stocksip.inventorymanagement.domain.model.events.CreateLowStockAlertEvent;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
 import com.stocksip.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
@@ -142,14 +143,6 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
         this.providerId = providerId;
         this.imageUrl = setDefaultImageUrlIfNotProvided(imageUrl);
     }
-
-    /**
-     * Factory method to create a Product from a CreateProductCommand.
-     *
-     * @param command The command containing the product creation details.
-     * @return A new Product instance.
-     */
-
 
     /**
      * Method to set a default image URL if the provided image URL is null or blank.

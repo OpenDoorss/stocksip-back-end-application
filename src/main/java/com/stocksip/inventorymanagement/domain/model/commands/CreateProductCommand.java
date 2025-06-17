@@ -1,6 +1,9 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
+import com.stocksip.inventorymanagement.domain.model.valueobjects.ProviderId;
+
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * CreateProductCommand
@@ -8,16 +11,15 @@ import java.util.Date;
  * @summary
  * CreateProductCommand is a record class that represents the command to register a product in a warehouse.
  */
-public record CreateProductCommand(Long id,
-                                   String name,
+public record CreateProductCommand(Optional<String> additionalName,
                                    String liquorType,
+                                   String brandName,
                                    Date expirationDate,
-                                   double price,
+                                   double unitPrice,
                                    int currentStock,
                                    int minimumStock,
                                    Long warehouseId,
-                                   Long providerId)
-{
+                                   Optional<ProviderId> providerId) {
     /**
      * Validates the command.
      *
