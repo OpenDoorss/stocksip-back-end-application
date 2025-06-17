@@ -17,9 +17,10 @@ public class WarehouseResourceFromEntityAssembler {
      */
     public static WarehouseResource toResourceFromEntity(Warehouse entity) {
         return new WarehouseResource(entity.getName(),
-                                     entity.getTemperature(),
-                                     entity.getCapacity(),
+                                     entity.getTemperature().maxTemperature(),
+                                     entity.getTemperature().minTemperature(),
+                                     entity.getCapacity().capacity(),
                                      entity.getFullAddress(),
-                                     entity.getImageUrl());
+                                     entity.getImageUrl().imageUrl());
     }
 }

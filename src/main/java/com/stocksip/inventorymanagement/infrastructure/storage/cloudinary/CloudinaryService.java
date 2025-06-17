@@ -1,4 +1,4 @@
-package com.stocksip.shared.infrastructure.cloudstorage.cloudinary;
+package com.stocksip.inventorymanagement.infrastructure.storage.cloudinary;
 
 import org.springframework.web.multipart.MultipartFile;
 

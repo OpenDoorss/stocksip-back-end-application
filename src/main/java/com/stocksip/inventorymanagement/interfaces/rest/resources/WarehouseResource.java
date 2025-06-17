@@ -14,8 +14,9 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
  * @since 1.0.0
  */
 public record WarehouseResource(String name,
-                                Temperature temperature,
-                                Capacity capacity,
+                                double maxTemperature,
+                                double minTemperature,
+                                double capacity,
                                 String address,
-                                ImageUrl imageUrl) {
+                                String imageUrl) {
 }

@@ -37,6 +37,7 @@ public record ImageUrl(String imageUrl) {
      * @return A new ImageUrl instance with the default image URL.
      */
     public static ImageUrl defaultImageUrl() {
+
         return new ImageUrl("https://res.cloudinary.com/deuy1pr9e/image/upload/v1747454213/g24tiltaf9nughb8km93.avif");
     }
 }

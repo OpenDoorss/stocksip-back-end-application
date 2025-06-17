@@ -1,14 +1,14 @@
-package com.stocksip.shared.infrastructure.cloudstorage.cloudinary;
+package com.stocksip.inventorymanagement.infrastructure.storage.cloudinary.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.stocksip.inventorymanagement.infrastructure.storage.cloudinary.CloudinaryService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -27,7 +27,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         try {
 
             if (file == null || file.isEmpty()) {
-                return null;
+                throw new IllegalArgumentException("File must not be null or empty");
             }
 
             List<String> allowedContentTypes = List.of(

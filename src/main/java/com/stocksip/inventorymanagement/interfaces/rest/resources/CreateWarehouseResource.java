@@ -27,7 +27,7 @@ public record CreateWarehouseResource(String name,
 
     /**
      * Validates the resource.
-     * @throws IllegalArgumentException if the name, address, temperature, capacity is null or invalid.
+     * @throws IllegalArgumentException if the name is null or blank.
      */
     public CreateWarehouseResource {
         if (name == null || name.isBlank()) {
