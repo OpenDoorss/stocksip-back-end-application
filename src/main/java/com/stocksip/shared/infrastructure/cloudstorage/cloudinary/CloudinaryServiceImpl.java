@@ -44,7 +44,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
             }
 
             Map<String, Object> options = ObjectUtils.asMap(
-                    "folder", "careguides",
+                    "folder", "warehouses",
                     "public_id", UUID.randomUUID().toString(),
                     "resource_type", "auto",
                     "quality", "auto:good"
