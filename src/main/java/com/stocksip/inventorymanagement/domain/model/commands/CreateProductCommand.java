@@ -10,6 +10,8 @@ import java.util.Optional;
  *
  * @summary
  * CreateProductCommand is a record class that represents the command to register a product in a warehouse.
+ *
+ * @since 1.0.0
  */
 public record CreateProductCommand(Optional<String> additionalName,
                                    String liquorType,
@@ -18,6 +20,7 @@ public record CreateProductCommand(Optional<String> additionalName,
                                    double unitPrice,
                                    int currentStock,
                                    int minimumStock,
+                                   String imageUrl,
                                    Long warehouseId,
                                    Optional<ProviderId> providerId) {
     /**
