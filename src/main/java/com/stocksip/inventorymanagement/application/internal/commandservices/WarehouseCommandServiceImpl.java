@@ -8,7 +8,7 @@ import com.stocksip.inventorymanagement.domain.model.commands.UploadImageCommand
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.WarehouseRepository;
-import com.stocksip.shared.infrastructure.cloudstorage.cloudinary.CloudinaryService;
+import com.stocksip.inventorymanagement.infrastructure.storage.cloudinary.CloudinaryService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -40,27 +40,31 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
     /**
      * Handles the command to create a new warehouse.
      *
+     * @param command the command containing the details of the warehouse to create
+     * @return an Optional containing the created Warehouse if successful, or empty if not
+     * @throws IllegalArgumentException if a warehouse with the same name or address already exists
+     */
+    @Override
+    public Optional<Warehouse> handle(CreateWarehouseCommand command) {
+        validateWarehouseUniqueness(command);
+        var warehouse = new Warehouse(command);
+        var createdWarehouse = warehouseRepository.save(warehouse);
+        return Optional.of(createdWarehouse);
+    }
+
+    /**
+     * Handles the command to create a new warehouse with an image.
+     *
      * @param warehouseCommand the command containing the details of the warehouse to create
-     * @param imageCommand the command containing the image file to upload
+     * @param imageCommand the command containing the image upload details
      * @return an Optional containing the created Warehouse if successful, or empty if not
      * @throws IllegalArgumentException if a warehouse with the same name or address already exists
      */
     @Override
     public Optional<Warehouse> handle(CreateWarehouseCommand warehouseCommand, UploadImageCommand imageCommand) {
-
-        if (warehouseRepository.existsByNameIgnoreCaseAndProfileId(warehouseCommand.name(), ProfileId.from(warehouseCommand.profileId())))
-            throw new IllegalArgumentException("Warehouse with the same name already exists.");
-
-        if (warehouseRepository.existsByAddressStreetAndAddressCityAndAddressPostalCodeIgnoreCaseAndProfileId(
-                warehouseCommand.street(),
-                warehouseCommand.city(),
-                warehouseCommand.postalCode(),
-                ProfileId.from(warehouseCommand.profileId()))) {
-            throw new IllegalArgumentException("Warehouse with the same address already exists.");
-        }
+        validateWarehouseUniqueness(warehouseCommand);
 
         String imageUrl;
-
         try {
             imageUrl = cloudinaryService.uploadImage(imageCommand.imageFile());
         } catch (IOException e) {
@@ -71,6 +75,7 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
                 warehouseCommand,
                 imageUrl
         );
+
         var createdWarehouse = warehouseRepository.save(warehouse);
         return Optional.of(createdWarehouse);
     }
@@ -136,6 +141,25 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
             warehouseRepository.deleteById(command.warehouseId());
         } catch (Exception e) {
             throw new RuntimeException("Error finding warehouse: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Validates the uniqueness of the warehouse based on its name and address.
+     *
+     * @param command the command containing the details of the warehouse to validate
+     * @throws IllegalArgumentException if a warehouse with the same name or address already exists
+     */
+    private void validateWarehouseUniqueness(CreateWarehouseCommand command) {
+        if (warehouseRepository.existsByNameIgnoreCaseAndProfileId(command.name(), ProfileId.from(command.profileId())))
+            throw new IllegalArgumentException("Warehouse with the same name already exists.");
+
+        if (warehouseRepository.existsByAddressStreetAndAddressCityAndAddressPostalCodeIgnoreCaseAndProfileId(
+                command.street(),
+                command.city(),
+                command.postalCode(),
+                ProfileId.from(command.profileId()))) {
+            throw new IllegalArgumentException("Warehouse with the same address already exists.");
         }
     }
 }

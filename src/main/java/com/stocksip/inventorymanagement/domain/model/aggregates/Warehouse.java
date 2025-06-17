@@ -79,7 +79,6 @@ public class Warehouse {
     // Default constructor for JPA
     protected Warehouse() {}
 
-
     /**
      * Constructor to create a new Warehouse instance.
      * This constructor initializes the warehouse with the provided command details.
@@ -91,7 +90,16 @@ public class Warehouse {
         this.address = new WarehousesAddress(command.street(), command.city(), command.district(), command.postalCode(), command.country());
         this.temperature = new Temperature(command.minTemperature(), command.maxTemperature());
         this.capacity = new Capacity(command.capacity());
-        this.imageUrl = this.setDefaultImageUrlIfNotProvided(imageUrl);
+        this.imageUrl = new ImageUrl(imageUrl);
+        this.profileId = new ProfileId(command.profileId());
+    }
+
+    public Warehouse(CreateWarehouseCommand command) {
+        this.name = command.name();
+        this.address = new WarehousesAddress(command.street(), command.city(), command.district(), command.postalCode(), command.country());
+        this.temperature = new Temperature(command.minTemperature(), command.maxTemperature());
+        this.capacity = new Capacity(command.capacity());
+        this.imageUrl = ImageUrl.defaultImageUrl();
         this.profileId = new ProfileId(command.profileId());
     }
 
