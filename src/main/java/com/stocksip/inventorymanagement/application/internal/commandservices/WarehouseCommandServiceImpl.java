@@ -45,9 +45,9 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
             throw new IllegalArgumentException("Warehouse with the same name already exists.");
 
         if (warehouseRepository.existsByAddressStreetAndAddressCityAndAddressPostalCodeIgnoreCaseAndProfileId(
-                command.address().street(),
-                command.address().city(),
-                command.address().postalCode(),
+                command.street(),
+                command.city(),
+                command.postalCode(),
                 ProfileId.from(command.profileId()))) {
             throw new IllegalArgumentException("Warehouse with the same address already exists.");
         }
@@ -75,24 +75,25 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
             throw new IllegalArgumentException("Warehouse with name %s already exists".formatted(command.name()));
         }
 
-        boolean isAddressChanged = !warehouseToUpdate.getAddress().equals(command.address());
+        boolean isAddressChanged = !warehouseToUpdate.getAddress().fullAddress().equals(
+                String.format("%s, %s, %s, %s, %s",
+                        command.street(),
+                        command.city(),
+                        command.district(),
+                        command.postalCode(),
+                        command.country()));
+
         if (isAddressChanged &&
                 warehouseRepository.existsByAddressStreetIgnoreCaseAndAddressCityIgnoreCaseAndAddressPostalCodeIgnoreCaseAndProfileIdAndWarehouseIdIsNot(
-                        command.address().street(),
-                        command.address().city(),
-                        command.address().postalCode(),
+                        command.street(),
+                        command.city(),
+                        command.postalCode(),
                         ProfileId.from(command.profileId()),
                         command.warehouseId())){
             throw new IllegalArgumentException("Another warehouse with the same address already exists.");
         }
 
-        warehouseToUpdate.updateInformation(
-                command.name(),
-                command.address(),
-                command.temperature(),
-                command.capacity(),
-                command.imageUrl()
-        );
+        warehouseToUpdate.updateInformation(command);
 
         try {
             var updatedWarehouse = warehouseRepository.save(warehouseToUpdate);

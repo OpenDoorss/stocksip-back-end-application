@@ -19,9 +19,14 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddr
  * @since 1.0.0
  */
 public record CreateWarehouseResource(String name,
-                                      WarehousesAddress address,
-                                      Temperature temperature,
-                                      Capacity capacity,
+                                      String street,
+                                      String city,
+                                      String district,
+                                      String postalCode,
+                                      String country,
+                                      Double maxTemperature,
+                                      Double minTemperature,
+                                      Double capacity,
                                       String imageUrl) {
 
     /**
@@ -31,15 +36,6 @@ public record CreateWarehouseResource(String name,
     public CreateWarehouseResource {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Warehouse name cannot be null or blank");
-        }
-        if (address == null) {
-            throw new IllegalArgumentException("Address cannot be null");
-        }
-        if (temperature == null) {
-            throw new IllegalArgumentException("Temperature cannot be null");
-        }
-        if (capacity == null) {
-            throw new IllegalArgumentException("Capacity cannot be null");
         }
     }
 }

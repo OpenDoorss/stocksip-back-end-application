@@ -25,8 +25,13 @@ public class UpdateWarehouseCommandFromResourceAssembler {
         return new UpdateWarehouseCommand(
                 warehouseId,
                 resource.name(),
-                resource.address(),
-                resource.temperature(),
+                resource.street(),
+                resource.city(),
+                resource.district(),
+                resource.postalCode(),
+                resource.country(),
+                resource.maxTemperature(),
+                resource.minTemperature(),
                 resource.capacity(),
                 resource.imageUrl(),
                 profileId

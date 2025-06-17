@@ -1,6 +1,7 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
+import com.stocksip.inventorymanagement.domain.model.commands.UpdateWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -84,45 +85,26 @@ public class Warehouse {
      */
     public Warehouse(CreateWarehouseCommand command) {
         this.name = command.name();
-        this.address = command.address();
-        this.temperature = command.temperature();
-        this.capacity = command.capacity();
+        this.address = new WarehousesAddress(command.street(), command.city(), command.district(), command.postalCode(), command.country());
+        this.temperature = new Temperature(command.minTemperature(), command.maxTemperature());
+        this.capacity = new Capacity(command.capacity());
         this.imageUrl = this.setDefaultImageUrlIfNotProvided(command.imageUrl());
         this.profileId = new ProfileId(command.profileId());
     }
 
     /**
-     * Update the warehouse information.
-     * This method allows updating the warehouse's name, address, temperature, total capacity, and image URL.
-     * @param name the new name of the warehouse.
-     * @param address the new location of the warehouse.
-     * @param capacity the new total capacity of the warehouse.
-     * @param imageUrl the url of the image.
+     * Updates the warehouse information with the details provided in the command.
      *
-     * @return the updated Warehouse object
+     * @param command the command containing the updated details for the warehouse.
+     * @return the updated Warehouse instance.
      */
-    public Warehouse updateInformation(String name, WarehousesAddress address, Temperature temperature, Capacity capacity, String imageUrl) {
-        this.name = name;
-        this.address = address;
-        this.temperature = temperature;
-        this.capacity = capacity;
-        this.imageUrl = setDefaultImageUrlIfNotProvided(imageUrl);
+    public Warehouse updateInformation(UpdateWarehouseCommand command) {
+        this.name = command.name();
+        this.address = new WarehousesAddress(command.street(), command.city(), command.district(), command.postalCode(), command.country());
+        this.temperature = new Temperature(command.minTemperature(), command.maxTemperature());
+        this.capacity = new Capacity(command.capacity());
+        this.imageUrl = setDefaultImageUrlIfNotProvided(command.imageUrl());
         return this;
-    }
-
-    /**
-     * Get the full address of the warehouse.
-     * This method formats the address components into a single string.
-     *
-     * @return a string representing the full address of the warehouse.
-     */
-    public String getFullAddress() {
-        return String.format("%s, %s, %s, %s, %s",
-                address.street(),
-                address.city(),
-                address.district(),
-                address.postalCode(),
-                address.country());
     }
 
     /**

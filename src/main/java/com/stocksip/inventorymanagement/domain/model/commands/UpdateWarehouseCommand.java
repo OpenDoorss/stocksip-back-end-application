@@ -19,9 +19,14 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddr
  */
 public record UpdateWarehouseCommand(Long warehouseId,
                                      String name,
-                                     WarehousesAddress address,
-                                     Temperature temperature,
-                                     Capacity capacity,
+                                     String street,
+                                     String city,
+                                     String district,
+                                     String postalCode,
+                                     String country,
+                                     Double maxTemperature,
+                                     Double minTemperature,
+                                     Double capacity,
                                      String imageUrl,
                                      Long profileId) {
     /**
@@ -38,18 +43,6 @@ public record UpdateWarehouseCommand(Long warehouseId,
     public UpdateWarehouseCommand {
         if (warehouseId == null || warehouseId <= 0) {
             throw new IllegalArgumentException("courseId cannot be null or less than or equal to 0");
-        }
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Warehouse name cannot be null or blank");
-        }
-        if (address == null) {
-            throw new IllegalArgumentException("Address cannot be null");
-        }
-        if (temperature == null) {
-            throw new IllegalArgumentException("Temperature cannot be null");
-        }
-        if (capacity == null) {
-            throw new IllegalArgumentException("Capacity cannot be null");
         }
     }
 }

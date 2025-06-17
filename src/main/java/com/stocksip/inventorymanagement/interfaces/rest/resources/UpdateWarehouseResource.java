@@ -6,20 +6,29 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
 
 /**
- * Resource for updating an existing warehouse.
+ * Resource for updating a warehouse.
+ * This record holds the details required to update a warehouse's information.
  *
- * @param name the name of the warehouse
- * @param address the address of the warehouse
- * @param temperature the temperature setting of the warehouse
- * @param capacity the capacity of the warehouse
- * @param imageUrl the URL of the image representing the warehouse
- *
- * @since 1.0.0
+ * @param name          Name of the warehouse
+ * @param street        Street address of the warehouse
+ * @param city          City where the warehouse is located
+ * @param district      District of the warehouse
+ * @param postalCode    Postal code of the warehouse location
+ * @param country       Country where the warehouse is located
+ * @param maxTemperature Maximum temperature allowed in the warehouse
+ * @param minTemperature Minimum temperature allowed in the warehouse
+ * @param capacity      Total capacity of the warehouse
+ * @param imageUrl      URL of an image representing the warehouse
  */
 public record UpdateWarehouseResource(String name,
-                                      WarehousesAddress address,
-                                      Temperature temperature,
-                                      Capacity capacity,
+                                      String street,
+                                      String city,
+                                      String district,
+                                      String postalCode,
+                                      String country,
+                                      Double maxTemperature,
+                                      Double minTemperature,
+                                      Double capacity,
                                       String imageUrl) {
 
     /**
@@ -29,15 +38,6 @@ public record UpdateWarehouseResource(String name,
     public UpdateWarehouseResource {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Warehouse name cannot be null or blank");
-        }
-        if (address == null) {
-            throw new IllegalArgumentException("Address cannot be null");
-        }
-        if (temperature == null) {
-            throw new IllegalArgumentException("Temperature cannot be null");
-        }
-        if (capacity == null) {
-            throw new IllegalArgumentException("Capacity cannot be null");
         }
     }
 }
