@@ -1,9 +1,5 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ImageUrl;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
-
 /**
  * WarehouseResource is a record that represents a warehouse resource in the REST API.
  *

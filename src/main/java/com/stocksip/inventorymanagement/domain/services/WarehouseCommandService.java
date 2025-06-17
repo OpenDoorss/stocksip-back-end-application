@@ -21,7 +21,7 @@ public interface WarehouseCommandService {
     /**
      * Handles the creation of a new warehouse.
      *
-     * @param warehouseCommand the command containing the details for creating a warehouse
+     * @param command the command containing the details for creating a warehouse
      * @return an Optional containing the created Warehouse if successful, or empty if not
      * @see CreateWarehouseCommand
      */
