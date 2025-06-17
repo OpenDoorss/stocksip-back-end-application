@@ -1,21 +1,21 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Capacity;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.Temperature;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
-
 /**
- * Command for updating an existing warehouse.
+ * Command for updating a warehouse.
+ * This record holds the details required to update a warehouse's information.
  *
- * @param warehouseId the ID of the warehouse to update
- * @param name the name of the warehouse
- * @param address the address of the warehouse
- * @param temperature the temperature setting of the warehouse
- * @param capacity the capacity of the warehouse
- * @param imageUrl the URL of the image representing the warehouse
- * @param profileId the ID of the profile associated with the warehouse
- *
- * @since 1.0.0
+ * @param warehouseId   ID of the warehouse to be updated
+ * @param name          Name of the warehouse
+ * @param street        Street address of the warehouse
+ * @param city          City where the warehouse is located
+ * @param district      District of the warehouse
+ * @param postalCode    Postal code of the warehouse location
+ * @param country       Country where the warehouse is located
+ * @param maxTemperature Maximum temperature allowed in the warehouse
+ * @param minTemperature Minimum temperature allowed in the warehouse
+ * @param capacity      Total capacity of the warehouse
+ * @param imageUrl      URL of an image representing the warehouse
+ * @param profileId     ID of the profile associated with this warehouse
  */
 public record UpdateWarehouseCommand(Long warehouseId,
                                      String name,
