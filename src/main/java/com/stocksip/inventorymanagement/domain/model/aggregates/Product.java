@@ -2,6 +2,7 @@ package com.stocksip.inventorymanagement.domain.model.aggregates;
 
 import com.stocksip.inventorymanagement.domain.model.entities.Brand;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
+import com.stocksip.inventorymanagement.domain.model.events.CreateLowStockAlertEvent;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
 import com.stocksip.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import com.stocksip.shared.domain.model.valueobjects.Money;
@@ -201,6 +202,7 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
         // Check if the removal will bring the stock below the minimum stock level
         if (this.minimumStock.getMinimumStock() >= this.currentStock.getStock() - quantity) {
             // TODO: Add event for generating an alert for low stock.
+            this.addDomainEvent(new CreateLowStockAlertEvent(this, getId()));
         }
 
         // Removes the stock
