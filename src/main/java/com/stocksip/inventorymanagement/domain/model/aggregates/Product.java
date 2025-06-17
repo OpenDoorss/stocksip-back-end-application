@@ -1,7 +1,5 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
-import com.stocksip.inventorymanagement.domain.model.entities.Brand;
-import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
 import com.stocksip.inventorymanagement.domain.model.events.CreateLowStockAlertEvent;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
 import com.stocksip.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
@@ -9,10 +7,8 @@ import com.stocksip.shared.domain.model.valueobjects.Money;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Currency;
 import java.util.Date;
 import java.util.Optional;
 
@@ -35,6 +31,14 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
     @Column(nullable = false)
     @Getter
     private LiquorType liquorType;
+
+    /**
+     * The brand of the product.
+     * This is a reference to the Brand name of the product.
+     */
+    @Column(nullable = false)
+    @Getter
+    private BrandName brandName;
 
     /**
      * The state of the product, which can be either WITH STOCK or OUT OF STOCK.
@@ -98,14 +102,6 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
     private Warehouse warehouse;
 
     /**
-     * The brand of the product.
-     * This is a many-to-one relationship with the Brand entity.
-     */
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "brand_id", nullable = false)
-    private Brand brand;
-
-    /**
      * The identifier of the user who provided this product to the liquor store owner.
      */
     @Column(nullable = false, updatable = false)
@@ -130,20 +126,20 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
      * @param minimumStock The minimum stock of the product in the warehouse.
      * @param imageUrl The image URL of the product.
      */
-    public Product(Warehouse warehouse, ProviderId providerId, Brand brand, String liquorType,
+    public Product(Warehouse warehouse, ProviderId providerId, String brand, String liquorType,
                    Optional<String> additionalName, Date expirationDate, double price, int currentStock,
                    int minimumStock, String imageUrl) {
-        this.productName = new ProductName(brand.getName(), LiquorType.valueOf(liquorType.toUpperCase()), additionalName);
+        this.productName = new ProductName(BrandName.valueOf(brand.toUpperCase()), LiquorType.valueOf(liquorType.toUpperCase()), additionalName);
         this.expirationDate = expirationDate;
         this.minimumStock = new ProductMinimumStock(minimumStock);
         this.currentStock = new ProductStock(currentStock);
         this.unitPrice = new Money(price, "PEN");
         this.liquorType = LiquorType.valueOf(liquorType.toUpperCase());
+        this.brandName = BrandName.valueOf(brand.toUpperCase());
         this.productState = ProductState.WITH_STOCK; // Default state when a product is created
 
         this.warehouse = warehouse;
         this.providerId = providerId;
-        this.brand = brand;
         this.imageUrl = setDefaultImageUrlIfNotProvided(imageUrl);
     }
 
