@@ -20,9 +20,15 @@ public class CreateWarehouseCommandFromResourceAssembler {
     public static CreateWarehouseCommand toCommandFromResource(CreateWarehouseResource resource, Long profileId) {
 
         return new CreateWarehouseCommand(resource.name(),
-                                          resource.address(),
-                                          resource.warehouseTemperature(),
-                                          resource.warehouseCapacity(),
+                                          resource.street(),
+                                          resource.city(),
+                                          resource.district(),
+                                          resource.postalCode(),
+                                          resource.country(),
+                                          resource.maxTemperature(),
+                                          resource.minTemperature(),
+                                          resource.capacity(),
+                                          resource.imageUrl(),
                                           profileId);
     }
 

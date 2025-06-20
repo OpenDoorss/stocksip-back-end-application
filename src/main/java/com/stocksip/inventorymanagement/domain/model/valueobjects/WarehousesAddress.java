@@ -54,4 +54,9 @@ public record WarehousesAddress(String street,
             throw new IllegalArgumentException("Country cannot be null or empty");
         }
     }
+
+    public String fullAddress() {
+        return String.format("%s, %s, %s, %s, %s", street, city, district, postalCode, country);
+    }
+
 }
