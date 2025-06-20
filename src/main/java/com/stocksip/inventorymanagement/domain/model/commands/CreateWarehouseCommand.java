@@ -1,7 +1,5 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
-
 /**
  * Command to create a new warehouse.
  *
@@ -12,9 +10,15 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
  * @since 1.0.0
  */
 public record CreateWarehouseCommand(String name,
-                                     WarehousesAddress address,
-                                     WarehouseTemperature warehouseTemperature,
-                                     WarehouseCapacity warehouseCapacity,
+                                     String street,
+                                     String city,
+                                     String district,
+                                     String postalCode,
+                                     String country,
+                                     Double maxTemperature,
+                                     Double minTemperature,
+                                     Double capacity,
+                                     String imageUrl,
                                      Long profileId) {
 
     /**
