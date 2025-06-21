@@ -48,7 +48,7 @@ public class CareGuide extends AuditableModel {
     /**
      * @summary Constructor.
      * This a create new CareGuide instance based on the CreateCareGuideCommand command.
-     * @param command - The CreateCareGuideCommand command
+     * @param product The product associated with the care guide.
      */
     public CareGuide(Product product, Warehouse warehouse, String guideName, String type, String description) {
         this.product = product;
