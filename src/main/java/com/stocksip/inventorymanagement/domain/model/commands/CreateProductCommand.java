@@ -19,4 +19,4 @@ public record CreateProductCommand(Optional<String> additionalName,
                                    double unitPriceAmount,
                                    int minimumStock,
                                    String imageUrl,
-                                   Optional<ProviderId> providerId) { }
+                                   ProviderId providerId) { }

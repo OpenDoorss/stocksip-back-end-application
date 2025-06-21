@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
+import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
 import com.stocksip.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import com.stocksip.shared.domain.model.valueobjects.Money;
@@ -107,6 +108,22 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
         this.brandName = BrandName.valueOf(brand.toUpperCase());
         this.providerId = providerId;
         this.imageUrl = setDefaultImageUrlIfNotProvided(imageUrl);
+        this.inventories = List.of();
+    }
+
+    /**
+     * Default constructor for handling commands
+     *
+     * @param command The command containing the information to create a new product.
+     */
+    public Product(CreateProductCommand command) {
+        this.productName = new ProductName(BrandName.valueOf(command.brandName().toUpperCase()), LiquorType.valueOf(command.liquorType().toUpperCase()), command.additionalName());
+        this.minimumStock = new ProductMinimumStock(command.minimumStock());
+        this.unitPrice = new Money(command.unitPriceAmount(), "PEN");
+        this.liquorType = LiquorType.valueOf(command.liquorType().toUpperCase());
+        this.brandName = BrandName.valueOf(command.brandName().toUpperCase());
+        this.providerId = command.providerId();
+        this.imageUrl = setDefaultImageUrlIfNotProvided(command.imageUrl());
         this.inventories = List.of();
     }
 

@@ -16,7 +16,6 @@ import java.util.Optional;
 public interface ProductCommandService {
 
     Optional<Product> handle(UpdateProductCommand command);
-
-    Long handle(CreateProductCommand command);
-    Long handle(UpdateProductMinimumStockCommand command);
+    Optional<Product> handle(CreateProductCommand command);
+    Optional<Product> handle(UpdateProductMinimumStockCommand command);
 }

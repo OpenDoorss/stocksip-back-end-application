@@ -1,6 +1,9 @@
 package com.stocksip.inventorymanagement.domain.services;
 
+import com.stocksip.inventorymanagement.domain.model.aggregates.Inventory;
 import com.stocksip.inventorymanagement.domain.model.commands.*;
+
+import java.util.Optional;
 
 /**
  * InventoryCommandService is an interface that defines methods for handling commands related to product inventories in a warehouse.
@@ -12,9 +15,9 @@ import com.stocksip.inventorymanagement.domain.model.commands.*;
  */
 public interface InventoryCommandService {
 
-    void handle(AddStockToProductCommand command);
-    void handle(ReduceStockFromProductCommand command);
-    void handle(AddProductsToWarehouseCommand command);
+    Optional<Inventory> handle(AddStockToProductCommand command);
+    Optional<Inventory> handle(ReduceStockFromProductCommand command);
+    Optional<Inventory> handle(AddProductsToWarehouseCommand command);
 
     Long handle(MoveProductToAnotherWarehouseCommand command);
     Long handle(DeleteProductFromWarehouseCommand command);
