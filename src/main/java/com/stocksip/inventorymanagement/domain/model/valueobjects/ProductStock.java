@@ -1,6 +1,7 @@
 package com.stocksip.inventorymanagement.domain.model.valueobjects;
 
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
 
 /**
  * Represents the stock of a product in the inventory management system.
@@ -30,7 +31,7 @@ public record ProductStock(int stock) {
      * @return true if the stock is a positive integer number, false otherwise.
      */
     private static boolean isStockValidate(int stock) {
-        return !(stock < 0);
+        return !(stock <= 0);
     }
 
     /**
@@ -40,7 +41,7 @@ public record ProductStock(int stock) {
      */
     public ProductStock addStock(int addedStock) {
         if (!(isStockValidate(addedStock))) {
-            throw new IllegalArgumentException("Added stock must be a non-negative integer.");
+            throw new IllegalArgumentException("Added stock must be a positive integer.");
         }
         return new ProductStock(this.stock + addedStock);
     }
