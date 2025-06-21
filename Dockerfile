@@ -9,6 +9,7 @@
 # Version: 1.0
 # Maintainer: Open-source Development Team
 
+
 # Step 1: Build the application using Maven
 
 # Use a lightweight OpenJDK 24 base image
