@@ -1,7 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
 import com.stocksip.inventorymanagement.domain.model.entities.Brand;
-import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -93,21 +92,4 @@ public class Product extends AbstractAggregateRoot<Product> {
     @Column(nullable = false, updatable = false)
     @Getter
     private Long providerId;
-
-    /**
-     * @summary Constructor.
-     * This creates a new Product instance based on the CreateProductCommand command.
-     * @param command - the CreateProductCommand command
-     */
-    public Product(CreateProductCommand command) {
-        this.productId = command.id();
-        this.name = command.name();
-        this.liquorType = command.liquorType();
-        this.expirationDate = command.expirationDate();
-        this.price = command.price();
-        this.currentStock = command.currentStock();
-        this.minimumStock = command.minimumStock();
-        this.warehouseId = command.warehouseId();
-        this.providerId = command.providerId();
-    }
 }

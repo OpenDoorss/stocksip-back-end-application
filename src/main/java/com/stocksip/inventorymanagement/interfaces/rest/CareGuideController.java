@@ -1,14 +1,9 @@
 package com.stocksip.inventorymanagement.interfaces.rest;
 
-import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
-import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
-import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
-import com.stocksip.inventorymanagement.domain.model.queries.GetCareGuideProductAndWarehouseQuery;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
 import com.stocksip.inventorymanagement.domain.model.queries.GetWarehouseByIdQuery;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CareGuideResource;
-import com.stocksip.inventorymanagement.interfaces.rest.transform.CareGuideResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
