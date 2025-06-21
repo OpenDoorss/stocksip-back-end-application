@@ -13,7 +13,7 @@ import jakarta.persistence.Embeddable;
  * @since 1.0.0
  */
 @Embeddable
-public record WarehouseTemperature(double minTemperature, double maxTemperature) {
+public record Temperature(double minTemperature, double maxTemperature) {
 
 
     /*
@@ -34,7 +34,7 @@ public record WarehouseTemperature(double minTemperature, double maxTemperature)
      * @throws IllegalArgumentException if the temperatures are not within the range of -50.0 to 50.0 degrees Celsius,
      * or if maxTemperature is not greater than minTemperature.
      */
-    public WarehouseTemperature {
+    public Temperature {
         validateTemperature(minTemperature, maxTemperature);
     }
 
