@@ -1,6 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.entities;
 
-import com.stocksip.shared.domain.entities.AuditableModel;
+import com.stocksip.shared.domain.model.entities.AuditableModel;
 import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import jakarta.persistence.*;

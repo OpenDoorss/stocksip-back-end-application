@@ -2,9 +2,9 @@ package com.stocksip.inventorymanagement.interfaces.rest;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteWarehouseCommand;
-import com.stocksip.inventorymanagement.domain.model.queries.GetAllWarehousesByProfileIdQuery;
+import com.stocksip.inventorymanagement.domain.model.queries.GetAllWarehousesByAccountIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetWarehouseByIdQuery;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateWarehouseResource;
@@ -57,10 +57,9 @@ public class WarehouseController {
 
     /**
      * Create a new warehouse.
-     * @param resource The {@link CreateWarehouseResource} containing the details of the warehouse to create
-     * @param imageFile Optional image file to upload for the warehouse
-     * @param profileId ID of the profile creating the warehouse
-     * @return ResponseEntity containing the created WarehouseResource or a bad request response if creation fails
+     * @param resource CreateWarehouseResource containing the details of the warehouse to be created
+     * @return ResponseEntity containing the created WarehouseResource or a bad request if the resource is invalid
+     * @see CreateWarehouseResource
      * @see WarehouseResource
      *
      * @since 1.0.0
@@ -73,14 +72,9 @@ public class WarehouseController {
             @ApiResponse(responseCode = "201", description = "Warehouse created successfully"),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WarehouseResource> createWarehouse(@RequestPart("warehouse") CreateWarehouseResource resource,
-                                                             @RequestPart(value = "image", required = false) MultipartFile imageFile,
-                                                             @RequestHeader("X-Profile-Id") Long profileId) {
-
-        var uploadImageResource = UploadImageCommandFromResource.toCommandFromResource(imageFile);
-
-        Optional<Warehouse> warehouse = warehouseCommandService.handle(CreateWarehouseCommandFromResourceAssembler.toCommandFromResource(resource, profileId), uploadImageResource);
+    @PostMapping
+    public ResponseEntity<WarehouseResource> createWarehouse(@RequestBody CreateWarehouseResource resource, @RequestHeader("X-Account-Id") Long accountId) {
+        Optional<Warehouse> warehouse = warehouseCommandService.handle(CreateWarehouseCommandFromResourceAssembler.toCommandFromResource(resource, accountId));
 
         return warehouse.map(source ->
                         new ResponseEntity<>(WarehouseResourceFromEntityAssembler.toResourceFromEntity(source), CREATED))
@@ -88,8 +82,8 @@ public class WarehouseController {
     }
 
     /**
-     * Get a warehouse by its ID.
-     * @param warehouseId ID of the warehouse to retrieve
+     * Updates a warehouse by its ID.
+     * @param warehouseId ID of the warehouse to update
      * @param updateWarehouseResource The {@link UpdateWarehouseResource} containing the updated details of the warehouse
      * @return ResponseEntity containing the WarehouseResource or a not found response if the warehouse does not exist
      * @see WarehouseResource
@@ -138,23 +132,23 @@ public class WarehouseController {
     }
 
     /**
-     * Get all warehouses associated with a specific profile ID.
-     * @param profileId ID of the profile to retrieve warehouses for
+     * Get all warehouses associated with a specific account ID.
+     * @param accountId ID of the profile to retrieve warehouses for
      * @return ResponseEntity containing a list of WarehouseResources
      * @see WarehouseResource
      *
      * @since 1.0.0
      */
-    @Operation(summary = "Get all warehouses by profile ID",
+    @Operation(summary = "Get all warehouses by account ID",
         description = "Retrieves all warehouses associated with a specific profile ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Warehouses retrieved successfully"),
             @ApiResponse(responseCode = "400", description = "Bad request - invalid profile ID")
     })
     @GetMapping
-    public ResponseEntity<List<WarehouseResource>> getAllWarehouses(@RequestHeader("X-Profile-Id") Long profileId)
+    public ResponseEntity<List<WarehouseResource>> getAllWarehouses(@RequestHeader("X-Account-Id") Long accountId)
     {
-        var getAllWarehousesByProfileIdQuery = new GetAllWarehousesByProfileIdQuery(new ProfileId(profileId));
+        var getAllWarehousesByProfileIdQuery = new GetAllWarehousesByAccountIdQuery(new AccountId(accountId));
         var warehouses = warehouseQueryService.handle(getAllWarehousesByProfileIdQuery);
         var warehouseResources = warehouses.stream().map(WarehouseResourceFromEntityAssembler::toResourceFromEntity).toList();
         return ResponseEntity.ok(warehouseResources);

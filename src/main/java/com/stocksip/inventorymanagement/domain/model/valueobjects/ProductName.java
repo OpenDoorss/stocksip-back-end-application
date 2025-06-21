@@ -13,7 +13,7 @@ import java.util.Optional;
  * @param name An optional additional name for the product, can be empty but not blank if present.
  */
 @Embeddable
-public record ProductName(BrandName brand, LiquorType type, Optional<String> name) {
+public record ProductName(BrandName brand, LiquorType type, String name) {
 
     /**
      * This constructor validates the input parameters to ensure that brand and type are not null,
@@ -28,7 +28,7 @@ public record ProductName(BrandName brand, LiquorType type, Optional<String> nam
         if (brand == null || type == null) {
             throw new IllegalArgumentException("Brand and type must not be null.");
         }
-        if (name.isPresent() && name.get().isBlank()) {
+        if (name == "") {
             throw new IllegalArgumentException("Name must not be blank if provided.");
         }
     }
@@ -40,7 +40,7 @@ public record ProductName(BrandName brand, LiquorType type, Optional<String> nam
      */
     public String getFullName() {
         return brand.toString() + " " + type.toString() +
-               (name.isPresent() ? " " + name.get() : "");
+               (name.isBlank() ? "" : " " + name);
     }
 
     /**
@@ -54,6 +54,6 @@ public record ProductName(BrandName brand, LiquorType type, Optional<String> nam
         if (newName != null && newName.isBlank()) {
             throw new IllegalArgumentException("Updated name must not be blank.");
         }
-        return new ProductName(brand, type, Optional.ofNullable(newName));
+        return new ProductName(brand, type, newName);
     }
 }

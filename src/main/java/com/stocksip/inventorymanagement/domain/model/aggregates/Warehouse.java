@@ -48,7 +48,7 @@ public class Warehouse {
             @AttributeOverride(name = "minTemperature", column = @Column(name = "min_temperature", nullable = false)),
             @AttributeOverride(name = "maxTemperature", column = @Column(name = "max_temperature", nullable = false))
     })
-    private Temperature temperature;
+    private WarehouseTemperature temperature;
 
     /**
      * The total capacity of this warehouse in cubic meters.
@@ -57,7 +57,7 @@ public class Warehouse {
     @AttributeOverrides({
             @AttributeOverride(name = "capacity", column = @Column(name = "capacity", nullable = false))
     })
-    private Capacity capacity;
+    private WarehouseCapacity capacity;
 
     /**
      * The url of the image that shows with the warehouse
@@ -72,7 +72,7 @@ public class Warehouse {
     @AttributeOverrides({
             @AttributeOverride(name = "profileId", column = @Column(name = "profile_id", nullable = false))
     })
-    private ProfileId profileId;
+    private AccountId accountId;
 
     // Default constructor for JPA
     protected Warehouse() {}
@@ -86,10 +86,10 @@ public class Warehouse {
     public Warehouse(CreateWarehouseCommand command) {
         this.name = command.name();
         this.address = new WarehousesAddress(command.street(), command.city(), command.district(), command.postalCode(), command.country());
-        this.temperature = new Temperature(command.minTemperature(), command.maxTemperature());
-        this.capacity = new Capacity(command.capacity());
+        this.temperature = new WarehouseTemperature(command.minTemperature(), command.maxTemperature());
+        this.capacity = new WarehouseCapacity(command.capacity());
         this.imageUrl = this.setDefaultImageUrlIfNotProvided(command.imageUrl());
-        this.profileId = new ProfileId(command.profileId());
+        this.accountId = new AccountId(command.profileId());
     }
 
     /**
@@ -101,8 +101,8 @@ public class Warehouse {
     public Warehouse updateInformation(UpdateWarehouseCommand command) {
         this.name = command.name();
         this.address = new WarehousesAddress(command.street(), command.city(), command.district(), command.postalCode(), command.country());
-        this.temperature = new Temperature(command.minTemperature(), command.maxTemperature());
-        this.capacity = new Capacity(command.capacity());
+        this.temperature = new WarehouseTemperature(command.minTemperature(), command.maxTemperature());
+        this.capacity = new WarehouseCapacity(command.capacity());
         this.imageUrl = setDefaultImageUrlIfNotProvided(command.imageUrl());
         return this;
     }

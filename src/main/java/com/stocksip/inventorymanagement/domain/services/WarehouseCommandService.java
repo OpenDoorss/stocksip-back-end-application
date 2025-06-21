@@ -22,12 +22,11 @@ public interface WarehouseCommandService {
      * Handles the creation of a new warehouse.
      *
      * @param warehouseCommand the command containing the details for creating a warehouse
-     * @param imageCommand the command containing the image upload details
      * @return an Optional containing the created Warehouse if successful, or empty if not
      * @see CreateWarehouseCommand
      * @see UploadImageCommand
      */
-    Optional<Warehouse> handle(CreateWarehouseCommand warehouseCommand, UploadImageCommand imageCommand);
+    Optional<Warehouse> handle(CreateWarehouseCommand warehouseCommand);
 
     /**
      * Handles the update of an existing warehouse.
