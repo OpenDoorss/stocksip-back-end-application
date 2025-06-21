@@ -1,6 +1,7 @@
 package com.stocksip.paymentandsubscriptions.domain.model.valueobjects;
 
 import jakarta.persistence.Embeddable;
+import lombok.ToString;
 
 /**
  * This is a value object that represents a role in the payment and subscription domain.
@@ -24,5 +25,9 @@ public record GeneralEmail(String email) {
         if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("Email cannot be null or empty");
         }
+    }
+
+    public static GeneralEmail from(String email) {
+        return new GeneralEmail(email);
     }
 }

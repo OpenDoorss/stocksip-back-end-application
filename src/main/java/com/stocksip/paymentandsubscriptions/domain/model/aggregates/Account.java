@@ -27,7 +27,7 @@ public class Account {
 
     @Column(unique = true, nullable = false)
     @Embedded()
-    private GeneralEmail email;
+    public GeneralEmail generalEmail;
 
     @Column(unique = true, nullable = false)
     @Embedded()
@@ -41,7 +41,7 @@ public class Account {
     public Account() {}
 
     public Account(CreateAccountCommand command) {
-        this.email = new GeneralEmail(command.email());
+        this.generalEmail = new GeneralEmail(command.email());
         this.role = new Role(command.role());
         this.plan = new Plan(command.plan());
     }
