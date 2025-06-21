@@ -16,7 +16,7 @@ import java.util.Optional;
  */
 public interface ProductQueryService {
 
-    List<Product> handle(GetAllProductsByProfileIdQuery query);
+    List<Product> handle(GetAllProductsByAccountIdQuery query);
     List<Product> handle(GetAllProductsByProviderIdAndWarehouseIdQuery query);
     List<Product> handle(GetAllProductsByWarehouseIdQuery query);
     List<Product> handle(GetProductsByIdAndWarehouseIdQuery query);

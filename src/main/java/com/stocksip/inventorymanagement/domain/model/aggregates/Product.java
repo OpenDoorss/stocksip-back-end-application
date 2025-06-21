@@ -1,6 +1,5 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
-import com.stocksip.inventorymanagement.domain.model.entities.Inventory;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
 import com.stocksip.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import com.stocksip.shared.domain.model.valueobjects.Money;
@@ -9,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
