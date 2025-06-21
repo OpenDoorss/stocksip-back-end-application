@@ -6,7 +6,7 @@ import com.stocksip.inventorymanagement.domain.model.commands.DeleteWarehouseCom
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
-import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.WarehouseRepository;
+import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositories.WarehouseRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
