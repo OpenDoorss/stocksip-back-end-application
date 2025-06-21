@@ -155,6 +155,7 @@ public class Inventory extends AuditableModel {
         // If the stock after reduction is below the minimum stock level, then an alert should be generated
         if (product.getMinimumStock().getMinimumStock() >= productStock.getStock() - stockToReduce) {
             //TODO: Add event for generating a warning alert for product with low stock.
+
         }
 
         // Reduce the stock
