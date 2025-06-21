@@ -1,4 +1,4 @@
-package com.stocksip.inventorymanagement.infrastructure.persistence.jpa;
+package com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositories;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;

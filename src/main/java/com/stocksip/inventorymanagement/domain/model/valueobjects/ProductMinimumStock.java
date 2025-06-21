@@ -45,4 +45,10 @@ public record ProductMinimumStock(int minimumStock) {
         }
         return new ProductMinimumStock(newMinimumStock);
     }
+
+    /**
+     * Gets the minimum stock of the product.
+     * @return The minimum stock of the product.
+     */
+    public int getMinimumStock() { return minimumStock; }
 }

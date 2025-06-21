@@ -2,7 +2,7 @@ package com.stocksip.inventorymanagement.domain.model.entities;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductExitReasons;
-import com.stocksip.shared.domain.entities.AuditableModel;
+import com.stocksip.shared.domain.model.entities.AuditableModel;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

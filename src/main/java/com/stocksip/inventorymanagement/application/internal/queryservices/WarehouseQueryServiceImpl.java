@@ -4,7 +4,7 @@ import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.queries.GetAllWarehousesByProfileIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetWarehouseByIdQuery;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
-import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.WarehouseRepository;
+import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositories.WarehouseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
