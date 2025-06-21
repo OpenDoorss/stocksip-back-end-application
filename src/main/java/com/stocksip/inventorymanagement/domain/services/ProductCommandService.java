@@ -19,5 +19,5 @@ public interface ProductCommandService {
     Optional<Product> handle(UpdateProductCommand command);
     Long handle(MoveProductToAnotherWarehouseCommand command);
     void handle(AddStockToProductCommand command);
-    void handle(RemoveStockFromProductCommand command);
+    void handle(ReduceStockFromProductCommand command);
 }

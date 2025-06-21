@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,6 +109,7 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
         this.brandName = BrandName.valueOf(brand.toUpperCase());
         this.providerId = providerId;
         this.imageUrl = setDefaultImageUrlIfNotProvided(imageUrl);
+        this.inventories = List.of();
     }
 
     /**
@@ -144,5 +146,34 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
         setMinimumStock(updatedMinimumStock);
         this.imageUrl = setDefaultImageUrlIfNotProvided(updatedImageUrl);
         this.unitPrice = new Money(updatedPrice, "PEN");
+    }
+
+    /**
+     * Verifies if the product has an inventory relation with the specified inventory.
+     *
+     * @param inventory The inventory to check for a relation with the product.
+     * @return True if the product has a relation with the specified inventory; otherwise, false.
+     */
+    private boolean existsWarehouseRelation(Inventory inventory) {
+        return inventories.contains(inventory);
+    }
+
+    /**
+     * This method adds a warehouse relation to the product.
+     *
+     * @param inventory The inventory to be added to the product's inventory relations.
+     */
+    public void addWarehouseRelation(Inventory inventory) {
+        if (existsWarehouseRelation(inventory)) return;
+        inventories.add(inventory);
+    }
+
+    /**
+     * This method removes a warehouse relation from the product.
+     *
+     * @param inventory The inventory to be removed from the product's inventory relations.
+     */
+    public void removeWarehouseRelation(Inventory inventory) {
+        inventories.remove(inventory);
     }
 }

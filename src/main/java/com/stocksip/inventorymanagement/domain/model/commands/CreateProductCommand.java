@@ -16,20 +16,7 @@ import java.util.Optional;
 public record CreateProductCommand(Optional<String> additionalName,
                                    String liquorType,
                                    String brandName,
-                                   Date expirationDate,
-                                   double unitPrice,
-                                   int currentStock,
+                                   double unitPriceAmount,
                                    int minimumStock,
                                    String imageUrl,
-                                   Long warehouseId,
-                                   Optional<ProviderId> providerId) {
-    /**
-     * Validates the command.
-     *
-     * @throws IllegalArgumentException If warehouse ID is null
-     */
-    public CreateProductCommand {
-        if (warehouseId == null)
-            throw new IllegalArgumentException("Warehouse ID cannot be null or empty");
-    }
-}
+                                   Optional<ProviderId> providerId) { }
