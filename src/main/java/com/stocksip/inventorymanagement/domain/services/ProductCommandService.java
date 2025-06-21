@@ -17,12 +17,6 @@ public interface ProductCommandService {
 
     Optional<Product> handle(UpdateProductCommand command);
 
-    Long handle(CreateProductCommand command, UploadImageCommand imageCommand);
-    Long handle(MoveProductToAnotherWarehouseCommand command);
-    Long handle(DeleteProductFromWarehouseCommand command);
+    Long handle(CreateProductCommand command);
     Long handle(UpdateProductMinimumStockCommand command);
-
-    void handle(AddStockToProductCommand command);
-    void handle(ReduceStockFromProductCommand command);
-    void handle(AddProductsToWarehouseCommand command);
 }
