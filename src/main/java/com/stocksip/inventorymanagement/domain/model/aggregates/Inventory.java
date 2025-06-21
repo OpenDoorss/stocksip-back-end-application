@@ -1,10 +1,9 @@
-package com.stocksip.inventorymanagement.domain.model.entities;
+package com.stocksip.inventorymanagement.domain.model.aggregates;
 
-import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
-import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductBestBeforeDate;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductState;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductStock;
+import com.stocksip.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import com.stocksip.shared.domain.model.entities.AuditableModel;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -22,7 +21,7 @@ import lombok.Getter;
  */
 @Getter
 @Entity
-public class Inventory extends AuditableModel {
+public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
 
     /**
      * The product associated with this inventory item.

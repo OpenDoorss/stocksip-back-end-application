@@ -72,7 +72,7 @@ public class Warehouse {
     @AttributeOverrides({
             @AttributeOverride(name = "profileId", column = @Column(name = "profile_id", nullable = false))
     })
-    private ProfileId profileId;
+    private AccountId accountId;
 
     // Default constructor for JPA
     protected Warehouse() {}
@@ -89,7 +89,7 @@ public class Warehouse {
         this.temperature = new Temperature(command.minTemperature(), command.maxTemperature());
         this.capacity = new Capacity(command.capacity());
         this.imageUrl = this.setDefaultImageUrlIfNotProvided(command.imageUrl());
-        this.profileId = new ProfileId(command.profileId());
+        this.accountId = new AccountId(command.profileId());
     }
 
     /**

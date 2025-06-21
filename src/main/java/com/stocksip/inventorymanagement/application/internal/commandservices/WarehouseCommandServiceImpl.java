@@ -4,7 +4,7 @@ import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateWarehouseCommand;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositories.WarehouseRepository;
 import jakarta.transaction.Transactional;
@@ -41,14 +41,14 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
      */
     @Override
     public Optional<Warehouse> handle(CreateWarehouseCommand command) {
-        if (warehouseRepository.existsByNameIgnoreCaseAndProfileId(command.name(), ProfileId.from(command.profileId())))
+        if (warehouseRepository.existsByNameIgnoreCaseAndProfileId(command.name(), AccountId.from(command.profileId())))
             throw new IllegalArgumentException("Warehouse with the same name already exists.");
 
         if (warehouseRepository.existsByAddressStreetAndAddressCityAndAddressPostalCodeIgnoreCaseAndProfileId(
                 command.street(),
                 command.city(),
                 command.postalCode(),
-                ProfileId.from(command.profileId()))) {
+                AccountId.from(command.profileId()))) {
             throw new IllegalArgumentException("Warehouse with the same address already exists.");
         }
 
@@ -67,11 +67,11 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
     @Override
     public Optional<Warehouse> handle(UpdateWarehouseCommand command) {
 
-        var warehouseToUpdate = warehouseRepository.findWarehouseByWarehouseIdAndProfileId(command.warehouseId(), ProfileId.from(command.profileId()))
+        var warehouseToUpdate = warehouseRepository.findWarehouseByWarehouseIdAndProfileId(command.warehouseId(), AccountId.from(command.profileId()))
                 .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.warehouseId())));
 
         if (!warehouseToUpdate.getName().equals(command.name()) &&
-                warehouseRepository.existsByNameAndProfileIdAndWarehouseIdIsNot(command.name(), ProfileId.from(command.profileId()), command.warehouseId())) {
+                warehouseRepository.existsByNameAndProfileIdAndWarehouseIdIsNot(command.name(), AccountId.from(command.profileId()), command.warehouseId())) {
             throw new IllegalArgumentException("Warehouse with name %s already exists".formatted(command.name()));
         }
 
@@ -88,7 +88,7 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
                         command.street(),
                         command.city(),
                         command.postalCode(),
-                        ProfileId.from(command.profileId()),
+                        AccountId.from(command.profileId()),
                         command.warehouseId())){
             throw new IllegalArgumentException("Another warehouse with the same address already exists.");
         }
