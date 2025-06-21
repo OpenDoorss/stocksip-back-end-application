@@ -41,6 +41,6 @@ public class WarehouseQueryServiceImpl implements WarehouseQueryService {
 
     @Override
     public List<Warehouse> handle(GetAllWarehousesByAccountIdQuery query) {
-        return warehouseRepository.findAllByProfileId(query.accountId());
+        return warehouseRepository.findAllByAccountId(query.accountId());
     }
 }

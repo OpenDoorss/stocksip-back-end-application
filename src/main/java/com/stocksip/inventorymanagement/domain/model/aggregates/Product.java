@@ -60,7 +60,6 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
      * It's used to generate alerts in the platform.
      */
     @Column(nullable = false)
-    @Setter
     @Getter
     private ProductMinimumStock minimumStock;
 
@@ -98,7 +97,7 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
      * @param imageUrl The image URL of the product.
      */
     public Product(ProviderId providerId, String brand, String liquorType,
-                   Optional<String> additionalName, double price,
+                   String additionalName, double price,
                    int minimumStock, String imageUrl) {
         this.productName = new ProductName(BrandName.valueOf(brand.toUpperCase()), LiquorType.valueOf(liquorType.toUpperCase()), additionalName);
         this.minimumStock = new ProductMinimumStock(minimumStock);
