@@ -2,7 +2,6 @@ package com.stocksip.alertsandnotifications.interfaces.acl;
 
 /**
  * Interface for the Alerts and Notifications context facade.
- * 
  * This interface defines the contract for the facade that provides
  * a clean interface for other bounded contexts to interact with
  * the Alerts and Notifications context.

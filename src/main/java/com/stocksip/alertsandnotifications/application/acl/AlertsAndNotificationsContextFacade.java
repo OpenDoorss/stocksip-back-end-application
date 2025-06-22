@@ -25,7 +25,6 @@ import java.util.Optional;
 public class AlertsAndNotificationsContextFacade implements IAlertsAndNotificationsContextFacade {
 
     private final AlertCommandService alertCommandService;
-    private final AlertQueryService alertQueryService;
 
     /**
      * Constructor for AlertsAndNotificationsContextFacade.
@@ -37,7 +36,6 @@ public class AlertsAndNotificationsContextFacade implements IAlertsAndNotificati
             AlertCommandService alertCommandService,
             AlertQueryService alertQueryService) {
         this.alertCommandService = alertCommandService;
-        this.alertQueryService = alertQueryService;
     }
 
     /**
