@@ -9,7 +9,6 @@ import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Product Aggregate Root
