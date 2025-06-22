@@ -263,12 +263,15 @@ public class InventoryCommandServiceImpl implements InventoryCommandService {
         var inventoryToDelete = inventoryRepository.findByProductAndWarehouseAndProductBestBeforeDate(product, warehouse, targetBestBeforeDate)
                 .orElseThrow(() -> new IllegalArgumentException("Inventory does not exists."));
 
+        product.removeWarehouseRelation(inventoryToDelete);
+        productRepository.save(product);
+
+
+
         // If the current stock of the product in the warehouse is not zero, it throws an exception to prevent deletion.
         // If the retrieved inventory exists, it removes the relation between the product and the inventory.
         if (inventoryToDelete.getProductStock().stock() == 0) {
             try {
-                product.removeWarehouseRelation(inventoryToDelete);
-                productRepository.save(product);
                 inventoryRepository.delete(inventoryToDelete);
                 return product.getProductId();
             } catch (Exception e) {
