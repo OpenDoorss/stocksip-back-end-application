@@ -24,6 +24,10 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 public class Alert extends AuditableAbstractAggregateRoot<Alert> {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long AlertId;
+
     /**
      * The title of the alert, providing a brief description of the alert.
      */

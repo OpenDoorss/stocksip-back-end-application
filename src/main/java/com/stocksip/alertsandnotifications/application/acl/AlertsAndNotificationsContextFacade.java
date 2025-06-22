@@ -69,6 +69,6 @@ public class AlertsAndNotificationsContextFacade implements IAlertsAndNotificati
         );
         
         Optional<Alert> alert = alertCommandService.handle(createAlertCommand);
-        return alert.map(alertEntity -> alertEntity.getId().toString()).orElse("");
+        return alert.map(alertEntity -> alertEntity.AlertId.toString()).orElse("");
     }
 } 
