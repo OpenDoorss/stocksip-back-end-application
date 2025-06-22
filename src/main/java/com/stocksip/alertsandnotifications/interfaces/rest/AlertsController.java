@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Alerts", description = "Available Alert Endpoints")
 public class AlertsController {
 
-    private final AlertCommandService alertCommandService;
     private final AlertQueryService alertQueryService;
 
     /**
@@ -38,7 +37,6 @@ public class AlertsController {
      * @param alertQueryService   The query service for retrieving alert information.
      */
     public AlertsController(AlertCommandService alertCommandService, AlertQueryService alertQueryService) {
-        this.alertCommandService = alertCommandService;
         this.alertQueryService = alertQueryService;
     }
 
