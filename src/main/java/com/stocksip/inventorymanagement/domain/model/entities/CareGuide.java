@@ -9,15 +9,15 @@ import lombok.Getter;
 import lombok.Setter;
 @Getter
 @Entity
-public class CareGuide extends AuditableModel{
+public class CareGuide extends AuditableModel {
+
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "productId")
     @NotNull
     private Product product;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "warehouse_id")
+    @JoinColumn(name = "warehouseId")
     @NotNull
     private Warehouse warehouse;
 

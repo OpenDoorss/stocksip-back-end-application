@@ -35,18 +35,18 @@ public class Warehouse {
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "street", column = @Column(name = "street", nullable = false)),
-            @AttributeOverride(name = "city", column = @Column(name = "city", nullable = false)),
-            @AttributeOverride(name = "state", column = @Column(name = "state", nullable = false)),
-            @AttributeOverride(name = "postalCode", column = @Column(name = "postal_code", nullable = false)),
-            @AttributeOverride(name = "country", column = @Column(name = "country", nullable = false))
+            @AttributeOverride(name = "street", column = @Column(nullable = false)),
+            @AttributeOverride(name = "city", column = @Column(nullable = false)),
+            @AttributeOverride(name = "state", column = @Column(nullable = false)),
+            @AttributeOverride(name = "postalCode", column = @Column(nullable = false)),
+            @AttributeOverride(name = "country", column = @Column(nullable = false))
     })
     private WarehousesAddress address;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "minTemperature", column = @Column(name = "min_temperature", nullable = false)),
-            @AttributeOverride(name = "maxTemperature", column = @Column(name = "max_temperature", nullable = false))
+            @AttributeOverride(name = "minTemperature", column = @Column(nullable = false)),
+            @AttributeOverride(name = "maxTemperature", column = @Column(nullable = false))
     })
     private WarehouseTemperature temperature;
 
@@ -55,7 +55,7 @@ public class Warehouse {
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "capacity", column = @Column(name = "capacity", nullable = false))
+            @AttributeOverride(name = "capacity", column = @Column(nullable = false))
     })
     private WarehouseCapacity capacity;
 

@@ -24,6 +24,10 @@ import java.util.Optional;
 @EntityListeners(AuditingEntityListener.class)
 public class Product extends AuditableAbstractAggregateRoot<Product> {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long productId;
+
     /**
      * The type of liquor the product is made of.
      */
