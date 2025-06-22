@@ -21,7 +21,7 @@ public class UpdateWarehouseCommandFromResourceAssembler {
      *                                  or if the resource contains invalid data
      * @since 1.0.0
      */
-    public static UpdateWarehouseCommand toCommandFromResource(Long warehouseId, UpdateWarehouseResource resource, Long profileId) {
+    public static UpdateWarehouseCommand toCommandFromResource(Long warehouseId, UpdateWarehouseResource resource) {
         return new UpdateWarehouseCommand(
                 warehouseId,
                 resource.name(),
@@ -34,7 +34,7 @@ public class UpdateWarehouseCommandFromResourceAssembler {
                 resource.minTemperature(),
                 resource.capacity(),
                 resource.imageUrl(),
-                profileId
+                resource.accountId()
         );
     }
 }

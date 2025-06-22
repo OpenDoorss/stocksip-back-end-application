@@ -9,7 +9,6 @@ import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Product Aggregate Root
@@ -23,6 +22,10 @@ import java.util.Optional;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Product extends AuditableAbstractAggregateRoot<Product> {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long productId;
 
     /**
      * The type of liquor the product is made of.

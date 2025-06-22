@@ -9,15 +9,15 @@ import lombok.Getter;
 import lombok.Setter;
 @Getter
 @Entity
-public class CareGuide extends AuditableModel{
+public class CareGuide extends AuditableModel {
+
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "productId")
     @NotNull
     private Product product;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "warehouse_id")
+    @JoinColumn(name = "warehouseId")
     @NotNull
     private Warehouse warehouse;
 
@@ -47,8 +47,7 @@ public class CareGuide extends AuditableModel{
 
     /**
      * @summary Constructor.
-     * This a create new CareGuide instance based on the CreateCareGuideCommand command.
-     * @param command - The CreateCareGuideCommand command
+     * It creates a new CareGuide instance based on the provided product, warehouse, guide name, type, and description.
      */
     public CareGuide(Product product, Warehouse warehouse, String guideName, String type, String description) {
         this.product = product;

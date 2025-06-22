@@ -28,7 +28,7 @@ public record UpdateWarehouseCommand(Long warehouseId,
                                      Double minTemperature,
                                      Double capacity,
                                      String imageUrl,
-                                     Long accountId) {
+                                     String accountId) {
     /**
      * Constructor for UpdateWarehouseCommand.
      * Validates the input parameters to ensure that the warehouse ID is not null or less than or equal to 0,

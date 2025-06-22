@@ -25,7 +25,7 @@ public final class AlertResourceFromEntityAssembler {
      */
     public static AlertResource toResourceFromEntity(Alert entity) {
         return new AlertResource(
-                entity.getId().toString(),
+                entity.AlertId.toString(),
                 entity.getTitle(),
                 entity.getMessage(),
                 entity.getSeverity().name(),
