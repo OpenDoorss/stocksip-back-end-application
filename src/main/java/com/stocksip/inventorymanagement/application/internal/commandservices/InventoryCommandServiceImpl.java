@@ -8,6 +8,7 @@ import com.stocksip.inventorymanagement.domain.services.InventoryCommandService;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositories.InventoryRepository;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositories.ProductRepository;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositories.WarehouseRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
  *
  * @since 1.0.0
  */
+@Service
 public class InventoryCommandServiceImpl implements InventoryCommandService {
 
     /**

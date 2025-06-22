@@ -4,6 +4,7 @@ import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
 import com.stocksip.inventorymanagement.domain.model.queries.*;
 import com.stocksip.inventorymanagement.domain.services.ProductQueryService;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositories.ProductRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import java.util.Optional;
  *
  * @since 1.0.0
  */
+@Service
 public class ProductQueryServiceImpl implements ProductQueryService {
 
     /**

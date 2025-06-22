@@ -11,6 +11,7 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductName;
 import com.stocksip.inventorymanagement.domain.services.ProductCommandService;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositories.InventoryRepository;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositories.ProductRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ import java.util.Optional;
  *
  * @since 1.0.0
  */
+@Service
 public class ProductCommandServiceImpl implements ProductCommandService {
 
     /**

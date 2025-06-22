@@ -91,7 +91,7 @@ public class WarehouseController {
             description = "Updates the details of an existing warehouse identified by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Warehouse updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Course not found - invalid warehouse ID or resource")
+            @ApiResponse(responseCode = "400", description = "Warehouse could not be updated - invalid warehouse ID or resource")
     })
     @PutMapping("/{warehouseId}")
     public ResponseEntity<WarehouseResource> updateWarehouse(@PathVariable Long warehouseId, @RequestBody UpdateWarehouseResource updateWarehouseResource) {
@@ -115,7 +115,7 @@ public class WarehouseController {
             description = "Retrieves the details of a warehouse identified by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Warehouse found successfully"),
-            @ApiResponse(responseCode = "404", description = "Course not found - invalid warehouse ID")
+            @ApiResponse(responseCode = "404", description = "Warehouse not found - invalid warehouse ID")
     })
     @GetMapping("/{warehouseId}")
     public ResponseEntity<WarehouseResource> getWarehouseById(@PathVariable Long warehouseId) {
