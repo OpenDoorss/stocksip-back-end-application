@@ -20,6 +20,5 @@ public interface InventoryQueryService {
 
     Optional<Inventory> handle(GetInventoryByIdQuery query);
     Optional<Inventory> handle(GetInventoryByProductIdAndWarehouseIdAndBestBeforeDateQuery query);
-
-    List<Inventory> handle(GetInventoryByProductIdAndWarehouseIdQuery query);
+    Optional<Inventory> handle(GetInventoryByProductIdAndWarehouseIdQuery query);
 }
