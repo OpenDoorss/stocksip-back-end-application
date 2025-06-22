@@ -18,7 +18,7 @@ public interface InventoryCommandService {
     Optional<Inventory> handle(AddStockToProductCommand command);
     Optional<Inventory> handle(ReduceStockFromProductCommand command);
     Optional<Inventory> handle(AddProductsToWarehouseCommand command);
+    Optional<Inventory> handle(MoveProductToAnotherWarehouseCommand command);
 
-    Long handle(MoveProductToAnotherWarehouseCommand command);
     Long handle(DeleteProductFromWarehouseCommand command);
 }

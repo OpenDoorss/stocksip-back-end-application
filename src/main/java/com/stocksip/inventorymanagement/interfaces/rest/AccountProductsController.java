@@ -40,9 +40,10 @@ public class AccountProductsController {
             description = "Retrieves all products associated with a specific account ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Products retrieved successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad request - invalid account ID")
+            @ApiResponse(responseCode = "404", description = "Not found - invalid account ID")
     })
     public ResponseEntity<List<ProductResource>> getAllProductsByAccountId(@PathVariable Long accountId) {
+
         var targetAccountId = new AccountId(accountId);
         var getAllProductsByAccountIdQuery = new GetAllProductsByAccountIdQuery(targetAccountId);
         var products = productQueryService.handle(getAllProductsByAccountIdQuery);

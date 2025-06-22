@@ -168,7 +168,7 @@ public class InventoryCommandServiceImpl implements InventoryCommandService {
      * @return The ID of the product whose stock is being moved to another warehouse.
      */
     @Override
-    public Long handle(MoveProductToAnotherWarehouseCommand command) {
+    public Optional<Inventory> handle(MoveProductToAnotherWarehouseCommand command) {
 
         // Validate if the product to be moved exists.
         var productToMove = productRepository.findById(command.productId())
@@ -223,7 +223,7 @@ public class InventoryCommandServiceImpl implements InventoryCommandService {
 
                 productRepository.save(productToMove);
                 inventoryRepository.save(newMovedInventory);
-                return productToMove.getProductId();
+                return Optional.of(newMovedInventory);
             } catch (Exception e) {
                 throw new RuntimeException("Error moving products: " + e.getMessage(), e);
             }
@@ -235,7 +235,7 @@ public class InventoryCommandServiceImpl implements InventoryCommandService {
                 Inventory inventory = newInventory.get();
                 inventory.addStockToProduct(command.quantityToMove());
                 inventoryRepository.save(inventory);
-                return productToMove.getProductId();
+                return Optional.of(inventory);
             } catch (Exception e) {
                 throw new RuntimeException("Error moving products: " + e.getMessage(), e);
             }

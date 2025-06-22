@@ -1,6 +1,7 @@
 package com.stocksip.inventorymanagement.interfaces.rest;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
+import com.stocksip.inventorymanagement.domain.model.commands.DeleteProductCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateProductCommand;
 import com.stocksip.inventorymanagement.domain.model.queries.GetProductByIdQuery;
 import com.stocksip.inventorymanagement.domain.services.ProductCommandService;
@@ -92,5 +93,16 @@ public class ProductsController {
         return ResponseEntity.ok(updatedProductResource);
     }
 
-
+    @DeleteMapping("/{productId}")
+    @Operation(summary = "Delete an existing product",
+            description = "Deletes a product without stock identified by its ID in any of the warehouses.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product deleted successfully"),
+            @ApiResponse(responseCode = "400", description = "Product could not be deleted - invalid product ID")
+    })
+    public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
+        var deleteProductCommand = new DeleteProductCommand(productId);
+        productCommandService.handle(deleteProductCommand);
+        return ResponseEntity.ok("Product with given Id deleted successfully.");
+    }
 }
