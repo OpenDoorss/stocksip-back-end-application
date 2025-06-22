@@ -28,7 +28,7 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
      * @param accountId the ID of the profile associated with the warehouse
      * @return true if a warehouse with the given name exists for the specified profile, false otherwise
      */
-    boolean existsByNameIgnoreCaseAndProfileId(String name, AccountId accountId);
+    boolean existsByNameIgnoreCaseAndAccountId(String name, AccountId accountId);
 
     /**
      * Checks if a warehouse with the given name exists for the specified profile ID, excluding a specific warehouse ID.
@@ -38,7 +38,7 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
      * @param warehouseId the ID of the warehouse to exclude from the check
      * @return true if a warehouse with the given name exists for the specified profile, excluding the specified warehouse ID, false otherwise
      */
-    boolean existsByNameAndProfileIdAndWarehouseIdIsNot(String name, AccountId profile, Long warehouseId);
+    boolean existsByNameAndAccountIdAndWarehouseIdIsNot(String name, AccountId profile, Long warehouseId);
 
     /**
      * Checks if a warehouse exists by its address components and profile ID, ignoring case.
@@ -49,7 +49,7 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
      * @param accountId the ID of the profile associated with the warehouse
      * @return true if a warehouse with the given address exists for the specified profile, false otherwise
      */
-    boolean existsByAddressStreetAndAddressCityAndAddressPostalCodeIgnoreCaseAndProfileId(String street, String city, String postalCode, AccountId accountId);
+    boolean existsByAddressStreetAndAddressCityAndAddressPostalCodeIgnoreCaseAndAccountId(String street, String city, String postalCode, AccountId accountId);
 
     /**
      * Checks if a warehouse exists by its address components, profile ID, and excludes a specific warehouse ID.
@@ -61,7 +61,7 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
      * @param warehouseId the ID of the warehouse to exclude from the check
      * @return true if a warehouse with the given address exists, excluding the specified warehouse ID, false otherwise
      */
-    boolean existsByAddressStreetIgnoreCaseAndAddressCityIgnoreCaseAndAddressPostalCodeIgnoreCaseAndProfileIdAndWarehouseIdIsNot(String street, String city, String postalCode, AccountId accountId, Long warehouseId);
+    boolean existsByAddressStreetIgnoreCaseAndAddressCityIgnoreCaseAndAddressPostalCodeIgnoreCaseAndAccountIdAndWarehouseIdIsNot(String street, String city, String postalCode, AccountId accountId, Long warehouseId);
 
     /**
      * Finds a warehouse by its ID and profile ID.
@@ -70,7 +70,7 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
      * @param accountId the ID of the profile associated with the warehouse
      * @return an Optional containing the found Warehouse, or empty if not found
      */
-    Optional<Warehouse> findWarehouseByWarehouseIdAndProfileId(Long warehouseId, AccountId accountId);
+    Optional<Warehouse> findWarehouseByWarehouseIdAndAccountId(Long warehouseId, AccountId accountId);
 
     /**
      * Finds all warehouses associated with a specific profile ID.
@@ -78,5 +78,5 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
      * @param accountId the ID of the profile to find warehouses for
      * @return a List of Warehouses associated with the specified profile ID
      */
-    List<Warehouse> findAllByProfileId(AccountId accountId);
+    List<Warehouse> findAllByAccountId(AccountId accountId);
 }

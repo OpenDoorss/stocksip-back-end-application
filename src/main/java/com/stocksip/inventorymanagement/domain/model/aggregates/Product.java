@@ -10,7 +10,6 @@ import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Product Aggregate Root
@@ -24,6 +23,10 @@ import java.util.Optional;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Product extends AuditableAbstractAggregateRoot<Product> {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long productId;
 
     /**
      * The type of liquor the product is made of.
@@ -61,7 +64,6 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
      * It's used to generate alerts in the platform.
      */
     @Column(nullable = false)
-    @Setter
     @Getter
     private ProductMinimumStock minimumStock;
 
@@ -99,7 +101,7 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
      * @param imageUrl The image URL of the product.
      */
     public Product(ProviderId providerId, String brand, String liquorType,
-                   Optional<String> additionalName, double price,
+                   String additionalName, double price,
                    int minimumStock, String imageUrl) {
         this.productName = new ProductName(BrandName.valueOf(brand.toUpperCase()), LiquorType.valueOf(liquorType.toUpperCase()), additionalName);
         this.minimumStock = new ProductMinimumStock(minimumStock);

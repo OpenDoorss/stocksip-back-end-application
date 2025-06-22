@@ -27,7 +27,7 @@ public class ProductExit extends AuditableModel {
      */
     @Getter
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "productId", nullable = false)
     private Product product;
 
     /**

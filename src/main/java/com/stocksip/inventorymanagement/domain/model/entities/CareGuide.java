@@ -1,8 +1,8 @@
 package com.stocksip.inventorymanagement.domain.model.entities;
 
+import com.stocksip.shared.domain.model.entities.AuditableModel;
 import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
-import com.stocksip.shared.domain.model.entities.AuditableModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -10,14 +10,14 @@ import lombok.Setter;
 @Getter
 @Entity
 public class CareGuide extends AuditableModel {
+
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "productId")
     @NotNull
     private Product product;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "warehouse_id")
+    @JoinColumn(name = "warehouseId")
     @NotNull
     private Warehouse warehouse;
 
@@ -46,12 +46,8 @@ public class CareGuide extends AuditableModel {
     protected CareGuide(){}
 
     /**
-     *
-     * @param product
-     * @param warehouse
-     * @param guideName
-     * @param type
-     * @param description
+     * @summary Constructor.
+     * It creates a new CareGuide instance based on the provided product, warehouse, guide name, type, and description.
      */
     public CareGuide(Product product, Warehouse warehouse, String guideName, String type, String description) {
         this.product = product;

@@ -4,11 +4,7 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductBestBef
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductState;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductStock;
 import com.stocksip.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
-import com.stocksip.shared.domain.model.entities.AuditableModel;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
@@ -19,9 +15,13 @@ import lombok.Getter;
  *
  * @since 1.0.0
  */
-@Getter
 @Entity
+@Getter
 public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long inventoryId;
 
     /**
      * The product associated with this inventory item.
@@ -29,7 +29,7 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
      */
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "productId", nullable = false)
     private Product product;
 
     /**
@@ -38,7 +38,7 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
      */
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "warehouse_id", nullable = false)
+    @JoinColumn(name = "warehouseId", nullable = false)
     private Warehouse warehouse;
 
     /**
