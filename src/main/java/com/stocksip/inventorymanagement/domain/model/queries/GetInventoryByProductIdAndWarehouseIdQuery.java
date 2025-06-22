@@ -9,6 +9,6 @@ package com.stocksip.inventorymanagement.domain.model.queries;
  * @param productId The unique identifier of the product inventory.
  * @param warehouseId The unique identifier of the warehouse that stores the product inventory.
  */
-public record GetInventoryByProductIdAndWarehouseIdQuery(String productId, String warehouseId) {
+public record GetInventoryByProductIdAndWarehouseIdQuery(Long productId, Long warehouseId) {
 
 }

@@ -25,6 +25,14 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
      * This method retrieves an inventory item by its product ID and warehouse ID.
      * @param product The ID of the product whose inventory is to be retrieved.
      * @param warehouse The ID of the warehouse where the product's inventory is located.
+     * @return A task that returns an Inventory object if found, or null if not found.
+     */
+    Optional<Inventory> findByProductAndWarehouse(Product product, Warehouse warehouse);
+
+    /**
+     * This method retrieves an inventory item by its product ID and warehouse ID and Best Before Date.
+     * @param product The ID of the product whose inventory is to be retrieved.
+     * @param warehouse The ID of the warehouse where the product's inventory is located.
      * @param bestBefore The expiration date of the product's inventory.
      * @return A task that returns an Inventory object if found, or null if not found.
      */

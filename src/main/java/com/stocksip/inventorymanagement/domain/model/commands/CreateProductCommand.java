@@ -13,7 +13,7 @@ import java.util.Optional;
  *
  * @since 1.0.0
  */
-public record CreateProductCommand(Optional<String> additionalName,
+public record CreateProductCommand(String additionalName,
                                    String liquorType,
                                    String brandName,
                                    double unitPriceAmount,
