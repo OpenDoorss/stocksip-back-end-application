@@ -19,7 +19,6 @@ public interface ProductQueryService {
     List<Product> handle(GetAllProductsByAccountIdQuery query);
     List<Product> handle(GetAllProductsByProviderIdAndWarehouseIdQuery query);
     List<Product> handle(GetAllProductsByWarehouseIdQuery query);
-    List<Product> handle(GetProductsByIdAndWarehouseIdQuery query);
 
     Optional<Product> handle(GetProductByFullNameAndWarehouseIdQuery query);
     Optional<Product> handle(GetProductByIdAndWarehouseIdAndBestBeforeDateQuery query);

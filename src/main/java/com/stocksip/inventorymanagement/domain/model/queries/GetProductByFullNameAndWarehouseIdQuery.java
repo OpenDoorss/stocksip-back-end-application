@@ -10,7 +10,7 @@ import java.util.Optional;
  *
  * @param warehouseId The unique identifier of the warehouse that stores the product.
  */
-public record GetProductByFullNameAndWarehouseIdQuery(Long warehouseId, Optional<String> additionalName, String liquorType, String brandName) {
+public record GetProductByFullNameAndWarehouseIdQuery(Long warehouseId, String additionalName, String liquorType, String brandName) {
 
     /**
      * Validates the command parameters

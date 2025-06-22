@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,11 +65,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("""
                 SELECT i.product
                 FROM Inventory i
-                WHERE i.product.id = :id
+                WHERE i.product.productId = :id
                     AND i.productBestBeforeDate = :bestBeforeDate
                     AND i.warehouse.warehouseId = :warehouseId
     """)
-    Optional<Product> findProductByIdAndWarehouseIdAndBestBeforeDate(@Param("id") Long id, @Param("warehouseId") Long warehouseId, @Param("bestBeforeDate") Long bestBeforeDate);
+    Optional<Product> findProductByIdAndWarehouseIdAndBestBeforeDate(@Param("id") Long id, @Param("warehouseId") Long warehouseId, @Param("bestBeforeDate") Date bestBeforeDate);
 
     /**
      * This method retrieves all product items that match the specified full name and warehouse ID.
