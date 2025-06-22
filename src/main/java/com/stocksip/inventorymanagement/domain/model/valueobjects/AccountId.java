@@ -25,7 +25,7 @@ public record AccountId(Long accountId) {
      */
     public AccountId {
         if (accountId == null) {
-            throw new IllegalArgumentException("Profile ID must be not null.");
+            throw new IllegalArgumentException("Account ID must be not null.");
         }
     }
 }
