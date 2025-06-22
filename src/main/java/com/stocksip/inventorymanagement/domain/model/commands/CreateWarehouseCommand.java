@@ -1,7 +1,5 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
-
 /**
  * Command to create a new warehouse.
  *

@@ -1,7 +1,5 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
-
 /**
  * Command for updating a warehouse.
  * This record holds the details required to update a warehouse's information.

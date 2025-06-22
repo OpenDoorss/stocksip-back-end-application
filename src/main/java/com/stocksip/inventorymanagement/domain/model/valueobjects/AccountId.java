@@ -27,5 +27,5 @@ public record AccountId(String accountId) {
         if (accountId == null) {
             throw new IllegalArgumentException("Profile ID must be not null.");
         }
-    };
+    }
 }

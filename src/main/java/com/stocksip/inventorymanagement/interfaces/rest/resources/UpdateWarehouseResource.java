@@ -1,10 +1,5 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseCapacity;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ImageUrl;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehouseTemperature;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.WarehousesAddress;
-
 /**
  * Resource for updating a warehouse.
  * This record holds the details required to update a warehouse's information.
