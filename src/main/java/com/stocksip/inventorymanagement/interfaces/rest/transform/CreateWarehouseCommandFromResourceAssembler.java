@@ -17,7 +17,7 @@ public class CreateWarehouseCommandFromResourceAssembler {
      * @param resource the CreateWarehouseResource to convert
      * @return CreateWarehouseCommand created from the resource
      */
-    public static CreateWarehouseCommand toCommandFromResource(CreateWarehouseResource resource, Long profileId) {
+    public static CreateWarehouseCommand toCommandFromResource(CreateWarehouseResource resource) {
 
         return new CreateWarehouseCommand(resource.name(),
                                           resource.street(),
@@ -29,7 +29,7 @@ public class CreateWarehouseCommandFromResourceAssembler {
                                           resource.minTemperature(),
                                           resource.capacity(),
                                           resource.imageUrl(),
-                                          profileId);
+                                          resource.accountId());
     }
 
 }

@@ -1,7 +1,5 @@
 package com.stocksip.inventorymanagement.domain.model.queries;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
-
 /**
  * Query to retrieve all warehouses associated with a specific profile ID.
  *
@@ -11,5 +9,5 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
  *
  * @since 1.0.0
  */
-public record GetAllWarehousesByAccountIdQuery(AccountId accountId) {
+public record GetAllWarehousesByIdQuery() {
 }

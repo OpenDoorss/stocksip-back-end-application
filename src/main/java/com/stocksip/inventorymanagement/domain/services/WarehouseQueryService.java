@@ -1,7 +1,7 @@
 package com.stocksip.inventorymanagement.domain.services;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
-import com.stocksip.inventorymanagement.domain.model.queries.GetAllWarehousesByAccountIdQuery;
+import com.stocksip.inventorymanagement.domain.model.queries.GetAllWarehousesByIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetWarehouseByIdQuery;
 
 import java.util.List;
@@ -28,5 +28,5 @@ public interface WarehouseQueryService {
      * @param query the query containing the profile ID
      * @return a List of Warehouses associated with the specified profile ID
      */
-    List<Warehouse> handle(GetAllWarehousesByAccountIdQuery query);
+    List<Warehouse> handle(GetAllWarehousesByIdQuery query);
 }
