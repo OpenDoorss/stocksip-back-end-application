@@ -25,7 +25,7 @@ public record UpdateWarehouseResource(String name,
                                       Double minTemperature,
                                       Double capacity,
                                       String imageUrl,
-                                      String accountId) {
+                                      Long accountId) {
 
     /**
      * Constructor for UpdateWarehouseResource.

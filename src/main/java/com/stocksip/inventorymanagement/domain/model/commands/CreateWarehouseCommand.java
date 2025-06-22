@@ -19,7 +19,7 @@ public record CreateWarehouseCommand(String name,
                                      Double minTemperature,
                                      Double capacity,
                                      String imageUrl,
-                                     String accountId) {
+                                     Long accountId) {
 
     /**
      * Constructor for CreateWarehouseCommand.

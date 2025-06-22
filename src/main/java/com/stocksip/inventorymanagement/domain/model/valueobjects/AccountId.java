@@ -15,7 +15,7 @@ import jakarta.persistence.Embeddable;
  * @since 1.0.0
  */
 @Embeddable
-public record AccountId(String accountId) {
+public record AccountId(Long accountId) {
 
     /**
      * Constructs an AccountId with the given ID.
@@ -24,8 +24,8 @@ public record AccountId(String accountId) {
      * @throws IllegalArgumentException if the accountId is null or not positive.
      */
     public AccountId {
-        if (accountId == null) {
-            throw new IllegalArgumentException("Profile ID must be not null.");
+        if (accountId == null || accountId <= 0) {
+            throw new IllegalArgumentException("Account ID must be a positive number");
         }
     }
 }

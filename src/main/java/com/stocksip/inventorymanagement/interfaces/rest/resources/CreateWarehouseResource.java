@@ -25,7 +25,7 @@ public record CreateWarehouseResource(String name,
                                       Double minTemperature,
                                       Double capacity,
                                       String imageUrl,
-                                      String accountId) {
+                                      Long accountId) {
 
     /**
      * Validates the resource.
