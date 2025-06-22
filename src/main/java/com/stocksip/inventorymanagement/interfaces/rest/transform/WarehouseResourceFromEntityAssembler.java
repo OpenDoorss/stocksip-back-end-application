@@ -5,6 +5,7 @@ import com.stocksip.inventorymanagement.interfaces.rest.resources.WarehouseResou
 
 /**
  * Assembler class to create a WarehouseResource from a Warehouse entity.
+ *
  * @since 1.0.0
  */
 public class WarehouseResourceFromEntityAssembler {
@@ -16,11 +17,17 @@ public class WarehouseResourceFromEntityAssembler {
      * @return a WarehouseResource created from the entity
      */
     public static WarehouseResource toResourceFromEntity(Warehouse entity) {
-        return new WarehouseResource(entity.getName(),
-                                     entity.getAddress().fullAddress(),
-                                     entity.getTemperature().maxTemperature(),
-                                     entity.getTemperature().minTemperature(),
-                                     entity.getCapacity().capacity(),
-                                     entity.getImageUrl().imageUrl());
+        return new WarehouseResource(
+                entity.getWarehouseId(),
+                entity.getName(),
+                entity.getAddress().street(),
+                entity.getAddress().city(),
+                entity.getAddress().district(),
+                entity.getAddress().postalCode(),
+                entity.getAddress().country(),
+                entity.getTemperature().maxTemperature(),
+                entity.getTemperature().minTemperature(),
+                entity.getCapacity().capacity(),
+                entity.getImageUrl().imageUrl());
     }
 }

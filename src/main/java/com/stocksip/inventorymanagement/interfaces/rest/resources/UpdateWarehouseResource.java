@@ -1,7 +1,5 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
-
 /**
  * Resource for updating a warehouse.
  * This record holds the details required to update a warehouse's information.
@@ -27,7 +25,7 @@ public record UpdateWarehouseResource(String name,
                                       Double minTemperature,
                                       Double capacity,
                                       String imageUrl,
-                                      AccountId accountId) {
+                                      Long accountId) {
 
     /**
      * Constructor for UpdateWarehouseResource.

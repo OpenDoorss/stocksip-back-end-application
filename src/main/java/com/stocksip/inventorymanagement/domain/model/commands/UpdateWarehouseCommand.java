@@ -1,7 +1,5 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
-
 /**
  * Command for updating a warehouse.
  * This record holds the details required to update a warehouse's information.
@@ -30,7 +28,7 @@ public record UpdateWarehouseCommand(Long warehouseId,
                                      Double minTemperature,
                                      Double capacity,
                                      String imageUrl,
-                                     AccountId accountId) {
+                                     Long accountId) {
     /**
      * Constructor for UpdateWarehouseCommand.
      * Validates the input parameters to ensure that the warehouse ID is not null or less than or equal to 0,
