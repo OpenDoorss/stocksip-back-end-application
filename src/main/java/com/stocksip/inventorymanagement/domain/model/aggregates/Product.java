@@ -77,6 +77,7 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
     private ImageUrl imageUrl;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @Getter
     private List<Inventory> inventories;
 
     /**

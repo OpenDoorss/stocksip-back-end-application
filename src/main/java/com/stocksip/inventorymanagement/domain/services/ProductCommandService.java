@@ -18,4 +18,6 @@ public interface ProductCommandService {
     Optional<Product> handle(UpdateProductCommand command);
     Optional<Product> handle(CreateProductCommand command);
     Optional<Product> handle(UpdateProductMinimumStockCommand command);
+
+    void handle(DeleteProductCommand command);
 }

@@ -2,12 +2,14 @@ package com.stocksip.inventorymanagement.application.internal.commandservices;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
+import com.stocksip.inventorymanagement.domain.model.commands.DeleteProductCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateProductCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateProductMinimumStockCommand;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.BrandName;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.LiquorType;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductName;
 import com.stocksip.inventorymanagement.domain.services.ProductCommandService;
+import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositories.InventoryRepository;
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositories.ProductRepository;
 
 import java.util.Optional;
@@ -27,8 +29,14 @@ public class ProductCommandServiceImpl implements ProductCommandService {
      */
     private final ProductRepository productRepository;
 
-    public ProductCommandServiceImpl(ProductRepository productRepository) {
+    /**
+     * Repository for accessing inventory data.
+     */
+    private final InventoryRepository inventoryRepository;
+
+    public ProductCommandServiceImpl(ProductRepository productRepository, InventoryRepository inventoryRepository) {
         this.productRepository = productRepository;
+        this.inventoryRepository = inventoryRepository;
     }
 
     /**
@@ -96,6 +104,38 @@ public class ProductCommandServiceImpl implements ProductCommandService {
             return Optional.of(updatedProduct);
         } catch (Exception e) {
             throw new RuntimeException("Error updating product: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Handles the command for deleting a product only when it's out of stock in all the warehouses.
+     * If the product is out of stock in all the warehouses, then it will be deleted and also all the inventory objects related to that product.
+     *
+     * @param command The command containing the details for deleting a product
+     */
+    @Override
+    public void handle(DeleteProductCommand command) {
+        var productToDelete = productRepository.findById(command.productId())
+                .orElseThrow(() -> new IllegalArgumentException("Product with ID %s does not exist".formatted(command.productId())));
+
+        var count = 0;
+        for (int i = 0; i < productToDelete.getInventories().size(); i++)
+        {
+            if (productToDelete.getInventories().get(i).getProductStock().getStock() == 0){
+                count++;
+            }
+        }
+
+        try {
+            if (count == productToDelete.getInventories().size()) {
+                productRepository.delete(productToDelete);
+                inventoryRepository.deleteAll(productToDelete.getInventories());
+            }
+            else {
+                throw new IllegalArgumentException("Cannot delete product with ID %s because it has stock available in a warehouse.".formatted(command.productId()));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting product: " + e.getMessage(), e);
         }
     }
 }
