@@ -15,7 +15,7 @@ import jakarta.persistence.Embeddable;
  * @since 1.0.0
  */
 @Embeddable
-public record AccountId(String accountId) {
+public record AccountId(Long accountId) {
 
     /**
      * Constructs an AccountId with the given ID.

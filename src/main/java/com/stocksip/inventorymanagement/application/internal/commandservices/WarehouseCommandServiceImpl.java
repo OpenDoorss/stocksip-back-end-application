@@ -41,14 +41,14 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
      */
     @Override
     public Optional<Warehouse> handle(CreateWarehouseCommand command) {
-        if (warehouseRepository.existsByNameIgnoreCaseAndAccountId(command.name(), new AccountId(command.accountId())))
+        if (warehouseRepository.existsByNameIgnoreCaseAndAccountId(command.name(), command.accountId()))
             throw new IllegalArgumentException("Warehouse with the same name already exists.");
 
         if (warehouseRepository.existsByAddressStreetAndAddressCityAndAddressPostalCodeIgnoreCaseAndAccountId(
                 command.street(),
                 command.city(),
                 command.postalCode(),
-                new AccountId(command.accountId()))) {
+                command.accountId())) {
             throw new IllegalArgumentException("Warehouse with the same address already exists.");
         }
 
@@ -67,11 +67,11 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
     @Override
     public Optional<Warehouse> handle(UpdateWarehouseCommand command) {
 
-        var warehouseToUpdate = warehouseRepository.findWarehouseByWarehouseIdAndAccountId(command.warehouseId(), new AccountId(command.accountId()))
+        var warehouseToUpdate = warehouseRepository.findWarehouseByWarehouseIdAndAccountId(command.warehouseId(), command.accountId())
                 .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.warehouseId())));
 
         if (!warehouseToUpdate.getName().equals(command.name()) &&
-                warehouseRepository.existsByNameAndAccountIdAndWarehouseIdIsNot(command.name(), new AccountId(command.accountId()), command.warehouseId())) {
+                warehouseRepository.existsByNameAndAccountIdAndWarehouseIdIsNot(command.name(), command.accountId(), command.warehouseId())) {
             throw new IllegalArgumentException("Warehouse with name %s already exists".formatted(command.name()));
         }
 
@@ -88,7 +88,7 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
                         command.street(),
                         command.city(),
                         command.postalCode(),
-                        new AccountId(command.accountId()),
+                        command.accountId(),
                         command.warehouseId())){
             throw new IllegalArgumentException("Another warehouse with the same address already exists.");
         }

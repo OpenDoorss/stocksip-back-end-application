@@ -90,7 +90,7 @@ public class Warehouse {
         this.temperature = new WarehouseTemperature(command.minTemperature(), command.maxTemperature());
         this.capacity = new WarehouseCapacity(command.capacity());
         this.imageUrl = this.setDefaultImageUrlIfNotProvided(command.imageUrl());
-        this.accountId = new AccountId(command.accountId());
+        this.accountId = command.accountId();
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.stocksip.inventorymanagement.interfaces.rest.transform;
 
+import com.cloudinary.provisioning.Account;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateWarehouseResource;
 
 /**
