@@ -20,6 +20,7 @@ import lombok.Getter;
 public class Warehouse {
 
     @Id
+    @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long warehouseId;
 

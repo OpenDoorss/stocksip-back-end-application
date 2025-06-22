@@ -25,6 +25,7 @@ import java.util.List;
 public class Product extends AuditableAbstractAggregateRoot<Product> {
 
     @Id
+    @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 

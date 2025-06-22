@@ -20,6 +20,7 @@ import lombok.Getter;
 public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
 
     @Id
+    @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long inventoryId;
 

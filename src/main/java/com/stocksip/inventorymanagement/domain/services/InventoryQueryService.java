@@ -1,8 +1,11 @@
 package com.stocksip.inventorymanagement.domain.services;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Inventory;
+import com.stocksip.inventorymanagement.domain.model.queries.GetInventoryByIdQuery;
+import com.stocksip.inventorymanagement.domain.model.queries.GetInventoryByProductIdAndWarehouseIdAndBestBeforeDateQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetInventoryByProductIdAndWarehouseIdQuery;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -15,5 +18,8 @@ import java.util.Optional;
  */
 public interface InventoryQueryService {
 
-    Optional<Inventory> handle(GetInventoryByProductIdAndWarehouseIdQuery query);
+    Optional<Inventory> handle(GetInventoryByIdQuery query);
+    Optional<Inventory> handle(GetInventoryByProductIdAndWarehouseIdAndBestBeforeDateQuery query);
+
+    List<Inventory> handle(GetInventoryByProductIdAndWarehouseIdQuery query);
 }

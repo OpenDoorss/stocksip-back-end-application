@@ -42,17 +42,26 @@ public class InventoryCommandServiceImpl implements InventoryCommandService {
         this.warehouseRepository = warehouseRepository;
     }
 
+    /**
+     * Handles the command for adding stock to a product in a warehouse.
+     *
+     * @param command The command containing the details for adding stock to a product.
+     * @return The updated inventory object.
+     */
     @Override
     public Optional<Inventory> handle(AddStockToProductCommand command) {
 
+        // Validate if the stock of the product to be added exists.
         var product = productRepository.findById(command.productId())
                 .orElseThrow(() -> new IllegalArgumentException("Product with ID %s does not exist".formatted(command.productId())));
 
+        // Validate if the warehouse where the stock will be added exists.
         var warehouse = warehouseRepository.findById(command.warehouseId())
                 .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.warehouseId())));
 
         var targetBestBeforeDate = new ProductBestBeforeDate(command.bestBeforeDate());
 
+        // Retrieves the inventory of the product in the warehouse if it exists, if not, it will create a new inventory entry with the new Expiration Date.
         var inventoryToUpdate = inventoryRepository.findByProductAndWarehouseAndProductBestBeforeDate(product, warehouse, targetBestBeforeDate);
 
         if (inventoryToUpdate.isEmpty()) {
@@ -78,22 +87,34 @@ public class InventoryCommandServiceImpl implements InventoryCommandService {
         }
     }
 
+    /**
+     * This method handles the command for reducing stock of a product in a specific warehouse.
+     * In other words, updating an inventory object.
+     *
+     * @param command The command containing the details for reducing stock from a product.
+     * @return The updated inventory object.
+     */
     @Override
     public Optional<Inventory> handle(ReduceStockFromProductCommand command) {
 
+        // Validate if the stock of the product to decrease exists.
         var product = productRepository.findById(command.productId())
                 .orElseThrow(() -> new IllegalArgumentException("Product with ID %s does not exist".formatted(command.productId())));
 
+        // Validate if the warehouse where the stock will be decreased exists.
         var warehouse = warehouseRepository.findById(command.warehouseId())
                 .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.warehouseId())));
 
         var targetBestBeforeDate = new ProductBestBeforeDate(command.bestBeforeDate());
 
+        // Retrieves the inventory of the product in the warehouse if it exists.
         var inventoryToUpdate = inventoryRepository.findByProductAndWarehouseAndProductBestBeforeDate(product, warehouse, targetBestBeforeDate)
                 .orElseThrow(() -> new IllegalArgumentException("Inventory does not exists."));
 
+        // Registers a product exit with the provided command details.
         //TODO: Add code to create a new product exit.
 
+        // If the retrieved inventory exists, it decreases the stock to the current inventory.
         try {
             inventoryToUpdate.reduceStockFromProduct(command.removedQuantity());
             var inventoryUpdated = inventoryRepository.save(inventoryToUpdate);
@@ -103,19 +124,31 @@ public class InventoryCommandServiceImpl implements InventoryCommandService {
         }
     }
 
+    /**
+     * This method handles the command for creating an inventory object that links a specific product and a specific warehouse.
+     *
+     * @param command The command containing the details for creating a new inventory entry.
+     * @return The created inventory object if created, null if not.
+     */
     @Override
     public Optional<Inventory> handle(AddProductsToWarehouseCommand command) {
 
+        // Validate if the product to be added exists.
         var product = productRepository.findById(command.productId())
                 .orElseThrow(() -> new IllegalArgumentException("Product with ID %s does not exist".formatted(command.productId())));
 
+        // Validate if the warehouse where the product will be added exists.
         var warehouse = warehouseRepository.findById(command.warehouseId())
                 .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.warehouseId())));
 
         var targetBestBeforeDate = new ProductBestBeforeDate(command.bestBeforeDate());
         var targetProductStock = new ProductStock(command.quantity());
+
+        // Creates a new inventory entry for the product in the warehouse with the specified quantity.
         var inventory = new Inventory(product, warehouse, targetProductStock, targetBestBeforeDate);
 
+        // Adds the new inventory entry to the product's inventory relations.
+        // Completes the inventory creation by saving the changes to the database.
         try {
             product.addWarehouseRelation(inventory);
             productRepository.save(product);
@@ -126,36 +159,118 @@ public class InventoryCommandServiceImpl implements InventoryCommandService {
         }
     }
 
+    /**
+     * This method handles the command for moving stock from a current warehouse to another warehouse.
+     *
+     * @param command The command containing the details for moving stock.
+     * @return The ID of the product whose stock is being moved to another warehouse.
+     */
     @Override
     public Long handle(MoveProductToAnotherWarehouseCommand command) {
+
+        // Validate if the product to be moved exists.
         var productToMove = productRepository.findById(command.productId())
                 .orElseThrow(() -> new IllegalArgumentException("Product with ID %s does not exist".formatted(command.productId())));
 
-        var newWarehouse = warehouseRepository.findById(command.newWarehouseId());
+        // Validate if the new warehouse where the product will be moved exists.
+        var newWarehouse = warehouseRepository.findById(command.newWarehouseId())
+                .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.productId())));
 
-        return 0l;
+        // Validate if the old warehouse where the product stock was exists.
+        var oldWarehouse = warehouseRepository.findById(command.oldWarehouseId())
+                .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.productId())));
+
+        // Validate if the old warehouse where the product will be moved exists.
+        if (command.newWarehouseId().equals(command.oldWarehouseId())) {
+            throw new IllegalArgumentException("Cannot move products to the same warehouse.");
+        }
+
+        var targetBestBeforeDate = new ProductBestBeforeDate(command.bestBeforeDate());
+
+        // Retrieves the current inventory of the product in the old warehouse.
+        var currentInventory = inventoryRepository.findByProductAndWarehouseAndProductBestBeforeDate(
+                productToMove,
+                oldWarehouse,
+                targetBestBeforeDate
+        ).orElseThrow(() -> new IllegalArgumentException("Inventory does not exists."));
+
+        // Removes the moved stock from the current inventory. And If the current inventory has no stock left, the product state will be set to OUT_OF_STOCK.
+        currentInventory.reduceStockFromProduct(command.quantityToMove());
+
+        // Registers a new product movement with the amount of stock exiting.
+        //TODO: Add code to create a Product Movement.
+
+        // Saves the changes to the current repository
+        inventoryRepository.save(currentInventory);
+
+        // Retrieves the inventory of the product in the new warehouse if it exists.
+        var newInventory = inventoryRepository.findByProductAndWarehouseAndProductBestBeforeDate(
+                productToMove,
+                newWarehouse,
+                targetBestBeforeDate
+        );
+
+        // If the retrieved inventory does not exist, creates a new inventory entry with the moved quantity.
+        if (newInventory.isEmpty()) {
+            try {
+                var targetAddedQuantity = new ProductStock(command.quantityToMove());
+                var newMovedInventory = new Inventory(productToMove, newWarehouse, targetAddedQuantity, targetBestBeforeDate);
+
+                // Adds the new inventory entry to the product's inventory relations if it does not already exist.
+                productToMove.addWarehouseRelation(newMovedInventory);
+
+                productRepository.save(productToMove);
+                inventoryRepository.save(newMovedInventory);
+                return productToMove.getProductId();
+            } catch (Exception e) {
+                throw new RuntimeException("Error moving products: " + e.getMessage(), e);
+            }
+        }
+
+        // If the retrieved inventory already existed, it adds the moved stock to the retrieved inventory.
+        else {
+            try {
+                Inventory inventory = newInventory.get();
+                inventory.addStockToProduct(command.quantityToMove());
+                inventoryRepository.save(inventory);
+                return productToMove.getProductId();
+            } catch (Exception e) {
+                throw new RuntimeException("Error moving products: " + e.getMessage(), e);
+            }
+        }
     }
 
+    /**
+     * This method handles the command to delete an inventory.
+     *
+     * @param command The command containing the details for deleting an inventory.
+     * @return The ID of the product whose inventory is being deleted.
+     */
     @Override
     public Long handle(DeleteProductFromWarehouseCommand command) {
 
+        // Validate if the product to be deleted exists.
         var product = productRepository.findById(command.productId())
                 .orElseThrow(() -> new IllegalArgumentException("Product with ID %s does not exist".formatted(command.productId())));
 
+        // Validate if the warehouse where the product will be deleted exists.
         var warehouse = warehouseRepository.findById(command.warehouseId())
                 .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.warehouseId())));
 
         var targetBestBeforeDate = new ProductBestBeforeDate(command.bestBeforeDate());
 
+        // Retrieves the inventory of the product in the warehouse if it exists.
         var inventoryToDelete = inventoryRepository.findByProductAndWarehouseAndProductBestBeforeDate(product, warehouse, targetBestBeforeDate)
                 .orElseThrow(() -> new IllegalArgumentException("Inventory does not exists."));
 
+        // If the current stock of the product in the warehouse is not zero, it throws an exception to prevent deletion.
+        // If the retrieved inventory exists, it removes the relation between the product and the inventory.
         if (inventoryToDelete.getProductStock().stock() == 0) {
             try {
                 product.removeWarehouseRelation(inventoryToDelete);
                 productRepository.save(product);
                 inventoryRepository.delete(inventoryToDelete);
-                return product.getId();
+                return product.getProductId();
             } catch (Exception e) {
                 throw new RuntimeException("Error updating product: " + e.getMessage(), e);
             }
