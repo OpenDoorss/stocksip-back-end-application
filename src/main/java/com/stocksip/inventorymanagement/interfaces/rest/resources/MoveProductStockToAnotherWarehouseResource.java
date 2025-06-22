@@ -11,7 +11,7 @@ import java.util.Date;
  * @since 1.0.0
  */
 public record MoveProductStockToAnotherWarehouseResource(
-        String newWarehouseId,
+        Long newWarehouseId,
         Date movedStockExpirationDate,
         int movedQuantity
 ) {
