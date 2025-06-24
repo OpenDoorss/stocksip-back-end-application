@@ -1,10 +1,12 @@
 package com.stocksip.inventorymanagement.domain.model.entities;
 
+import com.stocksip.inventorymanagement.domain.model.aggregates.Inventory;
 import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductExitReasons;
 import com.stocksip.shared.domain.model.entities.AuditableModel;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
@@ -23,12 +25,12 @@ import java.util.Date;
 public class ProductExit extends AuditableModel {
 
     /**
-     * The identifier of the product that will exit.
+     * The unique identifier for the inventory.
      */
-    @Getter
-    @ManyToOne
-    @JoinColumn(name = "productId", nullable = false)
-    private Product product;
+    @ManyToOne(optional = false)
+    @Setter
+    @JoinColumn(name = "inventory_id", nullable = false, updatable = false)
+    private Inventory inventory;
 
     /**
      * The reason why the product is exiting the warehouse.
@@ -41,7 +43,7 @@ public class ProductExit extends AuditableModel {
      * The number of products which will exit the warehouse.
      */
     @Column(nullable = false, updatable = false)
-    private int productAmount;
+    private int productAmountExited;
 
     /**
      * The date which this exit is being registered.
@@ -56,16 +58,14 @@ public class ProductExit extends AuditableModel {
     }
 
     /**
-     * @summary Constructor.
-     * It creates a new ProductExit instance based on the CreateProductExitCommand command.
-     *
+     * @summary
+     * Default Constructor.
+     * Creates a new ProductExit instance.
      */
-    public ProductExit(Product product, ProductExitReasons exitReason, int productAmount) {
-        this.product = product;
+    public ProductExit(Inventory inventory, ProductExitReasons exitReason, int productAmount) {
+        this.inventory = inventory;
         this.exitReason = exitReason;
-        this.productAmount = productAmount;
-
-        //TODO: Add command for removing stock of a product with its id.
+        this.productAmountExited = productAmount;
     }
 
     /**
@@ -73,7 +73,7 @@ public class ProductExit extends AuditableModel {
      *
      * @return The reason of exiting of these products.
      */
-    public String getReason() {
+    public String getExitReason() {
         return this.exitReason.name().toLowerCase();
     }
 }

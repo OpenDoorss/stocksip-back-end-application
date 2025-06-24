@@ -1,12 +1,16 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
+import com.stocksip.inventorymanagement.domain.model.entities.ProductExit;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductBestBeforeDate;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductExitReasons;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductState;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductStock;
 import com.stocksip.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+
+import java.util.List;
 
 /**
  * Represents an inventory item in the inventory management system.
@@ -61,6 +65,14 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
      */
     @Embedded
     private ProductBestBeforeDate productBestBeforeDate;
+
+    /**
+     * The list of product exits associated with this inventory item.
+     * It represents the history of exits for this product in the warehouse.
+     */
+    @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
+    @Getter
+    private List<ProductExit> productExits;
 
     protected Inventory() {
         // Default constructor for JPA
@@ -166,5 +178,29 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
             setProductStateToOutOfStock();
             //TODO: Add event for generating a critical alert for product with empty stock.
         }
+    }
+
+    /**
+     * Registers an exit of stock from the inventory.
+     * This method creates a new ProductExit instance and adds it to the inventory's product exits.
+     *
+     * @param stockExited The quantity of stock that has exited the inventory.
+     * @param exitReason The reason for the exit, represented as a string.
+     */
+    public void registerExit(int stockExited, ProductExitReasons exitReason) {
+
+        // Validate the stock exited
+        if (stockExited <= 0) {
+            throw new IllegalArgumentException("Stock exited must be a positive number.");
+        }
+
+        // Reduce the stock from the product in this inventory item.
+        this.reduceStockFromProduct(stockExited);
+
+        // Create a new ProductExit instance with the provided exit reason and stock exited
+        var productExit = new ProductExit(this, exitReason, stockExited);
+
+        // Add the product exit to the inventory
+        this.productExits.add(productExit);
     }
 }
