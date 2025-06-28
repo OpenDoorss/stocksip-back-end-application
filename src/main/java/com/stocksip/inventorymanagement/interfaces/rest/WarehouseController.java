@@ -56,32 +56,6 @@ public class WarehouseController {
     }
 
     /**
-     * Create a new warehouse.
-     * @param resource CreateWarehouseResource containing the details of the warehouse to be created
-     * @return ResponseEntity containing the created WarehouseResource or a bad request if the resource is invalid
-     * @see CreateWarehouseResource
-     * @see WarehouseResource
-     *
-     * @since 1.0.0
-     */
-    @Operation(
-            summary = "Create a new warehouse",
-            description = "Creates a new warehouse with the provided details."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Warehouse created successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad request")
-    })
-    @PostMapping
-    public ResponseEntity<WarehouseResource> createWarehouse(@RequestBody CreateWarehouseResource resource) {
-        Optional<Warehouse> warehouse = warehouseCommandService.handle(CreateWarehouseCommandFromResourceAssembler.toCommandFromResource(resource));
-
-        return warehouse.map(source ->
-                        new ResponseEntity<>(WarehouseResourceFromEntityAssembler.toResourceFromEntity(source), CREATED))
-                .orElseGet(() -> ResponseEntity.badRequest().build());
-    }
-
-    /**
      * Updates a warehouse by its ID.
      * @param warehouseId ID of the warehouse to update
      * @param updateWarehouseResource The {@link UpdateWarehouseResource} containing the updated details of the warehouse
