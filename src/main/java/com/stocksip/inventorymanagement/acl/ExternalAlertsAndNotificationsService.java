@@ -1,4 +1,4 @@
-package com.stocksip.inventorymanagement.application.internal.outboundservices.acl;
+package com.stocksip.inventorymanagement.acl;
 
 import com.stocksip.alertsandnotifications.interfaces.acl.IAlertsAndNotificationsContextFacade;
 import org.springframework.stereotype.Service;

@@ -28,7 +28,7 @@ public class CreateWarehouseCommandFromResourceAssembler {
                                           resource.maxTemperature(),
                                           resource.minTemperature(),
                                           resource.capacity(),
-                                          resource.imageUrl(),
+                                          resource.image(),
                                           accountId);
     }
 

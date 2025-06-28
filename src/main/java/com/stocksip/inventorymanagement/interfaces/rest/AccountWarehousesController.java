@@ -59,8 +59,8 @@ public class AccountWarehousesController {
             @ApiResponse(responseCode = "201", description = "Warehouse created successfully"),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
-    @PostMapping
-    public ResponseEntity<WarehouseResource> createWarehouse(@RequestBody CreateWarehouseResource resource, @PathVariable Long accountId) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<WarehouseResource> createWarehouse(@ModelAttribute CreateWarehouseResource resource, @PathVariable Long accountId) {
         Optional<Warehouse> warehouse = warehouseCommandService.handle(CreateWarehouseCommandFromResourceAssembler.toCommandFromResource(resource, accountId));
 
         return warehouse.map(source ->

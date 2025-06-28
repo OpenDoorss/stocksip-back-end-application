@@ -1,4 +1,4 @@
-package com.stocksip.shared.infrastructure.cloudstorage.cloudinary.configuration;
+package com.stocksip.inventorymanagement.infrastructure.filestorage.cloudinary.configuration;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

@@ -84,12 +84,12 @@ public class Warehouse {
      *
      * @param command the command containing the details for creating a new warehouse.
      */
-    public Warehouse(CreateWarehouseCommand command) {
+    public Warehouse(CreateWarehouseCommand command, String imageUrl) {
         this.name = command.name();
         this.address = new WarehousesAddress(command.street(), command.city(), command.district(), command.postalCode(), command.country());
         this.temperature = new WarehouseTemperature(command.minTemperature(), command.maxTemperature());
         this.capacity = new WarehouseCapacity(command.capacity());
-        this.imageUrl = this.setDefaultImageUrlIfNotProvided(command.imageUrl());
+        this.imageUrl = new ImageUrl(imageUrl);
         this.accountId = new AccountId(command.accountId());
     }
 

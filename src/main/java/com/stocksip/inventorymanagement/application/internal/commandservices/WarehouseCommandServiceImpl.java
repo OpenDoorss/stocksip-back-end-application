@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.application.internal.commandservices;
 
+import com.stocksip.inventorymanagement.application.internal.outboundservices.cloudinary.CloudinaryService;
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteWarehouseCommand;
@@ -28,8 +29,14 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
      */
     private final WarehouseRepository warehouseRepository;
 
-    public WarehouseCommandServiceImpl(WarehouseRepository warehouseRepository) {
+    /**
+     * Service for handling cloudinary operations.
+     */
+    private final CloudinaryService cloudinaryService;
+
+    public WarehouseCommandServiceImpl(WarehouseRepository warehouseRepository, CloudinaryService cloudinaryService) {
         this.warehouseRepository = warehouseRepository;
+        this.cloudinaryService = cloudinaryService;
     }
 
     /**
@@ -41,6 +48,7 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
      */
     @Override
     public Optional<Warehouse> handle(CreateWarehouseCommand command) {
+
         if (warehouseRepository.existsByNameIgnoreCaseAndAccountId(command.name(), new AccountId(command.accountId())))
             throw new IllegalArgumentException("Warehouse with the same name already exists.");
 
@@ -52,7 +60,10 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
             throw new IllegalArgumentException("Warehouse with the same address already exists.");
         }
 
-        var warehouse = new Warehouse(command);
+        String imageUrl = command.image() != null ? cloudinaryService.UploadImage(command.image())
+                : "https://res.cloudinary.com/deuy1pr9e/image/upload/v1750914969/default-warehouse_whqolq.avif";
+
+        var warehouse = new Warehouse(command, imageUrl);
         var createdWarehouse = warehouseRepository.save(warehouse);
         return Optional.of(createdWarehouse);
     }
