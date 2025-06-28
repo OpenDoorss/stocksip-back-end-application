@@ -1,7 +1,6 @@
 package com.stocksip.inventorymanagement.interfaces.rest;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
-import com.stocksip.inventorymanagement.domain.model.queries.GetAllProductsByAccountIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetAllWarehousesByAccountIdQuery;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
@@ -9,7 +8,6 @@ import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateWarehouseResource;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.WarehouseResource;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.CreateWarehouseCommandFromResourceAssembler;
-import com.stocksip.inventorymanagement.interfaces.rest.transform.ProductResourceFromEntityAssembler;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.WarehouseResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

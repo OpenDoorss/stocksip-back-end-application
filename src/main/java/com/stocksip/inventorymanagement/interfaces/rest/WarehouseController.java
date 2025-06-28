@@ -1,15 +1,12 @@
 package com.stocksip.inventorymanagement.interfaces.rest;
 
-import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.queries.GetAllWarehousesByIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetWarehouseByIdQuery;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
-import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateWarehouseResource;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.UpdateWarehouseResource;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.WarehouseResource;
-import com.stocksip.inventorymanagement.interfaces.rest.transform.CreateWarehouseCommandFromResourceAssembler;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.UpdateWarehouseCommandFromResourceAssembler;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.WarehouseResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,9 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.http.HttpStatus.CREATED;
 
 /**
  * REST controller for Warehouses.
