@@ -104,4 +104,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      * @return True if a product exists, otherwise, false.
      */
     boolean existsByBrandNameAndLiquorTypeAndProductName(BrandName brandName, LiquorType liquorType, ProductName productName);
+
+    /**
+     * This method retrieves the image URL of a product by its ID.
+     * @param productId The ID of the product whose image URL is to be retrieved.
+     * @return The image URL of the product if found, otherwise null.
+     */
+    @Query("SELECT p.imageUrl.imageUrl FROM Product p WHERE p.productId = :productId")
+    String findImageUrlByProductId(@Param("productId") Long productId);
 }

@@ -1,15 +1,12 @@
 package com.stocksip.inventorymanagement.interfaces.rest;
 
-import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteWarehouseCommand;
 import com.stocksip.inventorymanagement.domain.model.queries.GetAllWarehousesByIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetWarehouseByIdQuery;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
-import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateWarehouseResource;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.UpdateWarehouseResource;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.WarehouseResource;
-import com.stocksip.inventorymanagement.interfaces.rest.transform.CreateWarehouseCommandFromResourceAssembler;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.UpdateWarehouseCommandFromResourceAssembler;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.WarehouseResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,9 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.http.HttpStatus.CREATED;
+import java.util.Map;
 
 /**
  * REST controller for Warehouses.
@@ -56,32 +51,6 @@ public class WarehouseController {
     }
 
     /**
-     * Create a new warehouse.
-     * @param resource CreateWarehouseResource containing the details of the warehouse to be created
-     * @return ResponseEntity containing the created WarehouseResource or a bad request if the resource is invalid
-     * @see CreateWarehouseResource
-     * @see WarehouseResource
-     *
-     * @since 1.0.0
-     */
-    @Operation(
-            summary = "Create a new warehouse",
-            description = "Creates a new warehouse with the provided details."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Warehouse created successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad request")
-    })
-    @PostMapping
-    public ResponseEntity<WarehouseResource> createWarehouse(@RequestBody CreateWarehouseResource resource) {
-        Optional<Warehouse> warehouse = warehouseCommandService.handle(CreateWarehouseCommandFromResourceAssembler.toCommandFromResource(resource));
-
-        return warehouse.map(source ->
-                        new ResponseEntity<>(WarehouseResourceFromEntityAssembler.toResourceFromEntity(source), CREATED))
-                .orElseGet(() -> ResponseEntity.badRequest().build());
-    }
-
-    /**
      * Updates a warehouse by its ID.
      * @param warehouseId ID of the warehouse to update
      * @param updateWarehouseResource The {@link UpdateWarehouseResource} containing the updated details of the warehouse
@@ -96,8 +65,8 @@ public class WarehouseController {
             @ApiResponse(responseCode = "200", description = "Warehouse updated successfully"),
             @ApiResponse(responseCode = "400", description = "Warehouse could not be updated - invalid warehouse ID or resource")
     })
-    @PutMapping("/{warehouseId}")
-    public ResponseEntity<WarehouseResource> updateWarehouse(@PathVariable Long warehouseId, @RequestBody UpdateWarehouseResource updateWarehouseResource) {
+    @PutMapping(path = "/{warehouseId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<WarehouseResource> updateWarehouse(@PathVariable Long warehouseId, @ModelAttribute UpdateWarehouseResource updateWarehouseResource) {
         var updateWarehouseCommand = UpdateWarehouseCommandFromResourceAssembler.toCommandFromResource(warehouseId, updateWarehouseResource);
         var updatedWarehouse = warehouseCommandService.handle(updateWarehouseCommand);
         if (updatedWarehouse.isEmpty()) return ResponseEntity.badRequest().build();
@@ -166,10 +135,10 @@ public class WarehouseController {
             @ApiResponse(responseCode = "400", description = "Bad request - invalid warehouse ID")
     })
     @DeleteMapping("/{warehouseId}")
-    public ResponseEntity<?> deleteWarehouse(@PathVariable Long warehouseId) {
+    public ResponseEntity<Map<String, String>> deleteWarehouse(@PathVariable Long warehouseId) {
         var deleteWarehouseCommand = new DeleteWarehouseCommand(warehouseId);
         warehouseCommandService.handle(deleteWarehouseCommand);
-        return ResponseEntity.ok("Warehouse with given Id deleted successfully.");
+        return ResponseEntity.ok(Map.of("message", "Warehouse with given Id deleted successfully."));
     }
 
 }

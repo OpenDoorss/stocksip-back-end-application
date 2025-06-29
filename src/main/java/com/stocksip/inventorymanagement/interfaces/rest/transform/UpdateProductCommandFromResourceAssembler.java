@@ -19,7 +19,7 @@ public class UpdateProductCommandFromResourceAssembler {
                 productId,
                 resource.updatedUnitPriceAmount(),
                 resource.updatedMinimumStock(),
-                resource.updatedImageUrl()
+                resource.updatedImage()
         );
     }
 }
