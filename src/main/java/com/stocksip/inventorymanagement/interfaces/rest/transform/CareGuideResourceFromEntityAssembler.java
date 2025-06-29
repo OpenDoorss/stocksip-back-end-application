@@ -8,7 +8,8 @@ public class CareGuideResourceFromEntityAssembler {
                 entity.getId(),
                 entity.getGuideName(),
                 entity.getType(),
-                entity.getDescription()
+                entity.getDescription(),
+                entity.getImageUrl() != null ? entity.getImageUrl().imageUrl() : null
         );
     }
 }

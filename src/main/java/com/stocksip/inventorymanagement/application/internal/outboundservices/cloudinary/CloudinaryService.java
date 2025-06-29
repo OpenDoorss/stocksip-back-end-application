@@ -13,19 +13,18 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface CloudinaryService {
 
-    /**
+      /**
      * Uploads an image to Cloudinary.
      *
      * @param imageFile The image file to be uploaded.
      * @return The URL of the uploaded image.
      */
     String UploadImage(MultipartFile imageFile);
-
     /**
      * Deletes an image from Cloudinary.
      *
      * @param imageUrl The URL of the image to be deleted.
      * @return true if the image was successfully deleted, false otherwise.
      */
-    Boolean deleteImage(String imageUrl);
+    boolean DeleteImage(String imageUrl);
 }

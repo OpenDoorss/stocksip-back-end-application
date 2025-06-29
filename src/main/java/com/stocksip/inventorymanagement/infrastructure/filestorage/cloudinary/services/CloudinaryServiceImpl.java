@@ -68,7 +68,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
      * @return True if the image was successfully deleted, false if it was protected.
      */
     @Override
-    public Boolean deleteImage(String imageUrl) {
+    public boolean DeleteImage(String imageUrl) {
         if (imageUrl == null || imageUrl.trim().isEmpty()) {
             throw new IllegalArgumentException("Image URL cannot be null or empty.");
         }
