@@ -1,5 +1,7 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * Command to create a new warehouse.
  *
@@ -18,7 +20,7 @@ public record CreateWarehouseCommand(String name,
                                      Double maxTemperature,
                                      Double minTemperature,
                                      Double capacity,
-                                     String imageUrl,
+                                     MultipartFile image,
                                      Long accountId) {
 
     /**

@@ -1,13 +1,13 @@
 package com.stocksip.inventorymanagement.interfaces.rest;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
-import com.stocksip.inventorymanagement.domain.model.queries.GetAllProductsByAccountIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetAllWarehousesByAccountIdQuery;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
+import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateWarehouseResource;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.WarehouseResource;
-import com.stocksip.inventorymanagement.interfaces.rest.transform.ProductResourceFromEntityAssembler;
+import com.stocksip.inventorymanagement.interfaces.rest.transform.CreateWarehouseCommandFromResourceAssembler;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.WarehouseResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,12 +15,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 /**
  * REST controller for Account Warehouses.
@@ -34,9 +34,38 @@ import java.util.List;
 public class AccountWarehousesController {
 
     private final WarehouseQueryService warehouseQueryService;
+    private final WarehouseCommandService warehouseCommandService;
 
-    public AccountWarehousesController(WarehouseQueryService warehouseQueryService) {
+    public AccountWarehousesController(WarehouseQueryService warehouseQueryService,
+                                       WarehouseCommandService warehouseCommandService) {
         this.warehouseQueryService = warehouseQueryService;
+        this.warehouseCommandService = warehouseCommandService;
+    }
+
+    /**
+     * Create a new warehouse.
+     * @param resource CreateWarehouseResource containing the details of the warehouse to be created
+     * @return ResponseEntity containing the created WarehouseResource or a bad request if the resource is invalid
+     * @see CreateWarehouseResource
+     * @see WarehouseResource
+     *
+     * @since 1.0.0
+     */
+    @Operation(
+            summary = "Create a new warehouse",
+            description = "Creates a new warehouse with the provided details."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Warehouse created successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<WarehouseResource> createWarehouse(@ModelAttribute CreateWarehouseResource resource, @PathVariable Long accountId) {
+        Optional<Warehouse> warehouse = warehouseCommandService.handle(CreateWarehouseCommandFromResourceAssembler.toCommandFromResource(resource, accountId));
+
+        return warehouse.map(source ->
+                        new ResponseEntity<>(WarehouseResourceFromEntityAssembler.toResourceFromEntity(source), CREATED))
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @GetMapping

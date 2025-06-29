@@ -23,7 +23,7 @@ public class CreateProductCommandFromResourceAssembler {
                 resource.brandName(),
                 resource.unitPriceAmount(),
                 resource.minimumStock(),
-                resource.imageUrl(),
+                resource.image(),
                 targetProviderId
         );
     }

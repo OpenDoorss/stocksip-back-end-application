@@ -3,6 +3,8 @@ package com.stocksip.inventorymanagement.infrastructure.persistence.jpa.reposito
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -79,4 +81,24 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
      * @return a List of Warehouses associated with the specified profile ID
      */
     List<Warehouse> findAllByAccountId(AccountId accountId);
+
+    /**
+     * Finds the image URL of a warehouse by its ID.
+     *
+     * @param warehouseId the ID of the warehouse
+     * @return an Optional containing the image URL if found, or empty if not found
+     */
+    @Query("SELECT w.imageUrl.imageUrl FROM Warehouse w WHERE w.warehouseId = :warehouseId")
+    String findImageUrlByWarehouseId(@Param("warehouseId") Long warehouseId);
+
+    /**
+     * Finds the account ID associated with a specific warehouse ID.
+     *
+     * @param warehouseId the ID of the warehouse
+     * @return the account ID associated with the specified warehouse ID
+     */
+    @Query("SELECT w.accountId.accountId FROM Warehouse w WHERE w.warehouseId = :warehouseId")
+    Long findAccountIdByWarehouseId(@Param("warehouseId") Long warehouseId);
+
 }
+
