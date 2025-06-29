@@ -25,9 +25,6 @@ public record ImageUrl(String imageUrl) {
         if (imageUrl == null || imageUrl.isEmpty()) {
             throw new IllegalArgumentException("Image URL cannot be null or empty.");
         }
-        if (!imageUrl.startsWith("https://res.cloudinary.com/")) {
-            throw new IllegalArgumentException("Image URL must start with 'https://res.cloudinary.com/'.");
-        }
     }
 
     /**

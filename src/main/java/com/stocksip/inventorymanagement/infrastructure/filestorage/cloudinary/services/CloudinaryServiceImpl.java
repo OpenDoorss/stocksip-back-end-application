@@ -73,12 +73,14 @@ public class CloudinaryServiceImpl implements CloudinaryService {
             throw new IllegalArgumentException("Image URL cannot be null or empty.");
         }
 
+        // Imágenes protegidas que no deben eliminarse
         Set<String> protectedImages = new HashSet<>(Arrays.asList(
                 "default-warehouse_nwd0i7",
                 "default-product_ssjni6"
         ));
 
         try {
+            // Convertir string a URI para parsear el path
             URI uri = new URI(imageUrl);
             String[] parts = uri.getPath().split("/");
 
@@ -86,20 +88,31 @@ public class CloudinaryServiceImpl implements CloudinaryService {
                 throw new IllegalArgumentException("Invalid Cloudinary URL format.");
             }
 
-            String folder = parts[parts.length - 2];
+            // Obtener nombre del archivo con extensión (último segmento)
             String fileNameWithExtension = parts[parts.length - 1];
-            String fileName = fileNameWithExtension.substring(0, fileNameWithExtension.lastIndexOf('.'));
 
+            // Validar que tenga extensión
+            int dotIndex = fileNameWithExtension.lastIndexOf('.');
+            if (dotIndex == -1) {
+                throw new IllegalArgumentException("Image filename does not contain a valid extension.");
+            }
+
+            String fileName = fileNameWithExtension.substring(0, dotIndex); // sin extensión
+            String folder = parts[parts.length - 2];
+            String publicId = folder + "/" + fileName;
+
+            // Validar si es una imagen protegida
             if (protectedImages.stream().anyMatch(protectedImg -> protectedImg.equalsIgnoreCase(fileName))) {
+                System.out.println("Skipping deletion of protected image: " + fileName);
                 return false;
             }
 
-            String publicId = folder + "/" + fileName;
+            // Eliminar la imagen en Cloudinary
             Map<?, ?> result = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
-
             return "ok".equals(result.get("result"));
 
         } catch (URISyntaxException e) {
+            System.out.println("⛳ Attempting to parse imageUrl: " + imageUrl);
             throw new IllegalArgumentException("Invalid URL format", e);
         } catch (IOException e) {
             throw new RuntimeException("Error deleting image from Cloudinary", e);

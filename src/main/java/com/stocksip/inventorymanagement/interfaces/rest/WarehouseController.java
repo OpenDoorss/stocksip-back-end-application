@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * REST controller for Warehouses.
@@ -64,8 +65,8 @@ public class WarehouseController {
             @ApiResponse(responseCode = "200", description = "Warehouse updated successfully"),
             @ApiResponse(responseCode = "400", description = "Warehouse could not be updated - invalid warehouse ID or resource")
     })
-    @PutMapping("/{warehouseId}")
-    public ResponseEntity<WarehouseResource> updateWarehouse(@PathVariable Long warehouseId, @RequestBody UpdateWarehouseResource updateWarehouseResource) {
+    @PutMapping(path = "/{warehouseId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<WarehouseResource> updateWarehouse(@PathVariable Long warehouseId, @ModelAttribute UpdateWarehouseResource updateWarehouseResource) {
         var updateWarehouseCommand = UpdateWarehouseCommandFromResourceAssembler.toCommandFromResource(warehouseId, updateWarehouseResource);
         var updatedWarehouse = warehouseCommandService.handle(updateWarehouseCommand);
         if (updatedWarehouse.isEmpty()) return ResponseEntity.badRequest().build();
@@ -134,10 +135,10 @@ public class WarehouseController {
             @ApiResponse(responseCode = "400", description = "Bad request - invalid warehouse ID")
     })
     @DeleteMapping("/{warehouseId}")
-    public ResponseEntity<?> deleteWarehouse(@PathVariable Long warehouseId) {
+    public ResponseEntity<Map<String, String>> deleteWarehouse(@PathVariable Long warehouseId) {
         var deleteWarehouseCommand = new DeleteWarehouseCommand(warehouseId);
         warehouseCommandService.handle(deleteWarehouseCommand);
-        return ResponseEntity.ok("Warehouse with given Id deleted successfully.");
+        return ResponseEntity.ok(Map.of("message", "Warehouse with given Id deleted successfully."));
     }
 
 }

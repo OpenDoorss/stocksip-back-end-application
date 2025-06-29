@@ -1,5 +1,7 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * Command for updating a warehouse.
  * This record holds the details required to update a warehouse's information.
@@ -14,8 +16,7 @@ package com.stocksip.inventorymanagement.domain.model.commands;
  * @param maxTemperature Maximum temperature allowed in the warehouse
  * @param minTemperature Minimum temperature allowed in the warehouse
  * @param capacity      Total capacity of the warehouse
- * @param imageUrl      URL of an image representing the warehouse
- * @param accountId     ID of the profile associated with this warehouse
+ * @param image         Image file representing the warehouse
  */
 public record UpdateWarehouseCommand(Long warehouseId,
                                      String name,
@@ -27,8 +28,7 @@ public record UpdateWarehouseCommand(Long warehouseId,
                                      Double maxTemperature,
                                      Double minTemperature,
                                      Double capacity,
-                                     String imageUrl,
-                                     Long accountId) {
+                                     MultipartFile image) {
     /**
      * Constructor for UpdateWarehouseCommand.
      * Validates the input parameters to ensure that the warehouse ID is not null or less than or equal to 0,

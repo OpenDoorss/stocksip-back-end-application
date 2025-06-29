@@ -33,8 +33,7 @@ public class UpdateWarehouseCommandFromResourceAssembler {
                 resource.maxTemperature(),
                 resource.minTemperature(),
                 resource.capacity(),
-                resource.imageUrl(),
-                resource.accountId()
+                resource.image()
         );
     }
 }

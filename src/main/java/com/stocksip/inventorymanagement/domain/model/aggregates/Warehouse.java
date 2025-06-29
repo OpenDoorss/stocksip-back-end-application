@@ -99,26 +99,13 @@ public class Warehouse {
      * @param command the command containing the updated details for the warehouse.
      * @return the updated Warehouse instance.
      */
-    public Warehouse updateInformation(UpdateWarehouseCommand command) {
+    public Warehouse updateInformation(UpdateWarehouseCommand command, String imageUrl) {
         this.name = command.name();
         this.address = new WarehousesAddress(command.street(), command.city(), command.district(), command.postalCode(), command.country());
         this.temperature = new WarehouseTemperature(command.minTemperature(), command.maxTemperature());
         this.capacity = new WarehouseCapacity(command.capacity());
-        this.imageUrl = setDefaultImageUrlIfNotProvided(command.imageUrl());
+        this.imageUrl = new ImageUrl(imageUrl);
         return this;
-    }
-
-    /**
-     * Set the image URL for the warehouse.
-     * If the provided image URL is null or blank, it sets a default image URL.
-     *
-     * @param imageUrl the URL of the image representing the warehouse
-     * @return an ImageUrl object containing the image URL
-     */
-    private ImageUrl setDefaultImageUrlIfNotProvided(String imageUrl) {
-        return imageUrl == null || imageUrl.isBlank()
-                ? ImageUrl.defaultImageUrl()
-                : new ImageUrl(imageUrl);
     }
 
 }

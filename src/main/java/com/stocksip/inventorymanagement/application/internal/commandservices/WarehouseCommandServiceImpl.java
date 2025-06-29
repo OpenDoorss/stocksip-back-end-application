@@ -78,33 +78,34 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
     @Override
     public Optional<Warehouse> handle(UpdateWarehouseCommand command) {
 
-        var warehouseToUpdate = warehouseRepository.findWarehouseByWarehouseIdAndAccountId(command.warehouseId(), new AccountId(command.accountId()))
+        Long accountId = warehouseRepository.findAccountIdByWarehouseId(command.warehouseId());
+
+        var warehouseToUpdate = warehouseRepository.findWarehouseByWarehouseIdAndAccountId(command.warehouseId(), new AccountId(accountId))
                 .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.warehouseId())));
 
         if (!warehouseToUpdate.getName().equals(command.name()) &&
-                warehouseRepository.existsByNameAndAccountIdAndWarehouseIdIsNot(command.name(), new AccountId(command.accountId()), command.warehouseId())) {
+                warehouseRepository.existsByNameAndAccountIdAndWarehouseIdIsNot(command.name(), new AccountId(accountId), command.warehouseId())) {
             throw new IllegalArgumentException("Warehouse with name %s already exists".formatted(command.name()));
         }
 
-        boolean isAddressChanged = !warehouseToUpdate.getAddress().fullAddress().equals(
-                String.format("%s, %s, %s, %s, %s",
-                        command.street(),
-                        command.city(),
-                        command.district(),
-                        command.postalCode(),
-                        command.country()));
-
-        if (isAddressChanged &&
-                warehouseRepository.existsByAddressStreetIgnoreCaseAndAddressCityIgnoreCaseAndAddressPostalCodeIgnoreCaseAndAccountIdAndWarehouseIdIsNot(
+        if (warehouseRepository.existsByAddressStreetIgnoreCaseAndAddressCityIgnoreCaseAndAddressPostalCodeIgnoreCaseAndAccountIdAndWarehouseIdIsNot(
                         command.street(),
                         command.city(),
                         command.postalCode(),
-                        new AccountId(command.accountId()),
+                        new AccountId(accountId),
                         command.warehouseId())){
             throw new IllegalArgumentException("Another warehouse with the same address already exists.");
         }
 
-        warehouseToUpdate.updateInformation(command);
+        String currentImageUrl = warehouseToUpdate.getImageUrl().imageUrl();
+        String imageUrl = currentImageUrl;
+
+        if (command.image() != null && !command.image().isEmpty()) {
+            cloudinaryService.deleteImage(currentImageUrl);
+            imageUrl = cloudinaryService.UploadImage(command.image());
+        }
+
+        warehouseToUpdate.updateInformation(command, imageUrl);
 
         try {
             var updatedWarehouse = warehouseRepository.save(warehouseToUpdate);
@@ -123,11 +124,15 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
     @Transactional
     @Override
     public void handle(DeleteWarehouseCommand command) {
+
         if (!warehouseRepository.existsById(command.warehouseId()))
             throw new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.warehouseId()));
 
+        String imageUrl = warehouseRepository.findImageUrlByWarehouseId(command.warehouseId());
+
         try {
             warehouseRepository.deleteById(command.warehouseId());
+            cloudinaryService.deleteImage(imageUrl);
         } catch (Exception e) {
             throw new RuntimeException("Error finding warehouse: " + e.getMessage(), e);
         }
