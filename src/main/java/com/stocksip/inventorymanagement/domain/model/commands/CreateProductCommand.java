@@ -1,6 +1,7 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProviderId;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.Optional;
@@ -18,5 +19,5 @@ public record CreateProductCommand(String additionalName,
                                    String brandName,
                                    double unitPriceAmount,
                                    int minimumStock,
-                                   String imageUrl,
+                                   MultipartFile image,
                                    ProviderId providerId) { }

@@ -26,14 +26,4 @@ public record ImageUrl(String imageUrl) {
             throw new IllegalArgumentException("Image URL cannot be null or empty.");
         }
     }
-
-    /**
-     * Static factory method to create a default ImageUrl instance.
-     * This method returns a predefined image URL that can be used as a default value.
-     *
-     * @return A new ImageUrl instance with the default image URL.
-     */
-    public static ImageUrl defaultImageUrl() {
-        return new ImageUrl("https://res.cloudinary.com/deuy1pr9e/image/upload/v1749934502/warehouses/ed50b16b-91b8-4027-a23d-71aaa158bc8b.jpg");
-    }
 }

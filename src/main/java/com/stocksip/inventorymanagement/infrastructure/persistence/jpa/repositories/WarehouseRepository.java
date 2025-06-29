@@ -91,6 +91,12 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
     @Query("SELECT w.imageUrl.imageUrl FROM Warehouse w WHERE w.warehouseId = :warehouseId")
     String findImageUrlByWarehouseId(@Param("warehouseId") Long warehouseId);
 
+    /**
+     * Finds the account ID associated with a specific warehouse ID.
+     *
+     * @param warehouseId the ID of the warehouse
+     * @return the account ID associated with the specified warehouse ID
+     */
     @Query("SELECT w.accountId.accountId FROM Warehouse w WHERE w.warehouseId = :warehouseId")
     Long findAccountIdByWarehouseId(@Param("warehouseId") Long warehouseId);
 

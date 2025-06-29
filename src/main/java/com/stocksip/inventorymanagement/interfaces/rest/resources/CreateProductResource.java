@@ -1,5 +1,7 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * CreateProductResource is a record that represents an CreateProductCommand resource in the REST API.
  *
@@ -14,7 +16,7 @@ public record CreateProductResource(
         String brandName,
         double unitPriceAmount,
         int minimumStock,
-        String imageUrl,
+        MultipartFile image,
         Long providerId
 ) {
 }

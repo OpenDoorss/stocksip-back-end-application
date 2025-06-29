@@ -10,7 +10,7 @@ package com.stocksip.inventorymanagement.domain.model.valueobjects;
  * @since 1.0.0
  */
 public enum BrandName {
-    TEBERNERO,
+    TABERNERO,
     SANTIAGO_QUEIROLO,
     PORTON,
     CRISTAL,
