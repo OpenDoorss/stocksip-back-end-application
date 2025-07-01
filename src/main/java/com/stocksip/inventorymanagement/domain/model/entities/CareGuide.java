@@ -89,7 +89,7 @@ public class CareGuide extends AuditableModel {
         this.guideName = guideName;
         this.type = type;
         this.description = description;
-        this.imageUrl = this.setDefaultImageUrlIfNotProvided(imageUrl);
+        this.imageUrl = new ImageUrl(imageUrl);
     }
     /**
      * Updates the care guide information with the provided values.
@@ -105,23 +105,5 @@ public class CareGuide extends AuditableModel {
         this.type = type;
         this.description = description;
         return this;
-    }
-    private ImageUrl setDefaultImageUrlIfNotProvided(String imageUrl) {
-        return imageUrl == null || imageUrl.isBlank()
-                ? ImageUrl.defaultImageUrl()
-                : new ImageUrl(imageUrl);
-    }
-    
-    /**
-     * Sets the image URL for this care guide.
-     * If the provided URL is null or blank, a default image URL will be used.
-     *
-     * @param imageUrl The URL of the image to set, or null/blank to use default
-     */
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = setDefaultImageUrlIfNotProvided(imageUrl);
-    }
-    public String getAccountId() {
-        return accountId;
     }
 }

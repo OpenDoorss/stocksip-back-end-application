@@ -77,7 +77,7 @@ public class CareGuideCommandServiceImpl implements CareGuideCommandService {
                 );
                 // Update the image URL if provided
                 if (command.imageUrl() != null && !command.imageUrl().isBlank()) {
-                    careGuide.setImageUrl(command.imageUrl());
+                    return null;
                 }
                 return careGuideRepository.save(careGuide);
             });

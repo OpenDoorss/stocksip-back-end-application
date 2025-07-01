@@ -101,7 +101,7 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
         String imageUrl = currentImageUrl;
 
         if (command.image() != null && !command.image().isEmpty()) {
-            cloudinaryService.deleteImage(currentImageUrl);
+            cloudinaryService.DeleteImage(currentImageUrl);
             imageUrl = cloudinaryService.UploadImage(command.image());
         }
 
@@ -132,7 +132,7 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
 
         try {
             warehouseRepository.deleteById(command.warehouseId());
-            cloudinaryService.deleteImage(imageUrl);
+            cloudinaryService.DeleteImage(imageUrl);
         } catch (Exception e) {
             throw new RuntimeException("Error finding warehouse: " + e.getMessage(), e);
         }

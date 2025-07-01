@@ -61,7 +61,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
         String imageUrl = currentImageUrl;
 
         if (command.image() != null && !command.image().isEmpty()) {
-            cloudinaryService.deleteImage(currentImageUrl);
+            cloudinaryService.DeleteImage(currentImageUrl);
             imageUrl = cloudinaryService.UploadImage(command.image());
         }
 
@@ -151,7 +151,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
 
                 productRepository.delete(productToDelete);
                 inventoryRepository.deleteAll(productToDelete.getInventories());
-                cloudinaryService.deleteImage(imageUrl);
+                cloudinaryService.DeleteImage(imageUrl);
             }
             else {
                 throw new IllegalArgumentException("Cannot delete product with ID %s because it has stock available in a warehouse.".formatted(command.productId()));
