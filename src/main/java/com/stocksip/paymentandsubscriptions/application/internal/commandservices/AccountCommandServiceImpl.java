@@ -2,7 +2,6 @@ package com.stocksip.paymentandsubscriptions.application.internal.commandservice
 
 import com.stocksip.paymentandsubscriptions.domain.model.aggregates.Account;
 import com.stocksip.paymentandsubscriptions.domain.model.commands.CreateAccountCommand;
-import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.GeneralEmail;
 import com.stocksip.paymentandsubscriptions.domain.services.AccountCommandService;
 import com.stocksip.paymentandsubscriptions.infrastructure.persistence.jpa.AccountRepository;
 import org.springframework.stereotype.Service;

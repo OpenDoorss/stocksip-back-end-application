@@ -1,11 +1,12 @@
 package com.stocksip.paymentandsubscriptions.domain.model.aggregates;
 
 import com.stocksip.paymentandsubscriptions.domain.model.commands.CreateAccountCommand;
-import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.GeneralEmail;
-import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.Plan;
 import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.Role;
+import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.UserId;
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 
 /**
@@ -23,27 +24,29 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long accountId;
+    private long accountId;
 
     @Column(unique = true, nullable = false)
-    @Embedded()
-    public GeneralEmail generalEmail;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(unique = true, nullable = false)
-    @Embedded()
-    public Role role;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "userId", column = @Column(nullable = false))
+    })
+    private UserId userId;
 
-    @Column(unique = true, nullable = false)
-    @Embedded()
-    public Plan plan;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "role", column = @Column(nullable = false))
+    })
+    private Role role;
 
     // Default constructor for JPA
     public Account() {}
 
     public Account(CreateAccountCommand command) {
-        this.generalEmail = new GeneralEmail(command.email());
+        this.createdAt = LocalDateTime.now();
         this.role = new Role(command.role());
-        this.plan = new Plan(command.plan());
     }
 
 }
