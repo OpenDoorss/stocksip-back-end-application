@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * Product Aggregate Root
  *
+ *
  * @summary
  * The Product class is an aggregate root that represents a product in a warehouse.
  * It is responsible for handling the CreateProductCommand command.
