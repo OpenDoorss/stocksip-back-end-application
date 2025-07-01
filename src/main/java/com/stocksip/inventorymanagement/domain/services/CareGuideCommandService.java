@@ -3,6 +3,7 @@ package com.stocksip.inventorymanagement.domain.services;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateCareGuideCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteCareGuideCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateCareGuideCommand;
+import com.stocksip.inventorymanagement.domain.model.commands.CreateCareGuideWithoutProductCommand;
 import com.stocksip.inventorymanagement.domain.model.entities.CareGuide;
 
 import java.util.Optional;
@@ -41,4 +42,5 @@ public interface CareGuideCommandService {
      * @see DeleteCareGuideCommand
      */
     void handle(DeleteCareGuideCommand command);    
+    Optional<CareGuide> handle(CreateCareGuideWithoutProductCommand command);
 }

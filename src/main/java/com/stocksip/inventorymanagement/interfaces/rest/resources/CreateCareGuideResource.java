@@ -17,10 +17,14 @@ public record CreateCareGuideResource(String guideName,String type, String descr
      * @throws IllegalArgumentException If any of the required fields are null or empty
      */
     public CreateCareGuideResource {
-        if (guideName == null || guideName.isEmpty() ||
-                type == null || type.isEmpty() ||
-                description == null || description.isEmpty()) {
-            throw new IllegalArgumentException("All fields must be provided");
+        if (guideName == null || guideName.isBlank()) {
+            throw new IllegalArgumentException("Guide name cannot be null or blank");
+        }
+        if (type == null || type.isBlank()) {
+            throw new IllegalArgumentException("Type cannot be null or blank");
+        }
+        if (description == null || description.isBlank()) {
+            throw new IllegalArgumentException("Description cannot be null or blank");
         }
     }
 }

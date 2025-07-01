@@ -3,6 +3,7 @@ package com.stocksip.inventorymanagement.application.internal.commandservices;
 import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateCareGuideCommand;
+import com.stocksip.inventorymanagement.domain.model.commands.CreateCareGuideWithoutProductCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteCareGuideCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateCareGuideCommand;
 import com.stocksip.inventorymanagement.domain.model.entities.CareGuide;
@@ -48,6 +49,7 @@ public class CareGuideCommandServiceImpl implements CareGuideCommandService {
 
             // Create the care guide with or without product/warehouse
             CareGuide careGuide = new CareGuide(
+                command.accountId(),
                 product,
                 warehouse,
                 command.guideName(),
@@ -75,7 +77,7 @@ public class CareGuideCommandServiceImpl implements CareGuideCommandService {
                 );
                 // Update the image URL if provided
                 if (command.imageUrl() != null && !command.imageUrl().isBlank()) {
-                    careGuide.setImageUrl(command.imageUrl());
+                    return null;
                 }
                 return careGuideRepository.save(careGuide);
             });
@@ -89,5 +91,23 @@ public class CareGuideCommandServiceImpl implements CareGuideCommandService {
                 careGuide -> careGuideRepository.delete(careGuide),
                 () -> { throw new NoSuchElementException("Care guide not found with id: " + command.id()); }
             );
+    }
+    @Override
+    @Transactional
+    public Optional<CareGuide> handle(CreateCareGuideWithoutProductCommand command) {
+        try {
+            CareGuide careGuide = new CareGuide(
+                command.accountId(),
+                null, 
+                null, 
+                command.guideName(),
+                command.type(),
+                command.description(),
+                command.imageUrl()
+            );
+        return Optional.of(careGuideRepository.save(careGuide));
+    } catch (Exception e) {
+        throw new IllegalStateException("Failed to create care guide: " + e.getMessage(), e);
+    }
     }
 }

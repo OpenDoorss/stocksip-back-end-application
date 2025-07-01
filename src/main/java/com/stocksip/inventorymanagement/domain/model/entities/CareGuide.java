@@ -12,6 +12,10 @@ import lombok.Setter;
 @Entity
 public class CareGuide extends AuditableModel {
 
+    
+    @Column(nullable = false)
+    private String accountId;
+
     @ManyToOne
     @JoinColumn(name = "productId", nullable = true)
     private Product product;
@@ -47,7 +51,7 @@ public class CareGuide extends AuditableModel {
             @AttributeOverride(name = "imageUrl", column = @Column(name = "image_url"))
     })
     private ImageUrl imageUrl;
-
+    
     protected CareGuide(){}
 
     /**
@@ -65,7 +69,10 @@ public class CareGuide extends AuditableModel {
      * @param imageUrl the URL of the care guide image (can be null, will use default if null or blank)
      * @throws IllegalArgumentException if guideName, type, or description is null or blank
      */
-    public CareGuide(Product product, Warehouse warehouse, String guideName, String type, String description, String imageUrl) {
+    public CareGuide(String accountId, Product product, Warehouse warehouse, String guideName, String type, String description, String imageUrl) {
+        if (accountId == null || accountId.isBlank()) {
+            throw new IllegalArgumentException("Account ID cannot be null or blank");
+        }
         if (guideName == null || guideName.isBlank()) {
             throw new IllegalArgumentException("Guide name cannot be null or blank");
         }
@@ -76,12 +83,13 @@ public class CareGuide extends AuditableModel {
             throw new IllegalArgumentException("Description cannot be null or blank");
         }
         
+        this.accountId = accountId;
         this.product = product;
         this.warehouse = warehouse;
         this.guideName = guideName;
         this.type = type;
         this.description = description;
-        this.imageUrl = this.setDefaultImageUrlIfNotProvided(imageUrl);
+        this.imageUrl = new ImageUrl(imageUrl);
     }
     /**
      * Updates the care guide information with the provided values.
@@ -97,20 +105,5 @@ public class CareGuide extends AuditableModel {
         this.type = type;
         this.description = description;
         return this;
-    }
-    private ImageUrl setDefaultImageUrlIfNotProvided(String imageUrl) {
-        return imageUrl == null || imageUrl.isBlank()
-                ? ImageUrl.defaultImageUrl()
-                : new ImageUrl(imageUrl);
-    }
-    
-    /**
-     * Sets the image URL for this care guide.
-     * If the provided URL is null or blank, a default image URL will be used.
-     *
-     * @param imageUrl The URL of the image to set, or null/blank to use default
-     */
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = setDefaultImageUrlIfNotProvided(imageUrl);
     }
 }

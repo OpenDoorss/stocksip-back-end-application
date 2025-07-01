@@ -20,7 +20,9 @@ public class CreateCareGuideCommandFromResourceAssembler {
                 resource.guideName(),
                 resource.type(),
                 resource.description(),
-                resource.image() != null ? resource.image().getOriginalFilename() : ""
+                resource.image() != null ? resource.image().getOriginalFilename() : "",
+                "",
+                null
         );
     }
 }
