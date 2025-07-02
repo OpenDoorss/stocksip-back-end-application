@@ -30,22 +30,22 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      * @param accountId The ID of the account whose products are to be retrieved.
      * @return The list of products associated with the specified account ID.
      */
-    @Query("SELECT i.product FROM Inventory i WHERE i.warehouse.accountId = :accountId")
-    List<Product> findAllProductsByAccountId(@Param("profileId") Long accountId);
+    @Query("SELECT p FROM Product p WHERE p.accountId.accountId = :accountId")
+    List<Product> findAllProductsByAccountId(@Param("accountId") Long accountId);
 
     /**
      * This method retrieves all products associated with a specific provider and warehouse ID.
      * @param warehouseId The ID of the warehouse whose products are to be retrieved.
-     * @param providerId The ID of the provider whose products in a specific warehouse are to be retrieved.
+     * @param accountId The ID of the provider whose products in a specific warehouse are to be retrieved.
      * @return A list of products that belong to the specified provider and warehouse ID.
      */
     @Query("""
                 SELECT i.product
                 FROM Inventory i
                 WHERE i.warehouse.warehouseId = :warehouseId
-                    AND i.product.providerId = :providerId
+                    AND i.product.accountId.accountId = :accountId
     """)
-    List<Product> findAllProductsByWarehouseIdAndProviderId(@Param("warehouseId") Long warehouseId, @Param("providerId") Long providerId);
+    List<Product> findAllProductsByWarehouseIdAndAccountId(@Param("warehouseId") Long warehouseId, @Param("accountId") Long accountId);
 
     /**
      * This method retrieves all products associated with a specific warehouse ID.

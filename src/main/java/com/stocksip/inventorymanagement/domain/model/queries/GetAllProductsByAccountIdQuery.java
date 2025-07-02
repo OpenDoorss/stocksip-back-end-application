@@ -10,7 +10,7 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
  *
  * @param accountId The unique identifier of the profile whose products will be retrieved.
  */
-public record GetAllProductsByAccountIdQuery(AccountId accountId) {
+public record GetAllProductsByAccountIdQuery(Long accountId) {
 
     /**
      * Validates the command parameters

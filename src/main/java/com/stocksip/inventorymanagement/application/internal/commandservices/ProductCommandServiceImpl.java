@@ -87,12 +87,9 @@ public class ProductCommandServiceImpl implements ProductCommandService {
      */
     @Override
     public Optional<Product> handle(CreateProductCommand command) {
-        var targetBrandName = BrandName.valueOf(command.brandName());
-        var targetLiquorType = LiquorType.valueOf(command.liquorType());
 
-        if (productRepository.existsByBrandNameAndLiquorTypeAndProductName(targetBrandName,
-                        targetLiquorType,
-                        new ProductName(targetBrandName, targetLiquorType, command.additionalName()))) {
+        if (productRepository.existsByBrandNameAndLiquorTypeAndProductName(BrandName.valueOf(command.brandName()),
+                LiquorType.valueOf(command.liquorType()), new ProductName(command.additionalName()))) {
             throw new IllegalArgumentException("Product will full name given already exists.");
         }
 

@@ -1,9 +1,13 @@
 package com.stocksip.inventorymanagement.interfaces.rest;
 
+import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
 import com.stocksip.inventorymanagement.domain.model.queries.GetAllProductsByAccountIdQuery;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
+import com.stocksip.inventorymanagement.domain.services.ProductCommandService;
 import com.stocksip.inventorymanagement.domain.services.ProductQueryService;
+import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateProductResource;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.ProductResource;
+import com.stocksip.inventorymanagement.interfaces.rest.transform.CreateProductCommandFromResourceAssembler;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.ProductResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,12 +15,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 /**
  * REST controller for Account Products.
@@ -30,9 +34,29 @@ import java.util.List;
 public class AccountProductsController {
 
     private final ProductQueryService productQueryService;
+    private final ProductCommandService productCommandService;
 
-    public AccountProductsController(ProductQueryService productQueryService) {
+    public AccountProductsController(ProductQueryService productQueryService, ProductCommandService productCommandService) {
         this.productQueryService = productQueryService;
+        this.productCommandService = productCommandService;
+    }
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(
+            summary = "Create a new product",
+            description = "Creates a new product with the provided details."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Product created successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
+    public ResponseEntity<ProductResource> createProduct(@ModelAttribute CreateProductResource resource,
+                                                         @PathVariable Long accountId) {
+        Optional<Product> product = productCommandService.handle(CreateProductCommandFromResourceAssembler.toCommandFromResource(resource, accountId));
+
+        return product.map(source ->
+                        new ResponseEntity<>(ProductResourceFromEntityAssembler.toResourceFromEntity(source), CREATED))
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @GetMapping
@@ -44,8 +68,7 @@ public class AccountProductsController {
     })
     public ResponseEntity<List<ProductResource>> getAllProductsByAccountId(@PathVariable Long accountId) {
 
-        var targetAccountId = new AccountId(accountId);
-        var getAllProductsByAccountIdQuery = new GetAllProductsByAccountIdQuery(targetAccountId);
+        var getAllProductsByAccountIdQuery = new GetAllProductsByAccountIdQuery(accountId);
         var products = productQueryService.handle(getAllProductsByAccountIdQuery);
         if (products.isEmpty()) return ResponseEntity.notFound().build();
         var productEntities = products.stream().map(ProductResourceFromEntityAssembler::toResourceFromEntity).toList();
