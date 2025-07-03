@@ -49,7 +49,7 @@ public class Warehouse {
             @AttributeOverride(name = "minTemperature", column = @Column(nullable = false)),
             @AttributeOverride(name = "maxTemperature", column = @Column(nullable = false))
     })
-    private WarehouseTemperature temperature;
+    private Temperature temperature;
 
     /**
      * The total capacity of this warehouse in cubic meters.
@@ -58,7 +58,7 @@ public class Warehouse {
     @AttributeOverrides({
             @AttributeOverride(name = "capacity", column = @Column(nullable = false))
     })
-    private WarehouseCapacity capacity;
+    private Capacity capacity;
 
     /**
      * The url of the image that shows with the warehouse
@@ -87,8 +87,8 @@ public class Warehouse {
     public Warehouse(CreateWarehouseCommand command) {
         this.name = command.name();
         this.address = new WarehousesAddress(command.street(), command.city(), command.district(), command.postalCode(), command.country());
-        this.temperature = new WarehouseTemperature(command.minTemperature(), command.maxTemperature());
-        this.capacity = new WarehouseCapacity(command.capacity());
+        this.temperature = new Temperature(command.minTemperature(), command.maxTemperature());
+        this.capacity = new Capacity(command.capacity());
         this.imageUrl = this.setDefaultImageUrlIfNotProvided(command.imageUrl());
         this.accountId = new AccountId(command.accountId());
     }
@@ -102,8 +102,8 @@ public class Warehouse {
     public Warehouse updateInformation(UpdateWarehouseCommand command) {
         this.name = command.name();
         this.address = new WarehousesAddress(command.street(), command.city(), command.district(), command.postalCode(), command.country());
-        this.temperature = new WarehouseTemperature(command.minTemperature(), command.maxTemperature());
-        this.capacity = new WarehouseCapacity(command.capacity());
+        this.temperature = new Temperature(command.minTemperature(), command.maxTemperature());
+        this.capacity = new Capacity(command.capacity());
         this.imageUrl = setDefaultImageUrlIfNotProvided(command.imageUrl());
         return this;
     }
