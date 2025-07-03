@@ -27,4 +27,6 @@ public interface CatalogQueryService {
     List<CatalogItem> handle(GetCatalogItemsByCatalogIdQuery query);
 
     Optional<CatalogItem> handle(GetCatalogItemByIdQuery query);
+
+    List<Catalog> getPublishedCatalogsByProviderEmail(String email);
 }
