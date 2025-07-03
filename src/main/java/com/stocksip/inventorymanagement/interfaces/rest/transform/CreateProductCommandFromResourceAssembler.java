@@ -14,9 +14,14 @@ public class CreateProductCommandFromResourceAssembler {
      * @param resource The CreateProductResource to transform.
      * @return The CreateProductCommand created from the resource.
      */
-    public static CreateProductCommand toCommandFromResource(CreateProductResource resource) {
+    public static CreateProductCommand toCommandFromResource(CreateProductResource resource, Long accountId) {
 
-        var targetProviderId = new ProviderId(resource.providerId());
+        if (resource.brandName() == null && resource.liquorType() == null) {
+            System.out.println(resource);
+            throw new IllegalArgumentException("CreateProductResource cannot be null");
+        }
+
+        System.out.println(resource);
         return new CreateProductCommand(
                 resource.additionalName(),
                 resource.liquorType(),
@@ -24,7 +29,7 @@ public class CreateProductCommandFromResourceAssembler {
                 resource.unitPriceAmount(),
                 resource.minimumStock(),
                 resource.image(),
-                targetProviderId
+                accountId
         );
     }
 }

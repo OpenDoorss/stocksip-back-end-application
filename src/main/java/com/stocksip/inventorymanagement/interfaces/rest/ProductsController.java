@@ -61,23 +61,6 @@ public class ProductsController {
         return ResponseEntity.ok(productResource);
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(
-            summary = "Create a new product",
-            description = "Creates a new product with the provided details."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Product created successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad request")
-    })
-    public ResponseEntity<ProductResource> createProduct(@ModelAttribute CreateProductResource resource) {
-        Optional<Product> product = productCommandService.handle(CreateProductCommandFromResourceAssembler.toCommandFromResource(resource));
-
-        return product.map(source ->
-                new ResponseEntity<>(ProductResourceFromEntityAssembler.toResourceFromEntity(source), CREATED))
-                .orElseGet(() -> ResponseEntity.badRequest().build());
-    }
-
     @PutMapping(value = "/{productId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Update an existing product",
             description = "Updates the details of an existing product identified by its ID.")

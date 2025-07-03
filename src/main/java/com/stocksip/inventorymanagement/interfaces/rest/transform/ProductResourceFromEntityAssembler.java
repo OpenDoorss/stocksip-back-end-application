@@ -22,7 +22,7 @@ public class ProductResourceFromEntityAssembler {
                 entity.getLiquorType().name(),
                 entity.getUnitPrice().amount(),
                 entity.getMinimumStock().minimumStock(),
-                entity.getProviderId().providerId()
+                entity.getAccountId().accountId()
         );
     }
 }

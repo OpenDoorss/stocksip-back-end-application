@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
+import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProviderId;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,4 +21,4 @@ public record CreateProductCommand(String additionalName,
                                    double unitPriceAmount,
                                    int minimumStock,
                                    MultipartFile image,
-                                   ProviderId providerId) { }
+                                   Long accountId) { }

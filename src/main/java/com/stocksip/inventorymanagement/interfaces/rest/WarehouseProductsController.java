@@ -51,21 +51,4 @@ public class WarehouseProductsController {
         var productEntities = products.stream().map(ProductResourceFromEntityAssembler::toResourceFromEntity).toList();
         return ResponseEntity.ok(productEntities);
     }
-
-    @GetMapping("provider/{providerId}")
-    @Operation(summary = "Get all products by warehouse and provider ID",
-            description = "Retrieves all products associated with a specific warehouse and provider ID.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Products retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Not Found - invalid warehouse or provider ID")
-    })
-    public ResponseEntity<List<ProductResource>> getAllProductsByWarehouseIdAndProviderId(@PathVariable Long warehouseId, @PathVariable Long providerId) {
-
-        var targetProviderId = new ProviderId(providerId);
-        var getAllProductsByWarehouseIdAndProviderIdQuery = new GetAllProductsByProviderIdAndWarehouseIdQuery(warehouseId, targetProviderId);
-        var products = productQueryService.handle(getAllProductsByWarehouseIdAndProviderIdQuery);
-        if (products.isEmpty()) return ResponseEntity.notFound().build();
-        var productEntities = products.stream().map(ProductResourceFromEntityAssembler::toResourceFromEntity).toList();
-        return ResponseEntity.ok(productEntities);
-    }
 }

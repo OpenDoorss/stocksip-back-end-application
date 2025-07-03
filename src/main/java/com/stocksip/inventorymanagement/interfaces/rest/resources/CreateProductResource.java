@@ -16,7 +16,7 @@ public record CreateProductResource(
         String brandName,
         double unitPriceAmount,
         int minimumStock,
-        MultipartFile image,
-        Long providerId
+        MultipartFile image
+
 ) {
 }
