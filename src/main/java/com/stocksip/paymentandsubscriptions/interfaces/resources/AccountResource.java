@@ -1,14 +1,11 @@
 package com.stocksip.paymentandsubscriptions.interfaces.resources;
 
-import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.BusinessName;
-import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.GeneralEmail;
-import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.Role;
-
 public record AccountResource(
+        Long accountId,
         String email,
 
         Long userOwnerId,
 
-        Role role,
+        String role,
         String businessName
 ) {}

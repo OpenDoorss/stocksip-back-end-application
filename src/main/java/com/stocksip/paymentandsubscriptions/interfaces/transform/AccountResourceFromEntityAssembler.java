@@ -7,9 +7,10 @@ public class AccountResourceFromEntityAssembler {
 
     public static AccountResource toResourceFromEntity(Account acc) {
         return new AccountResource(
+                acc.getAccountId(),
                 acc.getEmail().value(),
                 acc.getUserOwnerId().userId(),
-                acc.getRole(),
+                acc.getRole().value(),
                 acc.getBusinessName().value()
         );
     }
