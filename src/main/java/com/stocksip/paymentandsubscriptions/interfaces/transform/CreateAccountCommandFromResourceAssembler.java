@@ -8,8 +8,10 @@ public class CreateAccountCommandFromResourceAssembler {
     public static CreateAccountCommand toCommandFromResource(CreateAccountResource resource) {
         return new CreateAccountCommand(
             resource.email(),
+            resource.userOwnerId(),
             resource.role(),
-            resource.plan()
+            resource.plan(),
+            resource.businessName()
         );
     }
 }

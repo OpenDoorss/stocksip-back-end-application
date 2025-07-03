@@ -5,11 +5,13 @@ import com.stocksip.paymentandsubscriptions.interfaces.resources.AccountResource
 
 public class AccountResourceFromEntityAssembler {
 
-    public static AccountResource toResourceFromEntity(Account entity) {
+    public static AccountResource toResourceFromEntity(Account acc) {
         return new AccountResource(
-            entity.getGeneralEmail().email(),
-            entity.getRole().role(),
-            entity.getPlan().type()
+                acc.getEmail().value(),
+                acc.getUserOwnerId().userId(),
+                acc.getRole(),
+                acc.getBusinessName().value()
         );
     }
+
 }

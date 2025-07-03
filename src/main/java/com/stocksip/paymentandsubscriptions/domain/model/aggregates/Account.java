@@ -1,6 +1,8 @@
 package com.stocksip.paymentandsubscriptions.domain.model.aggregates;
 
 import com.stocksip.paymentandsubscriptions.domain.model.commands.CreateAccountCommand;
+import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.BusinessName;
+import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.GeneralEmail;
 import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.Role;
 import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.UserId;
 import jakarta.persistence.*;
@@ -8,45 +10,54 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-
-/**
- * This is an aggregate root that represents an account in the payment and subscription domain.
- * The class encapsulates the account's email, role, and plan.
- *
- * @summary
- * The Account class is an aggregate root that encapsulates the email, role, and plan of a user account in the payment and subscription domain.
- *
- * @since 1.0.0
- */
 @Entity
 @Getter
 public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long accountId;
+    private Long accountId;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "userId", column = @Column(nullable = false))
-    })
-    private UserId userId;
+    @AttributeOverride(
+            name = "value",
+            column = @Column(name = "userOwnerId", nullable = false)
+    )
+    private UserId userOwnerId;
 
     @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "role", column = @Column(nullable = false))
-    })
+    @AttributeOverride(
+            name = "value",
+            column = @Column(name = "role", nullable = false)
+    )
     private Role role;
 
-    // Default constructor for JPA
-    public Account() {}
+    @Embedded
+    @AttributeOverride(
+            name = "value",
+            column = @Column(name = "email", nullable = false, unique = true)
+    )
+    private GeneralEmail email;
 
-    public Account(CreateAccountCommand command) {
-        this.createdAt = LocalDateTime.now();
-        this.role = new Role(command.role());
+
+    @Embedded
+    @AttributeOverride(
+            name = "value",
+            column = @Column(name = "businessName", nullable = false)
+    )
+    private BusinessName businessName;
+
+
+    protected Account() {}
+
+    public Account(CreateAccountCommand cmd) {
+        this.createdAt    = LocalDateTime.now();
+        this.userOwnerId = new UserId(cmd.userId());
+        this.role         = new Role(cmd.role());
+        this.email        = new GeneralEmail(cmd.email());
+        this.businessName = new BusinessName(cmd.businessName());
     }
-
 }

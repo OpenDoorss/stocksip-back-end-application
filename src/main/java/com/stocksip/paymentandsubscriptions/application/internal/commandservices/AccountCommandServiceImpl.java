@@ -2,6 +2,7 @@ package com.stocksip.paymentandsubscriptions.application.internal.commandservice
 
 import com.stocksip.paymentandsubscriptions.domain.model.aggregates.Account;
 import com.stocksip.paymentandsubscriptions.domain.model.commands.CreateAccountCommand;
+import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.GeneralEmail;
 import com.stocksip.paymentandsubscriptions.domain.services.AccountCommandService;
 import com.stocksip.paymentandsubscriptions.infrastructure.persistence.jpa.AccountRepository;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class AccountCommandServiceImpl implements AccountCommandService {
     @Override
     public Optional<Account> handle(CreateAccountCommand command) {
 
-        if (accountRepository.existsByGeneralEmail(GeneralEmail.from(command.email()))) {
+        if (accountRepository.existsByEmail(GeneralEmail.from(command.email()))) {
             throw new IllegalArgumentException("This email is already used.");
         }
 
