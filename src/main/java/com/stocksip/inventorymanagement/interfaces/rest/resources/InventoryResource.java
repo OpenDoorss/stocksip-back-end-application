@@ -12,7 +12,7 @@ import java.util.Date;
  * @since 1.0.0
  */
 public record InventoryResource(
-        Long id,
+        Long inventory_id,
         Long productId,
         Long warehouseId,
         LocalDate bestBeforeDate,

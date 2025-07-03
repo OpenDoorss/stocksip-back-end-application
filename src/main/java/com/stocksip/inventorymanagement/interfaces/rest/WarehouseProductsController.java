@@ -33,20 +33,4 @@ public class WarehouseProductsController {
     public WarehouseProductsController(ProductQueryService productQueryService) {
         this.productQueryService = productQueryService;
     }
-
-    @GetMapping
-    @Operation(summary = "Get all products by warehouse ID",
-            description = "Retrieves all products associated with a specific warehouse ID.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Products retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Not Found - invalid warehouse ID")
-    })
-    public ResponseEntity<List<ProductResource>> getAllProductsByWarehouseId(@PathVariable Long warehouseId) {
-
-        var getAllProductsByWarehouseIdQuery = new GetAllProductsByWarehouseIdQuery(warehouseId);
-        var products = productQueryService.handle(getAllProductsByWarehouseIdQuery);
-        if (products.isEmpty()) return ResponseEntity.notFound().build();
-        var productEntities = products.stream().map(ProductResourceFromEntityAssembler::toResourceFromEntity).toList();
-        return ResponseEntity.ok(productEntities);
-    }
 }

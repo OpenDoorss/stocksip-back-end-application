@@ -130,7 +130,7 @@ public class AccountCareGuideController {
         return ResponseEntity.created(location).body(resourceResponse);
     }
 
-    @PostMapping("/product/{productId}")
+    @PostMapping("/products/{productId}")
 @Operation(
     summary = "Create a Care Guide",
     description = "Create a Care Guide And Assign it to a specific product",

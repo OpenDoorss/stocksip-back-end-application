@@ -61,31 +61,17 @@ public class InventoryCommandServiceImpl implements InventoryCommandService {
         var warehouse = warehouseRepository.findById(command.warehouseId())
                 .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.warehouseId())));
 
-        var targetBestBeforeDate = new ProductBestBeforeDate(command.bestBeforeDate());
-
         // Retrieves the inventory of the product in the warehouse if it exists, if not, it will create a new inventory entry with the new Expiration Date.
-        var inventoryToUpdate = inventoryRepository.findByProductAndWarehouseAndProductBestBeforeDate(product, warehouse, targetBestBeforeDate);
+        var inventoryToUpdate = inventoryRepository.findByProductAndWarehouse(product, warehouse);
 
-        if (inventoryToUpdate.isEmpty()) {
-            try {
-                var targetAddedQuantity = new ProductStock(command.addedQuantity());
-                var newInventory = new Inventory(product, warehouse, targetAddedQuantity, targetBestBeforeDate);
-                product.addWarehouseRelation(newInventory);
-                productRepository.save(product);
-                var inventoryCreated = inventoryRepository.save(newInventory);
-                return Optional.of(inventoryCreated);
-            } catch (Exception e) {
-                throw new RuntimeException("Error creating inventory: " + e.getMessage(), e);
-            }
-        } else {
-            try {
-                Inventory inventory = inventoryToUpdate.get();
-                inventory.addStockToProduct(command.addedQuantity());
-                var inventoryUpdated = inventoryRepository.save(inventory);
-                return Optional.of(inventoryUpdated);
-            } catch (Exception e) {
-                throw new RuntimeException("Error updating inventory: " + e.getMessage(), e);
-            }
+        try {
+            Inventory inventory = inventoryToUpdate.get();
+            inventory.addStockToProduct(command.addedQuantity());
+            inventory.updatedBestBeforeDate(command.bestBeforeDate());
+            var inventoryUpdated = inventoryRepository.save(inventory);
+            return Optional.of(inventoryUpdated);
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating inventory: " + e.getMessage(), e);
         }
     }
 
@@ -110,7 +96,7 @@ public class InventoryCommandServiceImpl implements InventoryCommandService {
         var targetBestBeforeDate = new ProductBestBeforeDate(command.bestBeforeDate());
 
         // Retrieves the inventory of the product in the warehouse if it exists.
-        var inventoryToUpdate = inventoryRepository.findByProductAndWarehouseAndProductBestBeforeDate(product, warehouse, targetBestBeforeDate)
+        var inventoryToUpdate = inventoryRepository.findByProductAndWarehouse(product, warehouse)
                 .orElseThrow(() -> new IllegalArgumentException("Inventory does not exists."));
 
         // Registers a product exit with the provided command details.
@@ -119,6 +105,7 @@ public class InventoryCommandServiceImpl implements InventoryCommandService {
         // If the retrieved inventory exists, it decreases the stock to the current inventory.
         try {
             inventoryToUpdate.reduceStockFromProduct(command.removedQuantity());
+            inventoryToUpdate.updatedBestBeforeDate(command.bestBeforeDate());
             var inventoryUpdated = inventoryRepository.save(inventoryToUpdate);
             return Optional.of(inventoryUpdated);
         } catch (Exception e) {
@@ -143,17 +130,16 @@ public class InventoryCommandServiceImpl implements InventoryCommandService {
         var warehouse = warehouseRepository.findById(command.warehouseId())
                 .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.warehouseId())));
 
-        var targetBestBeforeDate = new ProductBestBeforeDate(command.bestBeforeDate());
-        var targetProductStock = new ProductStock(command.quantity());
+        if (inventoryRepository.existsByProduct_ProductIdAndWarehouse_WarehouseId(command.productId(), command.warehouseId())) {
+            throw new IllegalArgumentException("Product with ID %s already exists in warehouse with ID %s.".formatted(command.productId(), command.warehouseId()));
+        }
 
         // Creates a new inventory entry for the product in the warehouse with the specified quantity.
-        var inventory = new Inventory(product, warehouse, targetProductStock, targetBestBeforeDate);
+        var inventory = new Inventory(product, warehouse, command.quantity(), command.bestBeforeDate());
 
         // Adds the new inventory entry to the product's inventory relations.
         // Completes the inventory creation by saving the changes to the database.
         try {
-            product.addWarehouseRelation(inventory);
-            productRepository.save(product);
             var inventoryCreated = inventoryRepository.save(inventory);
             return Optional.of(inventoryCreated);
         } catch (Exception e) {
@@ -216,7 +202,7 @@ public class InventoryCommandServiceImpl implements InventoryCommandService {
         if (newInventory.isEmpty()) {
             try {
                 var targetAddedQuantity = new ProductStock(command.quantityToMove());
-                var newMovedInventory = new Inventory(productToMove, newWarehouse, targetAddedQuantity, targetBestBeforeDate);
+                var newMovedInventory = new Inventory(productToMove, newWarehouse, command.quantityToMove(), command.bestBeforeDate());
 
                 // Adds the new inventory entry to the product's inventory relations if it does not already exist.
                 productToMove.addWarehouseRelation(newMovedInventory);

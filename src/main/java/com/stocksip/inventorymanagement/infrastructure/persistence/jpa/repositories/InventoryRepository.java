@@ -5,8 +5,11 @@ import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductBestBeforeDate;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -45,4 +48,20 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
      * @return True if exists an inventory that links a specific warehouse and product, otherwise, false.
      */
     boolean existsByProductAndWarehouse(Product product, Warehouse warehouse);
+
+    /**
+     * This method checks if there is an inventory item that links a product with a warehouse.
+     * @param productId - The ID of the product used to check.
+     * @param warehouse - The ID of the warehouse used to check.
+     * @return - True if exists an inventory that links a specific warehouse and product, otherwise, false.
+     */
+    boolean existsByProduct_ProductIdAndWarehouse_WarehouseId(Long productId, Long warehouse);
+
+    /**
+     * This method retrieves all inventory items for a specific warehouse.
+     * @param warehouseId - The ID of the warehouse for which to retrieve inventory items.
+     * @return - A list of Inventory objects associated with the specified warehouse.
+     */
+    @Query("SELECT i FROM Inventory i JOIN FETCH i.product WHERE i.warehouse.warehouseId = :warehouseId")
+    List<Inventory> findByWarehouseId(@Param("warehouseId") Long warehouseId);
 }

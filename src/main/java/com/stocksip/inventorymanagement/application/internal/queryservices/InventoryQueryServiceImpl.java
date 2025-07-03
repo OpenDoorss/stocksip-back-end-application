@@ -1,6 +1,7 @@
 package com.stocksip.inventorymanagement.application.internal.queryservices;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Inventory;
+import com.stocksip.inventorymanagement.domain.model.queries.GetAllProductsByWarehouseIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetInventoryByIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetInventoryByProductIdAndWarehouseIdAndBestBeforeDateQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetInventoryByProductIdAndWarehouseIdQuery;
@@ -11,6 +12,7 @@ import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositor
 import com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositories.WarehouseRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -73,5 +75,10 @@ public class InventoryQueryServiceImpl implements InventoryQueryService {
                 .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(query.warehouseId())));
 
         return inventoryRepository.findByProductAndWarehouse(product, warehouse);
+    }
+
+    @Override
+    public List<Inventory> handle(GetAllProductsByWarehouseIdQuery query) {
+        return inventoryRepository.findByWarehouseId(query.warehouseId());
     }
 }

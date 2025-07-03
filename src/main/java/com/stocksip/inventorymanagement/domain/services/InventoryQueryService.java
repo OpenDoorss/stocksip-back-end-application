@@ -1,6 +1,7 @@
 package com.stocksip.inventorymanagement.domain.services;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Inventory;
+import com.stocksip.inventorymanagement.domain.model.queries.GetAllProductsByWarehouseIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetInventoryByIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetInventoryByProductIdAndWarehouseIdAndBestBeforeDateQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetInventoryByProductIdAndWarehouseIdQuery;
@@ -21,4 +22,5 @@ public interface InventoryQueryService {
     Optional<Inventory> handle(GetInventoryByIdQuery query);
     Optional<Inventory> handle(GetInventoryByProductIdAndWarehouseIdAndBestBeforeDateQuery query);
     Optional<Inventory> handle(GetInventoryByProductIdAndWarehouseIdQuery query);
+    List<Inventory> handle(GetAllProductsByWarehouseIdQuery query);
 }
