@@ -49,11 +49,19 @@ public class PurchaseOrderController {
     /* ────────────────────────────────
      * COMMAND – UPDATE STATUS
      * ──────────────────────────────── */
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateOrderStatus(@PathVariable Long id, @RequestBody StatusUpdateRequest request) {
-        commandService.changeStatus(id, OrderStatus.valueOf(request.status()));
+    @PatchMapping("/{id}/status")
+    @CrossOrigin(
+            origins = "http://localhost:4200",
+            methods = { RequestMethod.PATCH, RequestMethod.OPTIONS }
+    )
+    public ResponseEntity<Void> changeStatus(
+            @PathVariable Long id,
+            @RequestParam OrderStatus status) {
+
+        commandService.changeStatus(id, status);
         return ResponseEntity.noContent().build();
     }
+
 
     public record StatusUpdateRequest(String status) {}
 

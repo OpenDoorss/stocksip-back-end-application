@@ -1,15 +1,29 @@
 package com.stocksip.orderoperationandmonitoring.domain.model.valueobjects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum OrderStatus {
-    RECEIVED("Received"),
-    IN_PROCESS("In Process"),
-    ARRIVED("Arrived"),
-    CANCELED("Canceled");
+    RECEIVED,
+    IN_PROCESS,
+    ARRIVED,
+    CANCELED;
 
-    private final String label;
-    OrderStatus(String label) { this.label = label; }
+    @JsonCreator
+    public static OrderStatus from(String raw) {
+        if (raw == null) throw new IllegalArgumentException("Status null");
+        return switch (raw.trim().toUpperCase().replace(' ', '_')) {
+            case "RECEIVED"   -> RECEIVED;
+            case "IN_PROCESS" -> IN_PROCESS;
+            case "ARRIVED"    -> ARRIVED;
+            case "CANCELED"   -> CANCELED;
+            default -> throw new IllegalArgumentException("Bad status: " + raw);
+        };
+    }
 
-    public String label() { return label; }
-
-    @Override public String toString() { return label; }
+    @JsonValue
+    public String value() {
+        return name();
+    }
 }
+
