@@ -6,6 +6,7 @@ import com.stocksip.inventorymanagement.domain.model.commands.CreateProductComma
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteProductCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateProductCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateProductMinimumStockCommand;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.BrandName;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.LiquorType;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductName;
@@ -65,11 +66,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
             imageUrl = cloudinaryService.UploadImage(command.image());
         }
 
-        productToUpdate.updateInformation(
-                command.unitPriceAmount(),
-                command.minimumStock(),
-                imageUrl
-        );
+        productToUpdate.updateInformation(command, imageUrl);
 
         try {
             var updatedProduct = productRepository.save(productToUpdate);
@@ -88,14 +85,15 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     @Override
     public Optional<Product> handle(CreateProductCommand command) {
 
-        if (productRepository.existsByBrandNameAndLiquorTypeAndProductName(BrandName.valueOf(command.brandName()),
-                LiquorType.valueOf(command.liquorType()), new ProductName(command.additionalName()))) {
+        if (productRepository.existsByBrandNameAndLiquorTypeAndProductNameAndAccountId(BrandName.valueOf(command.brandName()),
+                LiquorType.valueOf(command.liquorType()), new ProductName(command.name()), new AccountId(command.accountId()))) {
             throw new IllegalArgumentException("Product will full name given already exists.");
         }
 
         String imageUrl = command.image() != null ? cloudinaryService.UploadImage(command.image())
                 : "https://res.cloudinary.com/deuy1pr9e/image/upload/v1751091989/default-product_ssjni6.jpg";
 
+        System.out.println(command);
         var product = new Product(command, imageUrl);
         var createdProduct = productRepository.save(product);
         return Optional.of(createdProduct);

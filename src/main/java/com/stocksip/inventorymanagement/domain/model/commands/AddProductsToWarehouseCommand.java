@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Date;
  * @param bestBeforeDate The best before date of the product that indicates until when you have time before it lost its properties.
  * @param quantity The quantity of product stock to add to the warehouse.
  */
-public record AddProductsToWarehouseCommand(Long productId, Long warehouseId, Date bestBeforeDate, int quantity) {
+public record AddProductsToWarehouseCommand(Long productId, Long warehouseId, LocalDate bestBeforeDate, Integer quantity) {
 
     /**
      * Validates the command parameters.
@@ -25,7 +26,7 @@ public record AddProductsToWarehouseCommand(Long productId, Long warehouseId, Da
         if (warehouseId == null) {
             throw new IllegalArgumentException("WarehouseId cannot be null");
         }
-        if (bestBeforeDate == null || bestBeforeDate.before(new Date()) ) {
+        if (bestBeforeDate == null) {
             throw new IllegalArgumentException("BestBeforeDate cannot be null or a past date.");
         }
         if (quantity <= 0) {

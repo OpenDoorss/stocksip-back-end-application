@@ -13,10 +13,10 @@ import jakarta.persistence.Embeddable;
  * @since 1.0.0
  */
 @Embeddable
-public record Money(double amount, String code) {
+public record Money(Double amount, String Currency) {
 
     @Override
     public String toString() {
-        return String.format("%.2f %s", amount, code);
+        return String.format("%.2f %s", amount, Currency);
     }
 }

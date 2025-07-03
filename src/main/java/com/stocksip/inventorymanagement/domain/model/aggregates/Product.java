@@ -1,6 +1,7 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
 import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
+import com.stocksip.inventorymanagement.domain.model.commands.UpdateProductCommand;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
 import com.stocksip.shared.domain.model.valueobjects.Money;
 import jakarta.persistence.*;
@@ -108,8 +109,8 @@ public class Product {
         this.productName = new ProductName(additionalName);
         this.minimumStock = new ProductMinimumStock(minimumStock);
         this.unitPrice = new Money(price, "PEN");
-        this.liquorType = LiquorType.valueOf(liquorType.toUpperCase());
-        this.brandName = BrandName.valueOf(brand.toUpperCase());
+        this.liquorType = LiquorType.valueOf(liquorType);
+        this.brandName = BrandName.valueOf(brand);
         this.accountId = providerId;
         this.imageUrl = new ImageUrl(imageUrl);
         this.inventories = List.of();
@@ -121,11 +122,11 @@ public class Product {
      * @param command The command containing the information to create a new product.
      */
     public Product(CreateProductCommand command, String imageUrl) {
-        this.productName = new ProductName(command.additionalName());
+        this.productName = new ProductName(command.name());
         this.minimumStock = new ProductMinimumStock(command.minimumStock());
         this.unitPrice = new Money(command.unitPriceAmount(), "PEN");
-        this.liquorType = LiquorType.valueOf(command.liquorType().toUpperCase());
-        this.brandName = BrandName.valueOf(command.brandName().toUpperCase());
+        this.liquorType = LiquorType.valueOf(command.liquorType());
+        this.brandName = BrandName.valueOf(command.brandName());
         this.accountId = new AccountId(command.accountId());
         this.imageUrl = new ImageUrl(imageUrl);
         this.inventories = List.of();
@@ -139,21 +140,19 @@ public class Product {
         this.minimumStock = this.minimumStock.updateMinimumStock(newMinimumStock);
     }
 
-
     /**
-     * Updates the product information such as price, minimum stock, and image URL.
-     * @param updatedPrice The new price of the product must be greater than zero.
-     * @param updatedMinimumStock The new minimum stock of the product must be a non-negative integer.
-     * @param updatedImageUrl The new image URL of the product.
+     * Updates the product information based on the provided command and updated image URL.
+     *
+     * @param command The command containing the updated product information.
+     * @param updatedImageUrl The new image URL for the product.
      */
-    public void updateInformation(double updatedPrice, int updatedMinimumStock, String updatedImageUrl) {
-        if (updatedPrice < 0) {
-            throw new IllegalArgumentException("Updated price must be greater than zero.");
-        }
-
-        setMinimumStock(updatedMinimumStock);
+    public void updateInformation(UpdateProductCommand command, String updatedImageUrl) {
+        this.productName = new ProductName(command.name());
+        this.liquorType = LiquorType.valueOf(command.liquorType());
+        this.brandName = BrandName.valueOf(command.brand());
+        setMinimumStock(command.minimumStock());
+        this.unitPrice = new Money(command.unitPriceAmount(), "PEN");
         this.imageUrl = new ImageUrl(updatedImageUrl);
-        this.unitPrice = new Money(updatedPrice, "PEN");
     }
 
     /**

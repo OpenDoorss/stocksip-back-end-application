@@ -21,8 +21,8 @@ public record ProductName(String name) {
      * @throws IllegalArgumentException if brand or type is null, or if name is provided and is blank.
      */
     public ProductName {
-        if (name == "") {
-            throw new IllegalArgumentException("Name must not be blank if provided.");
+        if (name != null && name.isBlank()) {
+            throw new IllegalArgumentException("Product name cannot be blank if provided.");
         }
     }
 

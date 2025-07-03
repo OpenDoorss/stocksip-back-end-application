@@ -16,5 +16,5 @@ public record ProductResource(
         String liquorType,
         double unitPriceAmount,
         int minimumStock,
-        Long providerId) {
+        Long accountId) {
 }

@@ -11,8 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
  * @since 1.0.0
  */
 public record UpdateProductResource(
-        double updatedUnitPriceAmount,
-        int updatedMinimumStock,
+        String name,
+        String brand,
+        String liquorType,
+        Double updatedUnitPriceAmount,
+        Integer updatedMinimumStock,
         MultipartFile updatedImage
 ) {
 }

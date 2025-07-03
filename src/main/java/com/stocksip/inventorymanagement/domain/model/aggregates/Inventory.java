@@ -17,7 +17,7 @@ import lombok.Getter;
  */
 @Entity
 @Getter
-public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
+public class Inventory {
 
     @Id
     @Getter
@@ -79,7 +79,7 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
         this.warehouse = warehouse;
         this.productStock = productStock;
         this.productBestBeforeDate = productBestBeforeDate;
-        this.productState = ProductState.WITH_STOCK;
+        this.productState = ProductState.With_Stock;
     }
 
     /**
@@ -89,12 +89,12 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
      */
     private void setProductStateToOutOfStock() {
         // Ensure that the product is not already out of stock before changing its state
-        if (productState == ProductState.OUT_OF_STOCK) {
+        if (productState == ProductState.Out_Of_Stock) {
             throw new IllegalArgumentException("Product is already out of stock.");
         }
 
         // Change the product state to OUT_OF_STOCK
-        this.productState = ProductState.OUT_OF_STOCK;
+        this.productState = ProductState.Out_Of_Stock;
     }
 
     /**
@@ -104,12 +104,12 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
      */
     private void setProductStateToWithStock() {
         // Ensure that the product is not already in stock before changing its state
-        if (productState == ProductState.WITH_STOCK) {
+        if (productState == ProductState.With_Stock) {
             throw new IllegalArgumentException("Product is already in stock.");
         }
 
         // Change the product state to WITH_STOCK
-        this.productState = ProductState.WITH_STOCK;
+        this.productState = ProductState.With_Stock;
     }
 
     /**

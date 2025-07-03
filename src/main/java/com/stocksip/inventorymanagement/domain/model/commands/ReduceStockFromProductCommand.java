@@ -1,6 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * RemoveStockFromProductCommand
@@ -13,7 +13,7 @@ import java.util.Date;
  * @param bestBeforeDate The best before date of the product that indicates until when you have time before it lost its properties.
  * @param removedQuantity The quantity of stock to be removed from the product.
  */
-public record ReduceStockFromProductCommand(Long productId, Long warehouseId, Date bestBeforeDate, int removedQuantity) {
+public record ReduceStockFromProductCommand(Long productId, Long warehouseId, LocalDate bestBeforeDate, Integer removedQuantity) {
 
     /**
      * Validates the command parameters.

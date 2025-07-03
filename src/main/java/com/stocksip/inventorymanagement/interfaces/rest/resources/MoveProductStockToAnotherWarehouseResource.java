@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Date;
  */
 public record MoveProductStockToAnotherWarehouseResource(
         Long newWarehouseId,
-        Date movedStockExpirationDate,
-        int movedQuantity
+        LocalDate movedStockExpirationDate,
+        Integer movedQuantity
 ) {
 }

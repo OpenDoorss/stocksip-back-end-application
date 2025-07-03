@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 
@@ -52,7 +53,7 @@ public class WarehouseInventoriesController {
     })
     public ResponseEntity<InventoryResource> getInventoryByProductIdAndWarehouseIdAndBestBeforeDate(
             @PathVariable Long warehouseId,
-            @PathVariable Date expirationDate,
+            @PathVariable LocalDate expirationDate,
             @PathVariable Long productId
     ) {
         var getInventoryByProductIdAndWarehouseIdAndBestBeforeDateQuery = new GetInventoryByProductIdAndWarehouseIdAndBestBeforeDateQuery(productId, warehouseId, expirationDate);

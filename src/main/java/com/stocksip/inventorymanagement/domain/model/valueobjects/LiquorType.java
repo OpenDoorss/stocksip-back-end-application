@@ -22,16 +22,16 @@ package com.stocksip.inventorymanagement.domain.model.valueobjects;
  * @since 1.0.0
  */
 public enum LiquorType {
-    RUM,
-    WHISKY,
-    GIN,
-    VODKA,
-    TEQUILA,
-    BRANDY,
-    WINE,
-    BEER,
-    CREAMY,
-    HERBAL,
-    FRUITY,
-    SPECIAL
+    Rum,
+    Whisky,
+    Gin,
+    Vodka,
+    Tequila,
+    Brandy,
+    Wine,
+    Beer,
+    Creamy,
+    Herbal,
+    Fruity,
+    Special
 }

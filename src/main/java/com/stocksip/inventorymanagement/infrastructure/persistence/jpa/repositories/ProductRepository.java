@@ -1,6 +1,7 @@
 package com.stocksip.inventorymanagement.infrastructure.persistence.jpa.repositories;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.BrandName;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.LiquorType;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductName;
@@ -103,7 +104,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      * @param productName The additional name of the product.
      * @return True if a product exists, otherwise, false.
      */
-    boolean existsByBrandNameAndLiquorTypeAndProductName(BrandName brandName, LiquorType liquorType, ProductName productName);
+    boolean existsByBrandNameAndLiquorTypeAndProductNameAndAccountId(BrandName brandName, LiquorType liquorType, ProductName productName, AccountId AccountId);
 
     /**
      * This method retrieves the image URL of a product by its ID.

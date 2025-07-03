@@ -83,8 +83,7 @@ public class WarehouseCommandServiceImpl implements WarehouseCommandService {
         var warehouseToUpdate = warehouseRepository.findWarehouseByWarehouseIdAndAccountId(command.warehouseId(), new AccountId(accountId))
                 .orElseThrow(() -> new IllegalArgumentException("Warehouse with ID %s does not exist".formatted(command.warehouseId())));
 
-        if (!warehouseToUpdate.getName().equals(command.name()) &&
-                warehouseRepository.existsByNameAndAccountIdAndWarehouseIdIsNot(command.name(), new AccountId(accountId), command.warehouseId())) {
+        if (warehouseRepository.existsByNameAndAccountIdAndWarehouseIdIsNot(command.name(), new AccountId(accountId), command.warehouseId())) {
             throw new IllegalArgumentException("Warehouse with name %s already exists".formatted(command.name()));
         }
 

@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -11,6 +12,6 @@ import java.util.Date;
  * @since 1.0.0
  */
 public record AddProductsToWarehouseResource(
-        Date bestBeforeDate,
-        int quantity) {
+        LocalDate bestBeforeDate,
+        Integer quantity) {
 }

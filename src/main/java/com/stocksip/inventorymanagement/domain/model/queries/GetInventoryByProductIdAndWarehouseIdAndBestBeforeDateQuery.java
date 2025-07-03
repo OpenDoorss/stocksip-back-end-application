@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.queries;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -12,5 +13,5 @@ import java.util.Date;
  * @param warehouseId The unique identifier of the warehouse that stores the product inventory.
  * @param bestBeforeDate The best before date.
  */
-public record GetInventoryByProductIdAndWarehouseIdAndBestBeforeDateQuery(Long productId, Long warehouseId, Date bestBeforeDate) {
+public record GetInventoryByProductIdAndWarehouseIdAndBestBeforeDateQuery(Long productId, Long warehouseId, LocalDate bestBeforeDate) {
 }

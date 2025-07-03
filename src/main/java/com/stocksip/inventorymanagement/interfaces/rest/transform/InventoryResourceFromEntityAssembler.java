@@ -18,7 +18,7 @@ public class InventoryResourceFromEntityAssembler {
                 entity.getInventoryId(),
                 entity.getProduct().getProductId(),
                 entity.getWarehouse().getWarehouseId(),
-                entity.getProductBestBeforeDate().date(),
+                entity.getProductBestBeforeDate().bestBeforeDate(),
                 entity.getProductStock().getStock(),
                 entity.getProductState().toString()
         );

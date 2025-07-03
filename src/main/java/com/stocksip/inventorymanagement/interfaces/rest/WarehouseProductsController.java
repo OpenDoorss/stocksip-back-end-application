@@ -1,8 +1,6 @@
 package com.stocksip.inventorymanagement.interfaces.rest;
 
-import com.stocksip.inventorymanagement.domain.model.queries.GetAllProductsByProviderIdAndWarehouseIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetAllProductsByWarehouseIdQuery;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ProviderId;
 import com.stocksip.inventorymanagement.domain.services.ProductQueryService;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.ProductResource;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.ProductResourceFromEntityAssembler;

@@ -10,16 +10,16 @@ package com.stocksip.inventorymanagement.domain.model.valueobjects;
  * @since 1.0.0
  */
 public enum BrandName {
-    TABERNERO,
-    SANTIAGO_QUEIROLO,
-    PORTON,
-    CRISTAL,
-    JOHNNIE_WALKER,
-    JACK_DANIELS,
-    BUDWEISER,
-    HEINEKEN,
-    CORONA,
-    PILSEN_CALLAO,
-    CUSQUENA,
-    CARTAVIO
+    Tabernero,
+    SantiagoQueirolo,
+    Porton,
+    Cristal,
+    JhonnieWalker,
+    JackDaniels,
+    Budweiser,
+    Heineken,
+    Corona,
+    PilsenCallao,
+    Cusquena,
+    Cartavio
 }

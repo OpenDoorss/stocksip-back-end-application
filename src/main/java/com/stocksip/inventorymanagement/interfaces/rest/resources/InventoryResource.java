@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -14,8 +15,8 @@ public record InventoryResource(
         Long id,
         Long productId,
         Long warehouseId,
-        Date bestBeforeDate,
-        int stock,
+        LocalDate bestBeforeDate,
+        Integer stock,
         String productState
 ) {
 }
