@@ -1,19 +1,13 @@
 package com.stocksip.inventorymanagement.interfaces.rest;
-
-import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
-import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateCareGuideCommand;
-import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteCareGuideCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.UpdateCareGuideCommand;
 import com.stocksip.inventorymanagement.domain.model.queries.GetCareGuideByIdQuery;
-import com.stocksip.inventorymanagement.domain.model.queries.GetCareGuideProductAndWarehouseQuery;
 import com.stocksip.inventorymanagement.domain.services.CareGuideCommandService;
 import com.stocksip.inventorymanagement.domain.services.CareGuideQueryService;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
 import com.stocksip.inventorymanagement.application.internal.outboundservices.cloudinary.CloudinaryService;
-import com.stocksip.inventorymanagement.domain.model.queries.GetWarehouseByIdQuery;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CareGuideResource;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.UpdateCareGuideResource;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.CareGuideResourceFromEntityAssembler;

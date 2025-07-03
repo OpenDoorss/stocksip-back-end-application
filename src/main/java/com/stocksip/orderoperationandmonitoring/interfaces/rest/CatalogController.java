@@ -23,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/v1", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Catalog")
+@Tag(name = "Catalog", description = "Catalog management endpoints")
 @CrossOrigin(origins = "http://localhost:4200")
 public class CatalogController {
 
@@ -101,9 +101,26 @@ public class CatalogController {
         return ResponseEntity.ok(toResource(published));
     }
 
-    /* ────────────────────────────────
-     * QUERIES – CATALOG ITEMS
-     * ──────────────────────────────── */
+
+    @GetMapping("/catalogs/published")
+    public ResponseEntity<List<CatalogResource>> publishedByProviderEmail(
+            @RequestParam String providerEmail) {
+
+        try {
+            List<Catalog> catalogs =
+                    catalogQueryService.getPublishedCatalogsByProviderEmail(providerEmail);
+
+            List<CatalogResource> resources = catalogs.stream()
+                    .map(CatalogResourceFromEntityAssembler::toResourceFromEntity)
+                    .toList();
+
+            return ResponseEntity.ok(resources);
+
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(List.of());
+        }
+    }
+
     @GetMapping("/catalogItems")
     @Operation(summary = "Get catalog items")
     public ResponseEntity<List<CatalogItemResource>> getCatalogItems(@RequestParam Long catalogId) {
@@ -112,9 +129,6 @@ public class CatalogController {
         return ResponseEntity.ok(items.stream().map(this::toResource).toList());
     }
 
-    /* ────────────────────────────────
-     * COMMANDS – CATALOG ITEMS
-     * ──────────────────────────────── */
     @PostMapping("/catalogItems")
     @Operation(summary = "Create catalog item")
     public ResponseEntity<CatalogItemResource> createCatalogItem(@RequestBody CatalogItemResource resource) {
