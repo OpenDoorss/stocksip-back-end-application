@@ -10,7 +10,6 @@ import com.stocksip.orderoperationandmonitoring.domain.services.CatalogQueryServ
 import com.stocksip.orderoperationandmonitoring.interfaces.rest.resources.CatalogItemResource;
 import com.stocksip.orderoperationandmonitoring.interfaces.rest.resources.CatalogResource;
 import com.stocksip.orderoperationandmonitoring.interfaces.rest.transform.*;
-import io.micrometer.common.util.internal.logging.InternalLogger;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
