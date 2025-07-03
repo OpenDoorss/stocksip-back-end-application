@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -60,31 +61,14 @@ public class ProductsController {
         return ResponseEntity.ok(productResource);
     }
 
-    @PostMapping
-    @Operation(
-            summary = "Create a new product",
-            description = "Creates a new product with the provided details."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Product created successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad request")
-    })
-    public ResponseEntity<ProductResource> createProduct(@RequestBody CreateProductResource resource) {
-        Optional<Product> product = productCommandService.handle(CreateProductCommandFromResourceAssembler.toCommandFromResource(resource));
-
-        return product.map(source ->
-                new ResponseEntity<>(ProductResourceFromEntityAssembler.toResourceFromEntity(source), CREATED))
-                .orElseGet(() -> ResponseEntity.badRequest().build());
-    }
-
-    @PutMapping("/{productId}")
+    @PutMapping(value = "/{productId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Update an existing product",
             description = "Updates the details of an existing product identified by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Product updated successfully"),
             @ApiResponse(responseCode = "400", description = "Product could not be updated - invalid product ID or resource")
     })
-    public ResponseEntity<ProductResource> updateProduct(@RequestBody UpdateProductResource resource, @PathVariable Long productId) {
+    public ResponseEntity<ProductResource> updateProduct(@ModelAttribute UpdateProductResource resource, @PathVariable Long productId) {
         var updateProductCommand = UpdateProductCommandFromResourceAssembler.toCommandFromResource(resource, productId);
         var updatedProduct = productCommandService.handle(updateProductCommand);
         if (updatedProduct.isEmpty()) return ResponseEntity.badRequest().build();
@@ -100,9 +84,9 @@ public class ProductsController {
             @ApiResponse(responseCode = "200", description = "Product deleted successfully"),
             @ApiResponse(responseCode = "400", description = "Product could not be deleted - invalid product ID")
     })
-    public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
+    public ResponseEntity<Map<String, String>> deleteProduct(@PathVariable Long productId) {
         var deleteProductCommand = new DeleteProductCommand(productId);
         productCommandService.handle(deleteProductCommand);
-        return ResponseEntity.ok("Product with given Id deleted successfully.");
+        return ResponseEntity.ok(Map.of("message", "Product with given Id deleted successfully."));
     }
 }

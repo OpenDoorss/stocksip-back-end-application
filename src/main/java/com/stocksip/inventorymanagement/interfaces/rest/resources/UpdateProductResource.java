@@ -1,5 +1,7 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * UpdateProductResource is a record that represents an UpdateProductCommand resource in the REST API.
  *
@@ -11,6 +13,6 @@ package com.stocksip.inventorymanagement.interfaces.rest.resources;
 public record UpdateProductResource(
         double updatedUnitPriceAmount,
         int updatedMinimumStock,
-        String updatedImageUrl
+        MultipartFile updatedImage
 ) {
 }

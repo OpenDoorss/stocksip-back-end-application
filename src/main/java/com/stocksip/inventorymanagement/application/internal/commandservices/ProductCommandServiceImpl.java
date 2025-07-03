@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.application.internal.commandservices;
 
+import com.stocksip.inventorymanagement.application.internal.outboundservices.cloudinary.CloudinaryService;
 import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteProductCommand;
@@ -36,9 +37,12 @@ public class ProductCommandServiceImpl implements ProductCommandService {
      */
     private final InventoryRepository inventoryRepository;
 
-    public ProductCommandServiceImpl(ProductRepository productRepository, InventoryRepository inventoryRepository) {
+    private final CloudinaryService cloudinaryService;
+
+    public ProductCommandServiceImpl(ProductRepository productRepository, InventoryRepository inventoryRepository, CloudinaryService cloudinaryService) {
         this.productRepository = productRepository;
         this.inventoryRepository = inventoryRepository;
+        this.cloudinaryService = cloudinaryService;
     }
 
     /**
@@ -49,13 +53,22 @@ public class ProductCommandServiceImpl implements ProductCommandService {
      */
     @Override
     public Optional<Product> handle(UpdateProductCommand command) {
+
         var productToUpdate = productRepository.findById(command.productId())
                 .orElseThrow(() -> new IllegalArgumentException("Product with ID %s does not exist".formatted(command.productId())));
+
+        String currentImageUrl = productToUpdate.getImageUrl().imageUrl();
+        String imageUrl = currentImageUrl;
+
+        if (command.image() != null && !command.image().isEmpty()) {
+            cloudinaryService.DeleteImage(currentImageUrl);
+            imageUrl = cloudinaryService.UploadImage(command.image());
+        }
 
         productToUpdate.updateInformation(
                 command.unitPriceAmount(),
                 command.minimumStock(),
-                command.imageUrl()
+                imageUrl
         );
 
         try {
@@ -74,16 +87,16 @@ public class ProductCommandServiceImpl implements ProductCommandService {
      */
     @Override
     public Optional<Product> handle(CreateProductCommand command) {
-        var targetBrandName = BrandName.valueOf(command.brandName());
-        var targetLiquorType = LiquorType.valueOf(command.liquorType());
 
-        if (productRepository.existsByBrandNameAndLiquorTypeAndProductName(targetBrandName,
-                        targetLiquorType,
-                        new ProductName(targetBrandName, targetLiquorType, command.additionalName()))) {
+        if (productRepository.existsByBrandNameAndLiquorTypeAndProductName(BrandName.valueOf(command.brandName()),
+                LiquorType.valueOf(command.liquorType()), new ProductName(command.additionalName()))) {
             throw new IllegalArgumentException("Product will full name given already exists.");
         }
 
-        var product = new Product(command);
+        String imageUrl = command.image() != null ? cloudinaryService.UploadImage(command.image())
+                : "https://res.cloudinary.com/deuy1pr9e/image/upload/v1751091989/default-product_ssjni6.jpg";
+
+        var product = new Product(command, imageUrl);
         var createdProduct = productRepository.save(product);
         return Optional.of(createdProduct);
     }
@@ -130,8 +143,12 @@ public class ProductCommandServiceImpl implements ProductCommandService {
 
         try {
             if (count == productToDelete.getInventories().size()) {
+
+                String imageUrl = productRepository.findImageUrlByProductId(command.productId());
+
                 productRepository.delete(productToDelete);
                 inventoryRepository.deleteAll(productToDelete.getInventories());
+                cloudinaryService.DeleteImage(imageUrl);
             }
             else {
                 throw new IllegalArgumentException("Cannot delete product with ID %s because it has stock available in a warehouse.".formatted(command.productId()));

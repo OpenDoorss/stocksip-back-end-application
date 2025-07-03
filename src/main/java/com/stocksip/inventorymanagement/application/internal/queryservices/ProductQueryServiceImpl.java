@@ -35,12 +35,12 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
     @Override
     public List<Product> handle(GetAllProductsByAccountIdQuery query) {
-        return productRepository.findAllProductsByAccountId(query.accountId().accountId());
+        return productRepository.findAllProductsByAccountId(query.accountId());
     }
 
     @Override
     public List<Product> handle(GetAllProductsByProviderIdAndWarehouseIdQuery query) {
-        return productRepository.findAllProductsByWarehouseIdAndProviderId(query.warehouseId(), query.providerId().providerId());
+        return productRepository.findAllProductsByWarehouseIdAndAccountId(query.warehouseId(), query.accountId().accountId());
     }
 
     @Override

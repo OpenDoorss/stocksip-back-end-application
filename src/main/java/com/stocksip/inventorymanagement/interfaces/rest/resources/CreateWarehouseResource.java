@@ -1,5 +1,7 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * Resource for updating a warehouse.
  * This record holds the details required to update a warehouse's information.
@@ -13,7 +15,7 @@ package com.stocksip.inventorymanagement.interfaces.rest.resources;
  * @param maxTemperature Maximum temperature allowed in the warehouse
  * @param minTemperature Minimum temperature allowed in the warehouse
  * @param capacity      Total capacity of the warehouse
- * @param imageUrl      URL of an image representing the warehouse
+ * @param image      URL of an image representing the warehouse
  */
 public record CreateWarehouseResource(String name,
                                       String street,
@@ -24,8 +26,7 @@ public record CreateWarehouseResource(String name,
                                       Double maxTemperature,
                                       Double minTemperature,
                                       Double capacity,
-                                      String imageUrl,
-                                      Long accountId) {
+                                      MultipartFile image) {
 
     /**
      * Validates the resource.

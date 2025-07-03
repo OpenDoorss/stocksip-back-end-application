@@ -1,6 +1,7 @@
 package com.stocksip.inventorymanagement.domain.model.queries;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ProviderId;
+import com.cloudinary.provisioning.Account;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
 
 /**
  * GetAllProductsByProviderIdAndWarehouseIdQuery
@@ -11,13 +12,13 @@ import com.stocksip.inventorymanagement.domain.model.valueobjects.ProviderId;
  * @param warehouseId The unique identifier of the warehouse that store the products that will be retrieved.
  * @param providerId The unique identifier of the provider whose provided products are to be retrieved.
  */
-public record GetAllProductsByProviderIdAndWarehouseIdQuery(Long warehouseId, ProviderId providerId) {
+public record GetAllProductsByProviderIdAndWarehouseIdQuery(Long warehouseId, AccountId accountId) {
 
     /**
      * Validates the query parameters.
      */
     public GetAllProductsByProviderIdAndWarehouseIdQuery {
-        if (providerId == null) {
+        if (accountId == null) {
             throw new IllegalArgumentException("Provider Id cannot be null");
         }
         if (warehouseId == null) {

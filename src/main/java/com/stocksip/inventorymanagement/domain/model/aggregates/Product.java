@@ -2,12 +2,10 @@ package com.stocksip.inventorymanagement.domain.model.aggregates;
 
 import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.*;
-import com.stocksip.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import com.stocksip.shared.domain.model.valueobjects.Money;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
 
@@ -21,8 +19,7 @@ import java.util.List;
  * @since 1.0
  */
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-public class Product extends AuditableAbstractAggregateRoot<Product> {
+public class Product {
 
     @Id
     @Getter
@@ -34,6 +31,7 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
      */
     @Column(nullable = false)
     @Getter
+    @Enumerated(EnumType.STRING)
     private LiquorType liquorType;
 
     /**
@@ -42,6 +40,7 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
      */
     @Column(nullable = false)
     @Getter
+    @Enumerated(EnumType.STRING)
     private BrandName brandName;
 
     /**
@@ -85,7 +84,7 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
      */
     @Column(nullable = false, updatable = false)
     @Getter
-    private ProviderId providerId;
+    private AccountId accountId;
 
     protected Product() {
         // Default constructor for JPA
@@ -102,16 +101,16 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
      * @param minimumStock The minimum stock of the product in the warehouse.
      * @param imageUrl The image URL of the product.
      */
-    public Product(ProviderId providerId, String brand, String liquorType,
+    public Product(AccountId providerId, String brand, String liquorType,
                    String additionalName, double price,
                    int minimumStock, String imageUrl) {
-        this.productName = new ProductName(BrandName.valueOf(brand.toUpperCase()), LiquorType.valueOf(liquorType.toUpperCase()), additionalName);
+        this.productName = new ProductName(additionalName);
         this.minimumStock = new ProductMinimumStock(minimumStock);
         this.unitPrice = new Money(price, "PEN");
         this.liquorType = LiquorType.valueOf(liquorType.toUpperCase());
         this.brandName = BrandName.valueOf(brand.toUpperCase());
-        this.providerId = providerId;
-        this.imageUrl = setDefaultImageUrlIfNotProvided(imageUrl);
+        this.accountId = providerId;
+        this.imageUrl = new ImageUrl(imageUrl);
         this.inventories = List.of();
     }
 
@@ -120,26 +119,15 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
      *
      * @param command The command containing the information to create a new product.
      */
-    public Product(CreateProductCommand command) {
-        this.productName = new ProductName(BrandName.valueOf(command.brandName().toUpperCase()), LiquorType.valueOf(command.liquorType().toUpperCase()), command.additionalName());
+    public Product(CreateProductCommand command, String imageUrl) {
+        this.productName = new ProductName(command.additionalName());
         this.minimumStock = new ProductMinimumStock(command.minimumStock());
         this.unitPrice = new Money(command.unitPriceAmount(), "PEN");
         this.liquorType = LiquorType.valueOf(command.liquorType().toUpperCase());
         this.brandName = BrandName.valueOf(command.brandName().toUpperCase());
-        this.providerId = command.providerId();
-        this.imageUrl = setDefaultImageUrlIfNotProvided(command.imageUrl());
+        this.accountId = new AccountId(command.accountId());
+        this.imageUrl = new ImageUrl(imageUrl);
         this.inventories = List.of();
-    }
-
-    /**
-     * Method to set a default image URL if the provided image URL is null or blank.
-     * @param imageUrl The image URL to be set for the product.
-     * @return The ImageUrl instance, either the provided one or a default one.
-     */
-    private ImageUrl setDefaultImageUrlIfNotProvided(String imageUrl) {
-        return imageUrl == null || imageUrl.isBlank()
-                ? ImageUrl.defaultImageUrl()
-                : new ImageUrl(imageUrl);
     }
 
     /**
@@ -153,8 +141,8 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
 
     /**
      * Updates the product information such as price, minimum stock, and image URL.
-     * @param updatedPrice The new price of the product, must be greater than zero.
-     * @param updatedMinimumStock The new minimum stock of the product, must be a non-negative integer.
+     * @param updatedPrice The new price of the product must be greater than zero.
+     * @param updatedMinimumStock The new minimum stock of the product must be a non-negative integer.
      * @param updatedImageUrl The new image URL of the product.
      */
     public void updateInformation(double updatedPrice, int updatedMinimumStock, String updatedImageUrl) {
@@ -163,7 +151,7 @@ public class Product extends AuditableAbstractAggregateRoot<Product> {
         }
 
         setMinimumStock(updatedMinimumStock);
-        this.imageUrl = setDefaultImageUrlIfNotProvided(updatedImageUrl);
+        this.imageUrl = new ImageUrl(updatedImageUrl);
         this.unitPrice = new Money(updatedPrice, "PEN");
     }
 

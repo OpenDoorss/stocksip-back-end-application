@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.entities;
 
+import com.stocksip.inventorymanagement.domain.model.valueobjects.ImageUrl;
 import com.stocksip.shared.domain.model.entities.AuditableModel;
 import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
@@ -11,14 +12,16 @@ import lombok.Setter;
 @Entity
 public class CareGuide extends AuditableModel {
 
+    
+    @Column(nullable = false)
+    private String accountId;
+
     @ManyToOne
-    @JoinColumn(name = "productId")
-    @NotNull
+    @JoinColumn(name = "productId", nullable = true)
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "warehouseId")
-    @NotNull
+    @JoinColumn(name = "warehouseId", nullable = true)
     private Warehouse warehouse;
 
     /**
@@ -43,18 +46,50 @@ public class CareGuide extends AuditableModel {
     @Getter
     private String description;
 
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "imageUrl", column = @Column(name = "image_url"))
+    })
+    private ImageUrl imageUrl;
+    
     protected CareGuide(){}
 
     /**
      * @summary Constructor.
      * It creates a new CareGuide instance based on the provided product, warehouse, guide name, type, and description.
      */
-    public CareGuide(Product product, Warehouse warehouse, String guideName, String type, String description) {
+    /**
+     * Creates a new CareGuide instance with the specified details.
+     *
+     * @param product the associated product (can be null)
+     * @param warehouse the associated warehouse (can be null)
+     * @param guideName the name of the care guide (required)
+     * @param type the type of the care guide (required)
+     * @param description the description of the care guide (required)
+     * @param imageUrl the URL of the care guide image (can be null, will use default if null or blank)
+     * @throws IllegalArgumentException if guideName, type, or description is null or blank
+     */
+    public CareGuide(String accountId, Product product, Warehouse warehouse, String guideName, String type, String description, String imageUrl) {
+        if (accountId == null || accountId.isBlank()) {
+            throw new IllegalArgumentException("Account ID cannot be null or blank");
+        }
+        if (guideName == null || guideName.isBlank()) {
+            throw new IllegalArgumentException("Guide name cannot be null or blank");
+        }
+        if (type == null || type.isBlank()) {
+            throw new IllegalArgumentException("Type cannot be null or blank");
+        }
+        if (description == null || description.isBlank()) {
+            throw new IllegalArgumentException("Description cannot be null or blank");
+        }
+        
+        this.accountId = accountId;
         this.product = product;
         this.warehouse = warehouse;
         this.guideName = guideName;
         this.type = type;
         this.description = description;
+        this.imageUrl = new ImageUrl(imageUrl);
     }
     /**
      * Updates the care guide information with the provided values.
