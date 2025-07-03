@@ -23,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/v1", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Catalog")
+@Tag(name = "Catalog", description = "Catalog management endpoints")
 @CrossOrigin(origins = "http://localhost:4200")
 public class CatalogController {
 
