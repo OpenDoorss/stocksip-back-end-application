@@ -102,7 +102,7 @@ public class CatalogController {
         return ResponseEntity.ok(toResource(published));
     }
 
-    /* GET /api/v1/catalogs/published?providerEmail=camila@example.com */
+
     @GetMapping("/catalogs/published")
     public ResponseEntity<List<CatalogResource>> publishedByProviderEmail(
             @RequestParam String providerEmail) {
@@ -122,10 +122,6 @@ public class CatalogController {
         }
     }
 
-
-    /* ────────────────────────────────
-     * QUERIES – CATALOG ITEMS
-     * ──────────────────────────────── */
     @GetMapping("/catalogItems")
     @Operation(summary = "Get catalog items")
     public ResponseEntity<List<CatalogItemResource>> getCatalogItems(@RequestParam Long catalogId) {
@@ -134,9 +130,6 @@ public class CatalogController {
         return ResponseEntity.ok(items.stream().map(this::toResource).toList());
     }
 
-    /* ────────────────────────────────
-     * COMMANDS – CATALOG ITEMS
-     * ──────────────────────────────── */
     @PostMapping("/catalogItems")
     @Operation(summary = "Create catalog item")
     public ResponseEntity<CatalogItemResource> createCatalogItem(@RequestBody CatalogItemResource resource) {
