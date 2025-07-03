@@ -2,9 +2,8 @@ package com.stocksip.inventorymanagement.interfaces.rest;
 
 import com.stocksip.inventorymanagement.domain.model.aggregates.Warehouse;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteWarehouseCommand;
-import com.stocksip.inventorymanagement.domain.model.queries.GetAllWarehousesByProfileIdQuery;
+import com.stocksip.inventorymanagement.domain.model.queries.GetAllWarehousesByIdQuery;
 import com.stocksip.inventorymanagement.domain.model.queries.GetWarehouseByIdQuery;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ProfileId;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateWarehouseResource;
@@ -12,7 +11,6 @@ import com.stocksip.inventorymanagement.interfaces.rest.resources.UpdateWarehous
 import com.stocksip.inventorymanagement.interfaces.rest.resources.WarehouseResource;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.CreateWarehouseCommandFromResourceAssembler;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.UpdateWarehouseCommandFromResourceAssembler;
-import com.stocksip.inventorymanagement.interfaces.rest.transform.UploadImageCommandFromResource;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.WarehouseResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,7 +19,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +34,9 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RestController
 @RequestMapping(value = "api/v1/warehouses", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Warehouses", description = "Endpoints for managing warehouses.")
+@CrossOrigin(origins = "http://localhost:4200",
+        allowedHeaders = "*",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class WarehouseController {
 
     private final WarehouseCommandService warehouseCommandService;
@@ -73,8 +73,8 @@ public class WarehouseController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping
-    public ResponseEntity<WarehouseResource> createWarehouse(@RequestBody CreateWarehouseResource resource, @RequestHeader("X-Profile-Id") Long profileId) {
-        Optional<Warehouse> warehouse = warehouseCommandService.handle(CreateWarehouseCommandFromResourceAssembler.toCommandFromResource(resource, profileId));
+    public ResponseEntity<WarehouseResource> createWarehouse(@RequestBody CreateWarehouseResource resource) {
+        Optional<Warehouse> warehouse = warehouseCommandService.handle(CreateWarehouseCommandFromResourceAssembler.toCommandFromResource(resource));
 
         return warehouse.map(source ->
                         new ResponseEntity<>(WarehouseResourceFromEntityAssembler.toResourceFromEntity(source), CREATED))
@@ -82,8 +82,8 @@ public class WarehouseController {
     }
 
     /**
-     * Get a warehouse by its ID.
-     * @param warehouseId ID of the warehouse to retrieve
+     * Updates a warehouse by its ID.
+     * @param warehouseId ID of the warehouse to update
      * @param updateWarehouseResource The {@link UpdateWarehouseResource} containing the updated details of the warehouse
      * @return ResponseEntity containing the WarehouseResource or a not found response if the warehouse does not exist
      * @see WarehouseResource
@@ -94,11 +94,11 @@ public class WarehouseController {
             description = "Updates the details of an existing warehouse identified by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Warehouse updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Course not found - invalid warehouse ID or resource")
+            @ApiResponse(responseCode = "400", description = "Warehouse could not be updated - invalid warehouse ID or resource")
     })
     @PutMapping("/{warehouseId}")
-    public ResponseEntity<WarehouseResource> updateWarehouse(@PathVariable Long warehouseId, @RequestBody UpdateWarehouseResource updateWarehouseResource, @RequestHeader("X-Profile-Id") Long profileId) {
-        var updateWarehouseCommand = UpdateWarehouseCommandFromResourceAssembler.toCommandFromResource(warehouseId, updateWarehouseResource, profileId);
+    public ResponseEntity<WarehouseResource> updateWarehouse(@PathVariable Long warehouseId, @RequestBody UpdateWarehouseResource updateWarehouseResource) {
+        var updateWarehouseCommand = UpdateWarehouseCommandFromResourceAssembler.toCommandFromResource(warehouseId, updateWarehouseResource);
         var updatedWarehouse = warehouseCommandService.handle(updateWarehouseCommand);
         if (updatedWarehouse.isEmpty()) return ResponseEntity.badRequest().build();
         var updatedWarehouseEntity = updatedWarehouse.get();
@@ -118,7 +118,7 @@ public class WarehouseController {
             description = "Retrieves the details of a warehouse identified by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Warehouse found successfully"),
-            @ApiResponse(responseCode = "404", description = "Course not found - invalid warehouse ID")
+            @ApiResponse(responseCode = "404", description = "Warehouse not found - invalid warehouse ID")
     })
     @GetMapping("/{warehouseId}")
     public ResponseEntity<WarehouseResource> getWarehouseById(@PathVariable Long warehouseId) {
@@ -132,24 +132,23 @@ public class WarehouseController {
     }
 
     /**
-     * Get all warehouses associated with a specific profile ID.
-     * @param profileId ID of the profile to retrieve warehouses for
+     * Get all warehouses associated with a specific account ID.
      * @return ResponseEntity containing a list of WarehouseResources
      * @see WarehouseResource
      *
      * @since 1.0.0
      */
-    @Operation(summary = "Get all warehouses by profile ID",
+    @Operation(summary = "Get all warehouses by account ID",
         description = "Retrieves all warehouses associated with a specific profile ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Warehouses retrieved successfully"),
             @ApiResponse(responseCode = "400", description = "Bad request - invalid profile ID")
     })
     @GetMapping
-    public ResponseEntity<List<WarehouseResource>> getAllWarehouses(@RequestHeader("X-Profile-Id") Long profileId)
+    public ResponseEntity<List<WarehouseResource>> getAllWarehouses()
     {
-        var getAllWarehousesByProfileIdQuery = new GetAllWarehousesByProfileIdQuery(new ProfileId(profileId));
-        var warehouses = warehouseQueryService.handle(getAllWarehousesByProfileIdQuery);
+        var getAllWarehousesByIdQuery = new GetAllWarehousesByIdQuery();
+        var warehouses = warehouseQueryService.handle(getAllWarehousesByIdQuery);
         var warehouseResources = warehouses.stream().map(WarehouseResourceFromEntityAssembler::toResourceFromEntity).toList();
         return ResponseEntity.ok(warehouseResources);
     }

@@ -9,8 +9,13 @@ package com.stocksip.inventorymanagement.interfaces.rest.resources;
  *
  * @since 1.0.0
  */
-public record WarehouseResource(String name,
-                                String fullAddress,
+public record WarehouseResource(Long warehouseId,
+                                String name,
+                                String street,
+                                String city,
+                                String district,
+                                String postalCode,
+                                String country,
                                 Double maxTemperature,
                                 Double minTemperature,
                                 Double capacity,

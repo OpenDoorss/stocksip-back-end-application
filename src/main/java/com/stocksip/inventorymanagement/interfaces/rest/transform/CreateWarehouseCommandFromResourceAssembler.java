@@ -1,6 +1,8 @@
 package com.stocksip.inventorymanagement.interfaces.rest.transform;
 
+import com.cloudinary.provisioning.Account;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateWarehouseCommand;
+import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateWarehouseResource;
 
 /**
@@ -17,7 +19,7 @@ public class CreateWarehouseCommandFromResourceAssembler {
      * @param resource the CreateWarehouseResource to convert
      * @return CreateWarehouseCommand created from the resource
      */
-    public static CreateWarehouseCommand toCommandFromResource(CreateWarehouseResource resource, Long profileId) {
+    public static CreateWarehouseCommand toCommandFromResource(CreateWarehouseResource resource) {
 
         return new CreateWarehouseCommand(resource.name(),
                                           resource.street(),
@@ -29,7 +31,7 @@ public class CreateWarehouseCommandFromResourceAssembler {
                                           resource.minTemperature(),
                                           resource.capacity(),
                                           resource.imageUrl(),
-                                          profileId);
+                                          resource.accountId());
     }
 
 }

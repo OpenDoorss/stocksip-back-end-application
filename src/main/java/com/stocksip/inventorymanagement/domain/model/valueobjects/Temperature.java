@@ -1,3 +1,4 @@
+
 package com.stocksip.inventorymanagement.domain.model.valueobjects;
 
 import jakarta.persistence.Embeddable;
