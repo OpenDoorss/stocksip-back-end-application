@@ -9,7 +9,8 @@ package com.stocksip.paymentandsubscriptions.domain.model.commands;
  * @since 1.0.0
  */
 public record CreateAccountCommand(String email,
-                                   Long userId,
+                                   Long userOwnerId,
+
                                    String role,
 
                                     String plan,

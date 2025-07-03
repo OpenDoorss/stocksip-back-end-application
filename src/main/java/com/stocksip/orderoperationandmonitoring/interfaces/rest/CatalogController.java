@@ -10,6 +10,7 @@ import com.stocksip.orderoperationandmonitoring.domain.services.CatalogQueryServ
 import com.stocksip.orderoperationandmonitoring.interfaces.rest.resources.CatalogItemResource;
 import com.stocksip.orderoperationandmonitoring.interfaces.rest.resources.CatalogResource;
 import com.stocksip.orderoperationandmonitoring.interfaces.rest.transform.*;
+import io.micrometer.common.util.internal.logging.InternalLogger;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -100,6 +101,27 @@ public class CatalogController {
         var published = catalogCommandService.handle(new PublishCatalogCommand(id)).orElseThrow();
         return ResponseEntity.ok(toResource(published));
     }
+
+    /* GET /api/v1/catalogs/published?providerEmail=camila@example.com */
+    @GetMapping("/catalogs/published")
+    public ResponseEntity<List<CatalogResource>> publishedByProviderEmail(
+            @RequestParam String providerEmail) {
+
+        try {
+            List<Catalog> catalogs =
+                    catalogQueryService.getPublishedCatalogsByProviderEmail(providerEmail);
+
+            List<CatalogResource> resources = catalogs.stream()
+                    .map(CatalogResourceFromEntityAssembler::toResourceFromEntity)
+                    .toList();
+
+            return ResponseEntity.ok(resources);
+
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(List.of());
+        }
+    }
+
 
     /* ────────────────────────────────
      * QUERIES – CATALOG ITEMS
