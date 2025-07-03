@@ -49,7 +49,7 @@ public class Warehouse {
             @AttributeOverride(name = "minTemperature", column = @Column(nullable = false)),
             @AttributeOverride(name = "maxTemperature", column = @Column(nullable = false))
     })
-    private Temperature temperature;
+    private WarehouseTemperature temperature;
 
     /**
      * The total capacity of this warehouse in cubic meters.
@@ -58,7 +58,7 @@ public class Warehouse {
     @AttributeOverrides({
             @AttributeOverride(name = "capacity", column = @Column(nullable = false))
     })
-    private Capacity capacity;
+    private WarehouseCapacity capacity;
 
     /**
      * The url of the image that shows with the warehouse
