@@ -10,8 +10,7 @@ import com.stocksip.inventorymanagement.interfaces.rest.resources.CareGuideResou
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateCareGuideResource;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CreateCareGuideWithoutProductResource;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.CareGuideResourceFromEntityAssembler;
-import com.stocksip.inventorymanagement.application.internal.outboundservices.cloudinary.CloudinaryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.stocksip.inventorymanagement.application.internal.outboundservices.filestorage.FileStorageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,14 +32,14 @@ public class AccountCareGuideController {
 
     private final CareGuideCommandService careGuideCommandService;
     private final CareGuideQueryService careGuideQueryService;
-    private final CloudinaryService cloudinaryService;
+    private final FileStorageService fileStorageService;
     public AccountCareGuideController(
             CareGuideCommandService careGuideCommandService,
             CareGuideQueryService careGuideQueryService,
-            CloudinaryService cloudinaryService) {
+            FileStorageService fileStorageService) {
         this.careGuideCommandService = careGuideCommandService;
         this.careGuideQueryService = careGuideQueryService;
-        this.cloudinaryService = cloudinaryService;
+        this.fileStorageService = fileStorageService;
     }
 
     @GetMapping("/{careGuideId}")
@@ -147,7 +146,7 @@ public ResponseEntity<CareGuideResource> createCareGuide(
     if (resource.image() != null && !resource.image().isEmpty()) {
         try {
             // Upload image to Cloudinary
-            imageUrl = cloudinaryService.UploadImage(resource.image());
+            imageUrl = fileStorageService.UploadImage(resource.image());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new CareGuideResource(

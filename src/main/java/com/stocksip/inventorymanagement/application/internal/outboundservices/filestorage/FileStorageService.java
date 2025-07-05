@@ -1,4 +1,4 @@
-package com.stocksip.inventorymanagement.application.internal.outboundservices.cloudinary;
+package com.stocksip.inventorymanagement.application.internal.outboundservices.filestorage;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @since 1.0
  */
-public interface CloudinaryService {
+public interface FileStorageService {
 
       /**
      * Uploads an image to Cloudinary.

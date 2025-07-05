@@ -1,6 +1,6 @@
 package com.stocksip.inventorymanagement.application.internal.commandservices;
 
-import com.stocksip.inventorymanagement.application.internal.outboundservices.cloudinary.CloudinaryService;
+import com.stocksip.inventorymanagement.application.internal.outboundservices.filestorage.FileStorageService;
 import com.stocksip.inventorymanagement.domain.model.aggregates.Product;
 import com.stocksip.inventorymanagement.domain.model.commands.CreateProductCommand;
 import com.stocksip.inventorymanagement.domain.model.commands.DeleteProductCommand;
@@ -38,12 +38,12 @@ public class ProductCommandServiceImpl implements ProductCommandService {
      */
     private final InventoryRepository inventoryRepository;
 
-    private final CloudinaryService cloudinaryService;
+    private final FileStorageService fileStorageService;
 
-    public ProductCommandServiceImpl(ProductRepository productRepository, InventoryRepository inventoryRepository, CloudinaryService cloudinaryService) {
+    public ProductCommandServiceImpl(ProductRepository productRepository, InventoryRepository inventoryRepository, FileStorageService fileStorageService) {
         this.productRepository = productRepository;
         this.inventoryRepository = inventoryRepository;
-        this.cloudinaryService = cloudinaryService;
+        this.fileStorageService = fileStorageService;
     }
 
     /**
@@ -62,8 +62,8 @@ public class ProductCommandServiceImpl implements ProductCommandService {
         String imageUrl = currentImageUrl;
 
         if (command.image() != null && !command.image().isEmpty()) {
-            cloudinaryService.DeleteImage(currentImageUrl);
-            imageUrl = cloudinaryService.UploadImage(command.image());
+            fileStorageService.DeleteImage(currentImageUrl);
+            imageUrl = fileStorageService.UploadImage(command.image());
         }
 
         productToUpdate.updateInformation(command, imageUrl);
@@ -90,7 +90,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
             throw new IllegalArgumentException("Product will full name given already exists.");
         }
 
-        String imageUrl = command.image() != null ? cloudinaryService.UploadImage(command.image())
+        String imageUrl = command.image() != null ? fileStorageService.UploadImage(command.image())
                 : "https://res.cloudinary.com/deuy1pr9e/image/upload/v1751091989/default-product_ssjni6.jpg";
 
         System.out.println(command);
@@ -146,7 +146,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
 
                 productRepository.delete(productToDelete);
                 inventoryRepository.deleteAll(productToDelete.getInventories());
-                cloudinaryService.DeleteImage(imageUrl);
+                fileStorageService.DeleteImage(imageUrl);
             }
             else {
                 throw new IllegalArgumentException("Cannot delete product with ID %s because it has stock available in a warehouse.".formatted(command.productId()));
