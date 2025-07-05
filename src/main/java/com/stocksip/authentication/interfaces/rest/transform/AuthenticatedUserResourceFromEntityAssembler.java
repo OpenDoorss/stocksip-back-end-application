@@ -5,7 +5,7 @@ import com.stocksip.authentication.interfaces.rest.resources.AuthenticatedUserRe
 
 public class AuthenticatedUserResourceFromEntityAssembler {
 
-    public static AuthenticatedUserResource toResourceFromEntity(User user, String token) {
-        return new AuthenticatedUserResource(user.getUserId(), user.getUsername(), token);
+    public static AuthenticatedUserResource toResourceFromEntity(User user, String token, Long accountId) {
+        return new AuthenticatedUserResource(user.getUserId(), user.getUsername(), token, accountId);
     }
 }
