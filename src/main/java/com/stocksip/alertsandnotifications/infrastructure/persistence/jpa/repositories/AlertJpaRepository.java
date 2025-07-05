@@ -2,7 +2,7 @@ package com.stocksip.alertsandnotifications.infrastructure.persistence.jpa.repos
 
 import com.stocksip.alertsandnotifications.domain.model.aggregates.Alert;
 import com.stocksip.alertsandnotifications.domain.model.valueobjects.ProductId;
-import com.stocksip.alertsandnotifications.domain.model.valueobjects.ProfileId;
+import com.stocksip.alertsandnotifications.domain.model.valueobjects.AccountId;
 import com.stocksip.alertsandnotifications.domain.model.valueobjects.WarehouseId;
 import com.stocksip.alertsandnotifications.domain.repositories.AlertRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,13 +34,13 @@ public interface AlertJpaRepository extends JpaRepository<Alert, Long>, AlertRep
     List<Alert> findByProductId(@Param("productId") ProductId productId);
 
     /**
-     * This method retrieves all alerts associated with a specific profile ID.
+     * This method retrieves all alerts associated with a specific account ID.
      *
-     * @param profileId The ID of the profile whose alerts are to be retrieved.
+     * @param accountId The ID of the profile whose alerts are to be retrieved.
      * @return The list of alerts that belong to the specified profile ID.
      */
-    @Query("SELECT a FROM Alert a WHERE a.profileId = :profileId")
-    List<Alert> findByProfileId(@Param("profileId") ProfileId profileId);
+    @Query("SELECT a FROM Alert a WHERE a.accountId = :accountId")
+    List<Alert> findByAccountId(@Param("accountId") AccountId accountId);
 
     /**
      * This method retrieves all alerts associated with a specific warehouse ID.

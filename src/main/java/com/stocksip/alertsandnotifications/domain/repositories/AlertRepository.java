@@ -2,7 +2,7 @@ package com.stocksip.alertsandnotifications.domain.repositories;
 
 import com.stocksip.alertsandnotifications.domain.model.aggregates.Alert;
 import com.stocksip.alertsandnotifications.domain.model.valueobjects.ProductId;
-import com.stocksip.alertsandnotifications.domain.model.valueobjects.ProfileId;
+import com.stocksip.alertsandnotifications.domain.model.valueobjects.AccountId;
 import com.stocksip.alertsandnotifications.domain.model.valueobjects.WarehouseId;
 
 import java.util.List;
@@ -27,12 +27,12 @@ public interface AlertRepository {
     List<Alert> findByProductId(ProductId productId);
     
     /**
-     * This method retrieves all alerts associated with a specific profile ID.
+     * This method retrieves all alerts associated with a specific account ID.
      *
-     * @param profileId The profile ID to search for.
-     * @return A list of alerts associated with the specified profile ID.
+     * @param accountId The account ID to search for.
+     * @return A list of alerts associated with the specified account ID.
      */
-    List<Alert> findByProfileId(ProfileId profileId);
+    List<Alert> findByAccountId(AccountId accountId);
     
     /**
      * This method retrieves all alerts associated with a specific warehouse ID.

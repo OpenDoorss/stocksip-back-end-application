@@ -22,11 +22,11 @@ public interface IAlertsAndNotificationsContextFacade {
      * @param message    The message content of the alert.
      * @param severity   The severity level of the alert.
      * @param type       The type of the alert.
-     * @param profileId  The ID of the profile associated with the alert.
+     * @param accountId  El ID de la cuenta asociada con la alerta.
      * @param productId  The ID of the product associated with the alert.
      * @param warehouseId The ID of the warehouse associated with the alert.
      * @return The ID of the created alert, or an empty string if the alert could not be created.
      */
-    String createAlert(String title, String message, String severity, String type, String profileId,
+    String createAlert(String title, String message, String severity, String type, String accountId,
                       String productId, String warehouseId);
 } 

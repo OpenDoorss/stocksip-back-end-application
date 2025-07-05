@@ -2,6 +2,7 @@ package com.stocksip.alertsandnotifications.interfaces.rest.transform;
 
 import com.stocksip.alertsandnotifications.domain.model.commands.CreateAlertCommand;
 import com.stocksip.alertsandnotifications.interfaces.rest.resources.CreateAlertResource;
+import com.stocksip.alertsandnotifications.domain.model.valueobjects.AccountId;
 
 /**
  * This static class is responsible for transforming a CreateAlertResource into a CreateAlertCommand.
@@ -29,7 +30,7 @@ public final class CreateAlertCommandFromResourceAssembler {
                 resource.message(),
                 resource.severity(),
                 resource.type(),
-                resource.profileId(),
+                resource.accountId(),
                 resource.productId(),
                 resource.warehouseId()
         );
