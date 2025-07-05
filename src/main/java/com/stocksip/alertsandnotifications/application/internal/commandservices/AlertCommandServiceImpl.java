@@ -51,7 +51,7 @@ public class AlertCommandServiceImpl implements AlertCommandService {
      * This method handles the marking of an alert as read based on the provided command.
      *
      * @param command The command containing the ID of the alert to be marked as resolved.
-     * @return The updated alert object after marking it as resolved, or empty if the alert does not exist.
+     * @return The updated alert object after marking it as resolved or empty if the alert does not exist.
      * @throws IllegalArgumentException when the alert with the specified ID does not exist in the repository.
      */
     @Override

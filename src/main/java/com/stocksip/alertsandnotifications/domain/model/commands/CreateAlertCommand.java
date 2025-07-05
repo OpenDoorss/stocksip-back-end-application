@@ -1,7 +1,7 @@
 package com.stocksip.alertsandnotifications.domain.model.commands;
 
 import com.stocksip.alertsandnotifications.domain.model.valueobjects.ProductId;
-import com.stocksip.alertsandnotifications.domain.model.valueobjects.ProfileId;
+import com.stocksip.alertsandnotifications.domain.model.valueobjects.AccountId;
 import com.stocksip.alertsandnotifications.domain.model.valueobjects.WarehouseId;
 
 /**
@@ -15,7 +15,7 @@ import com.stocksip.alertsandnotifications.domain.model.valueobjects.WarehouseId
  * @param message    The message of the alert, providing detailed information about the alert.
  * @param severity   The severity of the alert, indicating its importance or urgency.
  * @param type       The type of the alert, categorizing it into a specific type.
- * @param profileId  The unique identifier of the profile associated with the alert.
+ * @param accountId  The unique identifier of the profile associated with the alert.
  * @param productId  The unique identifier of the product associated with the alert.
  * @param warehouseId The unique identifier of the warehouse associated with the alert.
  * @since 1.0
@@ -25,7 +25,7 @@ public record CreateAlertCommand(
         String message,
         String severity,
         String type,
-        ProfileId profileId,
+        AccountId accountId,
         ProductId productId,
         WarehouseId warehouseId) {
 
@@ -45,8 +45,8 @@ public record CreateAlertCommand(
         if (type == null || type.isBlank()) {
             throw new IllegalArgumentException("Type cannot be null or blank.");
         }
-        if (profileId == null) {
-            throw new IllegalArgumentException("ProfileId cannot be null.");
+        if (accountId == null) {
+            throw new IllegalArgumentException("AccountId cannot be null.");
         }
         if (productId == null) {
             throw new IllegalArgumentException("ProductId cannot be null.");

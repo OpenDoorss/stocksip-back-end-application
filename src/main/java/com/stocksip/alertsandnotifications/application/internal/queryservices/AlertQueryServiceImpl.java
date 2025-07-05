@@ -3,7 +3,7 @@ package com.stocksip.alertsandnotifications.application.internal.queryservices;
 import com.stocksip.alertsandnotifications.domain.model.aggregates.Alert;
 import com.stocksip.alertsandnotifications.domain.model.queries.GetAlertByIdQuery;
 import com.stocksip.alertsandnotifications.domain.model.queries.GetAllAlertsByProductIdQuery;
-import com.stocksip.alertsandnotifications.domain.model.queries.GetAllAlertsByProfileIdQuery;
+import com.stocksip.alertsandnotifications.domain.model.queries.GetAllAlertsByAccountIdQuery;
 import com.stocksip.alertsandnotifications.domain.model.queries.GetAllAlertsByWarehouseIdQuery;
 import com.stocksip.alertsandnotifications.domain.services.AlertQueryService;
 import com.stocksip.alertsandnotifications.infrastructure.persistence.jpa.repositories.AlertJpaRepository;
@@ -65,8 +65,8 @@ public class AlertQueryServiceImpl implements AlertQueryService {
      * @return A list of alerts associated with the specified profile ID.
      */
     @Override
-    public List<Alert> handle(GetAllAlertsByProfileIdQuery query) {
-        return alertRepository.findByProfileId(query.profileId());
+    public List<Alert> handle(GetAllAlertsByAccountIdQuery query) {
+        return alertRepository.findByAccountId(query.accountId());
     }
 
     /**

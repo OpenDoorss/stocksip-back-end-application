@@ -3,7 +3,7 @@ package com.stocksip.alertsandnotifications.domain.services;
 import com.stocksip.alertsandnotifications.domain.model.aggregates.Alert;
 import com.stocksip.alertsandnotifications.domain.model.queries.GetAlertByIdQuery;
 import com.stocksip.alertsandnotifications.domain.model.queries.GetAllAlertsByProductIdQuery;
-import com.stocksip.alertsandnotifications.domain.model.queries.GetAllAlertsByProfileIdQuery;
+import com.stocksip.alertsandnotifications.domain.model.queries.GetAllAlertsByAccountIdQuery;
 import com.stocksip.alertsandnotifications.domain.model.queries.GetAllAlertsByWarehouseIdQuery;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public interface AlertQueryService {
      * @param query The query containing the profile ID.
      * @return A list of alerts associated with the specified profile ID.
      */
-    List<Alert> handle(GetAllAlertsByProfileIdQuery query);
+    List<Alert> handle(GetAllAlertsByAccountIdQuery query);
 
     /**
      * Handles the retrieval of all alerts for a specific warehouse ID.

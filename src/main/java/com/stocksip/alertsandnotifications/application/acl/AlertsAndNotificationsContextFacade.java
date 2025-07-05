@@ -2,8 +2,8 @@ package com.stocksip.alertsandnotifications.application.acl;
 
 import com.stocksip.alertsandnotifications.domain.model.aggregates.Alert;
 import com.stocksip.alertsandnotifications.domain.model.commands.CreateAlertCommand;
+import com.stocksip.alertsandnotifications.domain.model.valueobjects.AccountId;
 import com.stocksip.alertsandnotifications.domain.model.valueobjects.ProductId;
-import com.stocksip.alertsandnotifications.domain.model.valueobjects.ProfileId;
 import com.stocksip.alertsandnotifications.domain.model.valueobjects.WarehouseId;
 import com.stocksip.alertsandnotifications.domain.services.AlertCommandService;
 import com.stocksip.alertsandnotifications.domain.services.AlertQueryService;
@@ -46,24 +46,24 @@ public class AlertsAndNotificationsContextFacade implements IAlertsAndNotificati
      * @param message    The message content of the alert.
      * @param severity   The severity level of the alert.
      * @param type       The type of the alert.
-     * @param profileId  The ID of the profile associated with the alert.
+     * @param accountId  The ID of the account associated with the alert.
      * @param productId  The ID of the product associated with the alert.
      * @param warehouseId The ID of the warehouse associated with the alert.
      * @return The ID of the created alert, or an empty string if the alert could not be created.
      */
-    public String createAlert(String title, String message, String severity, String type, String profileId,
+    public String createAlert(String title, String message, String severity, String type, String accountId,
                              String productId, String warehouseId) {
         
         var targetProductId = new ProductId(productId);
         var targetWarehouseId = new WarehouseId(warehouseId);
-        var targetProfileId = new ProfileId(profileId);
+        var targetAccountId = new AccountId(accountId);
         
         var createAlertCommand = new CreateAlertCommand(
                 title,
                 message,
                 severity,
                 type,
-                targetProfileId,
+                targetAccountId,
                 targetProductId,
                 targetWarehouseId
         );

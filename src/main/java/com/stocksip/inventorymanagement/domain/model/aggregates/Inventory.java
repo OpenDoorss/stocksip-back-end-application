@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
+import com.stocksip.inventorymanagement.domain.model.events.ProductProblemDetectedEvent;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductBestBeforeDate;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductState;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductStock;
@@ -19,7 +20,7 @@ import java.time.LocalDate;
  */
 @Entity
 @Getter
-public class Inventory {
+public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
 
     @Id
     @Getter
@@ -167,7 +168,18 @@ public class Inventory {
 
         // If the stock after reduction is below the minimum stock level, then an alert should be generated
         if (product.getMinimumStock().getMinimumStock() >= productStock.getStock() - stockToReduce) {
-            //TODO: Add event for generating a warning alert for product with low stock.
+            addDomainEvent( new ProductProblemDetectedEvent(
+                    this,
+                    "Product Stock Alert",
+                    String.format("The stock of product %s in warehouse %s is below the minimum threshold.", 
+                        product.getProductId(), warehouse.getWarehouseId()),
+                    "Warning",
+                    "ProductLowStock",
+                    warehouse.getAccountId().accountId().toString(),
+                    product.getProductId().toString(),
+                    warehouse.getWarehouseId().toString()
+                )
+            );
         }
 
         // Reduce the stock
