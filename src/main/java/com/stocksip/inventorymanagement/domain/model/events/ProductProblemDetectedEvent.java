@@ -1,7 +1,9 @@
 package com.stocksip.inventorymanagement.domain.model.events;
 
+import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
+@Getter
 public class ProductProblemDetectedEvent extends ApplicationEvent {
     private final String title;
     private final String message;
@@ -22,11 +24,4 @@ public class ProductProblemDetectedEvent extends ApplicationEvent {
         this.warehouseId = warehouseId;
     }
 
-    public String getTitle() { return title; }
-    public String getMessage() { return message; }
-    public String getSeverity() { return severity; }
-    public String getType() { return type; }
-    public String getAccountId() { return accountId; }
-    public String getProductId() { return productId; }
-    public String getWarehouseId() { return warehouseId; }
-} 
+}
