@@ -8,7 +8,6 @@ import com.stocksip.authentication.domain.model.commands.SignInCommand;
 import com.stocksip.authentication.domain.model.commands.SignUpCommand;
 import com.stocksip.authentication.domain.services.UserCommandService;
 import com.stocksip.authentication.infrastructure.persistence.jpa.repositories.UserRepository;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.springframework.stereotype.Service;
 
