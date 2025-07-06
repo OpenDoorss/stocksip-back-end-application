@@ -161,7 +161,7 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
             throw new IllegalArgumentException("Stock to reduce must be a positive number.");
         }
 
-        // If the product is currently in stock, change its state to OUT_OF_STOCK if stock becomes zero
+        // If the product is currently in stock, change its state to OUT_OF_STOCK if the stock becomes zero
         if (productStock.getStock() < stockToReduce) {
             throw new IllegalArgumentException("Insufficient stock to reduce the requested quantity.");
         }
@@ -190,5 +190,61 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
             setProductStateToOutOfStock();
             //TODO: Add event for generating a critical alert for product with empty stock.
         }
+    }
+
+    /**
+     * Checks if the product is approaching its expiration date and generates an alert if necessary.
+     * The alert severity is determined based on the number of days until expiration:
+     * - WARNING: 3 days or less (critical - immediate action required)
+     * - HIGH: 4-7 days (high priority - urgent attention needed)
+     * - MEDIUM: 8-14 days (moderate - plan action)
+     * - LOW: 15-30 days (low - informational)
+     *
+     * @return ProductProblemDetectedEvent if an alert should be generated, otherwise null
+     */
+    public ProductProblemDetectedEvent checkExpirationWarning() {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate bestBeforeDate = productBestBeforeDate.bestBeforeDate();
+        // Only check if the product has not expired yet
+        if (currentDate.isBefore(bestBeforeDate)) {
+            long daysUntilExpiration = currentDate.until(bestBeforeDate).getDays();
+            String severity = determineExpirationSeverity(daysUntilExpiration);
+            // Generate alert only if the product falls within a warning range
+            if (severity != null) {
+                return new ProductProblemDetectedEvent(
+                        this,
+                    "Product Expiration Warning",
+                    String.format("The product %s in warehouse %s expires in %d days.",
+                        product.getProductId(),
+                        warehouse.getWarehouseId(),
+                        daysUntilExpiration),
+                    severity,
+                    "EXPIRATION_WARNING",
+                    warehouse.getAccountId().accountId().toString(),
+                    product.getProductId().toString(),
+                    warehouse.getWarehouseId().toString()
+                );
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Determines the severity level of an expiration warning based on the number of days until expiration.
+     * 
+     * @param daysUntilExpiration The number of days until the product expires
+     * @return The severity level as a string, or null if no warning should be generated
+     */
+    private String determineExpirationSeverity(long daysUntilExpiration) {
+        if (daysUntilExpiration <= 3) {
+            return "WARNING";  // Critical - immediate action required
+        } else if (daysUntilExpiration <= 7) {
+            return "HIGH";     // High priority - urgent attention needed
+        } else if (daysUntilExpiration <= 14) {
+            return "MEDIUM";   // Moderate - plan action
+        } else if (daysUntilExpiration <= 30) {
+            return "LOW";      // Low - informational
+        }
+        return null; // No warning generated if outside the warning ranges
     }
 }

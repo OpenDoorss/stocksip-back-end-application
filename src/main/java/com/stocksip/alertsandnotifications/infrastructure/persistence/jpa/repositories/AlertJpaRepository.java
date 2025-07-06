@@ -50,4 +50,17 @@ public interface AlertJpaRepository extends JpaRepository<Alert, Long>, AlertRep
      */
     @Query("SELECT a FROM Alert a WHERE a.warehouseId = :warehouseId")
     List<Alert> findByWarehouseId(@Param("warehouseId") WarehouseId warehouseId);
+
+    /**
+     * Finds all active alerts of a given type for a specific product and warehouse.
+     *
+     * @param type The type of the alert (e.g., EXPIRATION_WARNING)
+     * @param productId The product ID
+     * @param warehouseId The warehouse ID
+     * @return A list of active alerts matching the criteria
+     */
+    @Query("SELECT a FROM Alert a WHERE a.type = :type AND a.productId = :productId AND a.warehouseId = :warehouseId AND a.state = com.stocksip.alertsandnotifications.domain.model.aggregates.Alert.AlertState.ACTIVE")
+    List<Alert> findActiveByTypeProductWarehouse(@Param("type") com.stocksip.alertsandnotifications.domain.model.aggregates.Alert.AlertTypes type,
+                                                 @Param("productId") com.stocksip.alertsandnotifications.domain.model.valueobjects.ProductId productId,
+                                                 @Param("warehouseId") com.stocksip.alertsandnotifications.domain.model.valueobjects.WarehouseId warehouseId);
 } 

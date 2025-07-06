@@ -42,6 +42,18 @@ public class AlertCommandServiceImpl implements AlertCommandService {
      */
     @Override
     public Optional<Alert> handle(CreateAlertCommand command) {
+        // If the alert is of type EXPIRATION_WARNING, resolve any existing active alerts for the same product and warehouse
+        if ("EXPIRATION_WARNING".equalsIgnoreCase(command.type())) {
+            var existingAlerts = alertRepository.findActiveByTypeProductWarehouse(
+                Alert.AlertTypes.EXPIRATION_WARNING,
+                command.productId(),
+                command.warehouseId()
+            );
+            for (Alert alert : existingAlerts) {
+                alert.read(); // Mark as read/resolved
+                alertRepository.save(alert);
+            }
+        }
         var alert = new Alert(command);
         var savedAlert = alertRepository.save(alert);
         return Optional.of(savedAlert);
