@@ -6,8 +6,8 @@ public record PurchaseOrderResource(
         Long id,
         String date,
         String status,
-        AccountResource buyer,
-        AccountResource supplier,
+        AccountResourceForOrders buyer,
+        AccountResourceForOrders supplier,
         List<OrderItemResource> items,
         Double totalAmount,
         Integer totalItems

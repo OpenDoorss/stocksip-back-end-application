@@ -4,7 +4,7 @@ import com.stocksip.orderoperationandmonitoring.domain.model.aggregates.Purchase
 import com.stocksip.orderoperationandmonitoring.domain.model.valueobjects.Buyer;
 import com.stocksip.orderoperationandmonitoring.domain.model.valueobjects.OrderItem;
 import com.stocksip.orderoperationandmonitoring.domain.model.valueobjects.Supplier;
-import com.stocksip.orderoperationandmonitoring.interfaces.rest.resources.AccountResource;
+import com.stocksip.orderoperationandmonitoring.interfaces.rest.resources.AccountResourceForOrders;
 import com.stocksip.orderoperationandmonitoring.interfaces.rest.resources.OrderItemResource;
 import com.stocksip.orderoperationandmonitoring.interfaces.rest.resources.PurchaseOrderResource;
 
@@ -23,13 +23,13 @@ public class PurchaseOrderResourceFromEntityAssembler {
         );
     }
 
-    private static AccountResource toAccount(Buyer b) {
-        return new AccountResource(
+    private static AccountResourceForOrders toAccount(Buyer b) {
+        return new AccountResourceForOrders(
                 b.accountId(), b.userOwnerId(), b.role(), b.businessName(), b.email()
         );
     }
-    private static AccountResource toAccount(Supplier s) {
-        return new AccountResource(
+    private static AccountResourceForOrders toAccount(Supplier s) {
+        return new AccountResourceForOrders(
                 s.accountId(), s.userOwnerId(), s.role(), s.businessName(), s.email()
         );
     }

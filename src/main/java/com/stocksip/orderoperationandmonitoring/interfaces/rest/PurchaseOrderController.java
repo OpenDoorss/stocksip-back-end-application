@@ -32,9 +32,6 @@ public class PurchaseOrderController {
         this.queryService = queryService;
     }
 
-    /* ────────────────────────────────
-     * COMMAND – CREATE ORDER
-     * ──────────────────────────────── */
     @PostMapping
     public ResponseEntity<PurchaseOrderResource> createOrder(@RequestBody CreateOrderResource resource) {
         CreateOrderCommand cmd = CreateOrderCommandFromResourceAssembler.toCommand(resource);
@@ -46,9 +43,6 @@ public class PurchaseOrderController {
         return ResponseEntity.created(location).body(resourceResp);
     }
 
-    /* ────────────────────────────────
-     * COMMAND – UPDATE STATUS
-     * ──────────────────────────────── */
     @PatchMapping("/{id}/status")
     @CrossOrigin(
             origins = "http://localhost:4200",
@@ -65,9 +59,6 @@ public class PurchaseOrderController {
 
     public record StatusUpdateRequest(String status) {}
 
-    /* ────────────────────────────────
-     * QUERY – GET ALL ORDERS
-     * ──────────────────────────────── */
     @GetMapping
     public ResponseEntity<List<PurchaseOrderResource>> getAllOrders() {
         List<PurchaseOrder> orders = queryService.findAll();
@@ -77,9 +68,6 @@ public class PurchaseOrderController {
         return ResponseEntity.ok(resources);
     }
 
-    /* ────────────────────────────────
-     * QUERY – GET BY BUYER
-     * ──────────────────────────────── */
     @GetMapping("/buyer/{buyerId}")
     public ResponseEntity<List<PurchaseOrderResource>> getOrdersByBuyer(@PathVariable Long buyerId) {
         List<PurchaseOrder> orders = queryService.findByBuyerAccountId(buyerId);
@@ -88,9 +76,6 @@ public class PurchaseOrderController {
                 .toList());
     }
 
-    /* ────────────────────────────────
-     * QUERY – GET BY SUPPLIER
-     * ──────────────────────────────── */
     @GetMapping("/supplier/{supplierId}")
     public ResponseEntity<List<PurchaseOrderResource>> getOrdersBySupplier(@PathVariable Long supplierId) {
         List<PurchaseOrder> orders = queryService.findBySupplierAccountId(supplierId);

@@ -6,8 +6,8 @@ import java.util.List;
 public record CreateOrderResource(
         LocalDateTime orderDate,
 
-        AccountResource      buyer,
-        AccountResource      supplier,
+        AccountResourceForOrders      buyer,
+        AccountResourceForOrders      supplier,
         List<OrderItemResource> items,
         Double               totalAmount,
         Integer              totalItems

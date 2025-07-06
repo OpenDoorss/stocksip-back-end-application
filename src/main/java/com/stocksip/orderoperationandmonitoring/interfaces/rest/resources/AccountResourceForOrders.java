@@ -1,6 +1,6 @@
 package com.stocksip.orderoperationandmonitoring.interfaces.rest.resources;
 
-public record AccountResource(
+public record AccountResourceForOrders(
         Long accountId,
         Long userOwnerId,
         String role,
