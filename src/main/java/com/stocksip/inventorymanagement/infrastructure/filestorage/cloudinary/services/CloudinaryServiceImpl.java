@@ -2,7 +2,7 @@ package com.stocksip.inventorymanagement.infrastructure.filestorage.cloudinary.s
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.stocksip.inventorymanagement.application.internal.outboundservices.cloudinary.CloudinaryService;
+import com.stocksip.inventorymanagement.application.internal.outboundservices.filestorage.FileStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,7 +21,7 @@ import java.util.*;
  * @since 1.0
  */
 @Service
-public class CloudinaryServiceImpl implements CloudinaryService {
+public class CloudinaryServiceImpl implements FileStorageService {
 
     private final Cloudinary cloudinary;
 

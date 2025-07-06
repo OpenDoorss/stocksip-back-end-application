@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Date;
  * @param bestBeforeDate The best before date of the product that indicates until when you have time before it lost its properties.
  * @param quantityToMove The quantity of product stock to be moved to another warehouse.
  */
-public record MoveProductToAnotherWarehouseCommand(Long productId, Long oldWarehouseId, Long newWarehouseId, Date bestBeforeDate, int quantityToMove) {
+public record MoveProductToAnotherWarehouseCommand(Long productId, Long oldWarehouseId, Long newWarehouseId, LocalDate bestBeforeDate, Integer quantityToMove) {
 
     /**
      * Validates the command.

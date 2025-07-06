@@ -13,7 +13,13 @@ import org.springframework.web.multipart.MultipartFile;
  * @param minimumStock The updated minimum stock of the product must be a non-negative integer.
  * @param image The updated image file for the product can be null if no image is provided.
  */
-public record UpdateProductCommand(Long productId, double unitPriceAmount, int minimumStock, MultipartFile image) {
+public record UpdateProductCommand(Long productId,
+                                   String name,
+                                   String brand,
+                                   String liquorType,
+                                   Double unitPriceAmount,
+                                   Integer minimumStock,
+                                   MultipartFile image) {
 
     /**
      * Validates the command.

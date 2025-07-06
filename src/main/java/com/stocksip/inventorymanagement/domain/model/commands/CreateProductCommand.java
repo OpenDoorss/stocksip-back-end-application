@@ -1,11 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
-import com.stocksip.inventorymanagement.domain.model.valueobjects.AccountId;
-import com.stocksip.inventorymanagement.domain.model.valueobjects.ProviderId;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Date;
-import java.util.Optional;
 
 /**
  * CreateProductCommand
@@ -15,10 +10,10 @@ import java.util.Optional;
  *
  * @since 1.0.0
  */
-public record CreateProductCommand(String additionalName,
+public record CreateProductCommand(String name,
                                    String liquorType,
                                    String brandName,
-                                   double unitPriceAmount,
-                                   int minimumStock,
+                                   Double unitPriceAmount,
+                                   Integer minimumStock,
                                    MultipartFile image,
                                    Long accountId) { }

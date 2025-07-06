@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.interfaces.rest.resources;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  * @since 1.0.0
  */
 public record DecreaseStockFromProductResource(
-        Date expirationDate,
-        int removedQuantity
+        LocalDate expirationDate,
+        Integer removedQuantity
 ) {
 }

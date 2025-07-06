@@ -9,7 +9,7 @@ import jakarta.persistence.Embeddable;
  * @param minimumStock The minimum stock of the product, must be a non-negative integer.
  */
 @Embeddable
-public record ProductMinimumStock(int minimumStock) {
+public record ProductMinimumStock(Integer minimumStock) {
 
     /**
      * This constructor validates the input parameter to ensure that it is a non-negative integer.

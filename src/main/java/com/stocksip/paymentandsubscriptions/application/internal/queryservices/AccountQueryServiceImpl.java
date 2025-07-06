@@ -15,8 +15,9 @@ public class AccountQueryServiceImpl implements AccountQueryService {
     public AccountQueryServiceImpl(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
+
     @Override
-    public Optional<Account> handle(GetAccountByEmailQuery q) {
-        return accountRepository.findByEmail_Value(q.email());
+    public Optional<Account> handle(GetAccountByEmailQuery query) {
+        return Optional.empty();
     }
 }

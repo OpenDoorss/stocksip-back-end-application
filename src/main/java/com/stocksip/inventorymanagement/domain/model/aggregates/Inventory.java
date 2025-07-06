@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.aggregates;
 
+import com.stocksip.inventorymanagement.domain.model.events.ProductProblemDetectedEvent;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductBestBeforeDate;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductState;
 import com.stocksip.inventorymanagement.domain.model.valueobjects.ProductStock;
@@ -7,6 +8,8 @@ import com.stocksip.shared.domain.model.aggregates.AuditableAbstractAggregateRoo
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+
+import java.time.LocalDate;
 
 /**
  * Represents an inventory item in the inventory management system.
@@ -53,6 +56,7 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
      * The state of the product in this inventory item.
      * It indicates whether the product is currently in stock or out of stock.
      */
+    @Enumerated(EnumType.STRING)
     private ProductState productState;
 
     /**
@@ -74,12 +78,12 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
      * @param productStock The stock of the product in this inventory item.
      * @param productBestBeforeDate The best before date of the product in this inventory item.
      */
-    public Inventory(Product product, Warehouse warehouse, ProductStock productStock, ProductBestBeforeDate productBestBeforeDate) {
+    public Inventory(Product product, Warehouse warehouse, Integer productStock, LocalDate productBestBeforeDate) {
         this.product = product;
         this.warehouse = warehouse;
-        this.productStock = productStock;
-        this.productBestBeforeDate = productBestBeforeDate;
-        this.productState = ProductState.WITH_STOCK;
+        this.productStock = new ProductStock(productStock);
+        this.productBestBeforeDate = new ProductBestBeforeDate(productBestBeforeDate);
+        this.productState = ProductState.With_Stock;
     }
 
     /**
@@ -89,12 +93,12 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
      */
     private void setProductStateToOutOfStock() {
         // Ensure that the product is not already out of stock before changing its state
-        if (productState == ProductState.OUT_OF_STOCK) {
+        if (productState == ProductState.Out_Of_Stock) {
             throw new IllegalArgumentException("Product is already out of stock.");
         }
 
         // Change the product state to OUT_OF_STOCK
-        this.productState = ProductState.OUT_OF_STOCK;
+        this.productState = ProductState.Out_Of_Stock;
     }
 
     /**
@@ -104,12 +108,22 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
      */
     private void setProductStateToWithStock() {
         // Ensure that the product is not already in stock before changing its state
-        if (productState == ProductState.WITH_STOCK) {
+        if (productState == ProductState.With_Stock) {
             throw new IllegalArgumentException("Product is already in stock.");
         }
 
         // Change the product state to WITH_STOCK
-        this.productState = ProductState.WITH_STOCK;
+        this.productState = ProductState.With_Stock;
+    }
+
+    /**
+     * This method updates the best before date of the product in this inventory item.
+     * @param newBestBeforeDate - The new best before date to be set for the product.
+     */
+    public void updatedBestBeforeDate(LocalDate newBestBeforeDate) {
+
+        // Update the product's best before date
+        this.productBestBeforeDate = new ProductBestBeforeDate(newBestBeforeDate);
     }
 
     /**
@@ -118,19 +132,19 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
      *
      * @param stockToAdd The quantity of stock to be added to the product.
      */
-    public void addStockToProduct(int stockToAdd) {
+    public void addStockToProduct(Integer stockToAdd) {
         // Validate the stock to add
         if (stockToAdd <= 0) {
             throw new IllegalArgumentException("Stock to add must be a positive number.");
         }
 
-        // If the product is currently out of stock, change its state to WITH_STOCK
-        if (productStock.getStock() == 0) {
-            setProductStateToOutOfStock();
-        }
-
         // Update the product stock
         this.productStock = this.productStock.addStock(stockToAdd);
+
+        // If the product is currently out of stock, change its state to WITH_STOCK
+        if (productStock.getStock() > 0) {
+            setProductStateToWithStock();
+        }
     }
 
     /**
@@ -141,7 +155,7 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
      *
      * @param stockToReduce The quantity of stock to be reduced from the product.
      */
-    public void reduceStockFromProduct(int stockToReduce) {
+    public void reduceStockFromProduct(Integer stockToReduce) {
         // Validate the stock to reduce
         if (stockToReduce <= 0) {
             throw new IllegalArgumentException("Stock to reduce must be a positive number.");
@@ -154,8 +168,18 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
 
         // If the stock after reduction is below the minimum stock level, then an alert should be generated
         if (product.getMinimumStock().getMinimumStock() >= productStock.getStock() - stockToReduce) {
-            //TODO: Add event for generating a warning alert for product with low stock.
-
+            addDomainEvent( new ProductProblemDetectedEvent(
+                    this,
+                    "Product Stock Alert",
+                    String.format("The stock of product %s in warehouse %s is below the minimum threshold.", 
+                        product.getProductId(), warehouse.getWarehouseId()),
+                    "Warning",
+                    "ProductLowStock",
+                    warehouse.getAccountId().accountId().toString(),
+                    product.getProductId().toString(),
+                    warehouse.getWarehouseId().toString()
+                )
+            );
         }
 
         // Reduce the stock

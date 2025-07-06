@@ -1,0 +1,59 @@
+package com.stocksip.paymentandsubscriptions.interfaces.rest;
+
+import com.stocksip.paymentandsubscriptions.domain.model.aggregates.Account;
+import com.stocksip.paymentandsubscriptions.domain.services.AccountCommandService;
+import com.stocksip.paymentandsubscriptions.interfaces.rest.resources.AccountResource;
+import com.stocksip.paymentandsubscriptions.interfaces.rest.resources.CreateAccountResource;
+import com.stocksip.paymentandsubscriptions.interfaces.rest.transform.AccountResourceFromEntityAssembler;
+import com.stocksip.paymentandsubscriptions.interfaces.rest.transform.CreateAccountCommandFromResourceAssembler;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.CREATED;
+
+/**
+ * AccountsController
+ * <p>
+ *     This controller is responsible for handling account-related requests.
+ *     It exposes the following endpoint:
+ *     <ul>
+ *         <li>POST /api/v1/accounts/sign-up</li>
+ *     </ul>
+ * </p>
+ */
+@RestController
+@RequestMapping(value = "api/v1/accounts", produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Accounts", description = "Available Accounts Endpoints.")
+public class AccountsController {
+
+    private final AccountCommandService accountCommandService;
+
+    public AccountsController(AccountCommandService accountCommandService) {
+        this.accountCommandService = accountCommandService;
+    }
+
+    /* ────────────── CREATE ────────────── */
+    @Operation(summary = "Sign-up",
+            description = "Sign-up with the provided credentials.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Account created successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
+    @PostMapping("sign-up")
+    public ResponseEntity<AccountResource> createAccount(@RequestBody CreateAccountResource body) {
+
+        Optional<Account> account = accountCommandService.handle(
+                CreateAccountCommandFromResourceAssembler.toCommandFromResource(body));
+
+        return account
+                .map(a -> new ResponseEntity<>(AccountResourceFromEntityAssembler.toResourceFromEntity(a), CREATED))
+                .orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+}

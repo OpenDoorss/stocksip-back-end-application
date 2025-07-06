@@ -25,20 +25,8 @@ public class Account {
     )
     private UserOwnerId userOwnerId;
 
-    @Embedded
-    @AttributeOverride(
-            name = "value",
-            column = @Column(name = "role", nullable = false)
-    )
-    private Role role;
-
-    @Embedded
-    @AttributeOverride(
-            name = "value",
-            column = @Column(name = "email", nullable = false, unique = true)
-    )
-    private GeneralEmail email;
-
+    @Enumerated(EnumType.STRING)
+    private AccountRole accountRole;
 
     @Embedded
     @AttributeOverride(
@@ -47,14 +35,22 @@ public class Account {
     )
     private BusinessName businessName;
 
+    @Enumerated(EnumType.STRING)
+    private AccountStatus status;
 
     protected Account() {}
 
-    public Account(CreateAccountCommand cmd) {
+    public Account(Long userOwnerId, String accountRole, String businessName) {
+        this.userOwnerId  = new UserOwnerId(userOwnerId);
+        this.accountRole  = AccountRole.valueOf(accountRole);
+        this.status       = AccountStatus.INACTIVE;
+        this.businessName = new BusinessName(businessName);
+    }
+
+    public Account(CreateAccountCommand command) {
         this.createdAt    = LocalDateTime.now();
-        this.userOwnerId = new UserOwnerId(cmd.userOwnerId());
-        this.role         = new Role(cmd.role());
-        this.email        = new GeneralEmail(cmd.email());
-        this.businessName = new BusinessName(cmd.businessName());
+        this.accountRole  = AccountRole.valueOf(command.accountRole());
+        this.status       = AccountStatus.INACTIVE;
+        this.businessName = new BusinessName(command.businessName());
     }
 }

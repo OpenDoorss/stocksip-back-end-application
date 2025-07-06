@@ -17,6 +17,9 @@ public class UpdateProductCommandFromResourceAssembler {
     public static UpdateProductCommand toCommandFromResource(UpdateProductResource resource, Long productId) {
         return new UpdateProductCommand(
                 productId,
+                resource.name(),
+                resource.brand(),
+                resource.liquorType(),
                 resource.updatedUnitPriceAmount(),
                 resource.updatedMinimumStock(),
                 resource.updatedImage()

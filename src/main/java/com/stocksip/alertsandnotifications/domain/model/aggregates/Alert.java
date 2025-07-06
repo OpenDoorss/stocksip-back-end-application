@@ -2,7 +2,7 @@ package com.stocksip.alertsandnotifications.domain.model.aggregates;
 
 import com.stocksip.alertsandnotifications.domain.model.commands.CreateAlertCommand;
 import com.stocksip.alertsandnotifications.domain.model.valueobjects.ProductId;
-import com.stocksip.alertsandnotifications.domain.model.valueobjects.ProfileId;
+import com.stocksip.alertsandnotifications.domain.model.valueobjects.AccountId;
 import com.stocksip.alertsandnotifications.domain.model.valueobjects.WarehouseId;
 import com.stocksip.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;
@@ -74,14 +74,14 @@ public class Alert extends AuditableAbstractAggregateRoot<Alert> {
     private AlertState state = AlertState.ACTIVE;
     
     /**
-     * The unique identifier of the profile associated with the alert.
+     * The unique identifier of the account associated with the alert.
      */
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "profileId", column = @Column(name = "profile_id", nullable = false))
+            @AttributeOverride(name = "accountId", column = @Column(name = "account_id", nullable = false))
     })
     @Getter
-    private ProfileId profileId;
+    private AccountId accountId;
     
     /**
      * The unique identifier of the product associated with the alert.
@@ -113,20 +113,19 @@ public class Alert extends AuditableAbstractAggregateRoot<Alert> {
      * @param message    The message of the alert.
      * @param severity   The severity of the alert.
      * @param type       The type of the alert.
-     * @param profileId  The unique identifier of the profile associated with the alert.
+     * @param accountId  The unique identifier of the account associated with the alert.
      * @param productId  The unique identifier of the product associated with the alert.
      * @param warehouseId The unique identifier of the warehouse associated with the alert.
      */
     public Alert(String title, String message, String severity, String type,
-                 ProfileId profileId, ProductId productId, WarehouseId warehouseId) {
+                 AccountId accountId, ProductId productId, WarehouseId warehouseId) {
         this.title = title;
         this.message = message;
         this.severity = SeverityTypes.valueOf(severity.toUpperCase());
         this.type = AlertTypes.valueOf(type.toUpperCase());
-        this.profileId = profileId;
+        this.accountId = accountId;
         this.productId = productId;
         this.warehouseId = warehouseId;
-        this.state = AlertState.ACTIVE;
     }
 
     /**
@@ -136,7 +135,7 @@ public class Alert extends AuditableAbstractAggregateRoot<Alert> {
      */
     public Alert(CreateAlertCommand command) {
         this(command.title(), command.message(), command.severity(), command.type(),
-             command.profileId(), command.productId(), command.warehouseId());
+             command.accountId(), command.productId(), command.warehouseId());
     }
     
     /**

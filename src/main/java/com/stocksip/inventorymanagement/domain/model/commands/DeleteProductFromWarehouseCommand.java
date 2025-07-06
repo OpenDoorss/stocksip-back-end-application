@@ -1,5 +1,6 @@
 package com.stocksip.inventorymanagement.domain.model.commands;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Date;
  * @param warehouseId
  * @param bestBeforeDate
  */
-public record DeleteProductFromWarehouseCommand(Long productId, Long warehouseId, Date bestBeforeDate) {
+public record DeleteProductFromWarehouseCommand(Long productId, Long warehouseId, LocalDate bestBeforeDate) {
 
     public DeleteProductFromWarehouseCommand {
         if (productId == null) {
@@ -21,7 +22,7 @@ public record DeleteProductFromWarehouseCommand(Long productId, Long warehouseId
         if (warehouseId == null) {
             throw new IllegalArgumentException("Warehouse ID cannot be null.");
         }
-        if (bestBeforeDate == null || bestBeforeDate.before(new Date()) ) {
+        if (bestBeforeDate == null) {
             throw new IllegalArgumentException("BestBeforeDate cannot be null or a past date.");
         }
     }

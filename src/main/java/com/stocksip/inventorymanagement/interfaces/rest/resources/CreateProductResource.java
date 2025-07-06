@@ -11,11 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
  * @since 1.0.0
  */
 public record CreateProductResource(
-        String additionalName,
+        String name,
         String liquorType,
         String brandName,
-        double unitPriceAmount,
-        int minimumStock,
+        Double unitPriceAmount,
+        Integer minimumStock,
         MultipartFile image
 
 ) {

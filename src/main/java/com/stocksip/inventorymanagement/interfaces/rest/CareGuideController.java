@@ -7,7 +7,7 @@ import com.stocksip.inventorymanagement.domain.services.CareGuideCommandService;
 import com.stocksip.inventorymanagement.domain.services.CareGuideQueryService;
 import com.stocksip.inventorymanagement.domain.services.WarehouseCommandService;
 import com.stocksip.inventorymanagement.domain.services.WarehouseQueryService;
-import com.stocksip.inventorymanagement.application.internal.outboundservices.cloudinary.CloudinaryService;
+import com.stocksip.inventorymanagement.application.internal.outboundservices.filestorage.FileStorageService;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.CareGuideResource;
 import com.stocksip.inventorymanagement.interfaces.rest.resources.UpdateCareGuideResource;
 import com.stocksip.inventorymanagement.interfaces.rest.transform.CareGuideResourceFromEntityAssembler;
@@ -36,17 +36,17 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CareGuideController {
     private final WarehouseCommandService warehouseCommandService;
     private final WarehouseQueryService warehouseQueryService;
-    private final CloudinaryService cloudinaryService;
+    private final FileStorageService fileStorageService;
     private final CareGuideCommandService careGuideCommandService;
     private final CareGuideQueryService careGuideQueryService;
     @Autowired
     public CareGuideController(WarehouseCommandService warehouseCommandService, 
                              WarehouseQueryService warehouseQueryService,
-                             CloudinaryService cloudinaryService,
+                             FileStorageService fileStorageService,
                              CareGuideCommandService careGuideCommandService, CareGuideQueryService careGuideQueryService) {
         this.warehouseCommandService = warehouseCommandService;
         this.warehouseQueryService = warehouseQueryService;
-        this.cloudinaryService = cloudinaryService;
+        this.fileStorageService = fileStorageService;
         this.careGuideCommandService = careGuideCommandService;
         this.careGuideQueryService = careGuideQueryService;
     }
@@ -79,7 +79,7 @@ public class CareGuideController {
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
                 // Upload image to Cloudinary
-                imageUrl = cloudinaryService.UploadImage(imageFile);
+                imageUrl = fileStorageService.UploadImage(imageFile);
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new CareGuideResource(

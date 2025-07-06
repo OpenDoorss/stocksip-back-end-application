@@ -7,10 +7,10 @@ import lombok.Getter;
  * Represents the stock of a product in the inventory management system.
  * This value object encapsulates the stock quantity and provides methods to manipulate it.
  *
- * @param stock The stock of the product, must be a non-negative integer.
+ * @param stock The stock of the product must be a non-negative integer.
  */
 @Embeddable
-public record ProductStock(int stock) {
+public record ProductStock(Integer stock) {
 
     /**
      * This constructor validates the input parameter to ensure that it is a non-negative integer.
@@ -22,6 +22,7 @@ public record ProductStock(int stock) {
         if (!(isStockValidate(stock))) {
             throw new IllegalArgumentException("Stock must be a non-negative integer.");
         }
+
     }
 
     /**
@@ -30,8 +31,8 @@ public record ProductStock(int stock) {
      * @param stock The stock of the product.
      * @return true if the stock is a positive integer number, false otherwise.
      */
-    private static boolean isStockValidate(int stock) {
-        return !(stock <= 0);
+    private static boolean isStockValidate(Integer stock) {
+        return !(stock < 0);
     }
 
     /**
@@ -39,7 +40,7 @@ public record ProductStock(int stock) {
      * @param addedStock The amount of stock to be added to the current stock.
      * @return A new instance of ProductStock with the updated stock.
      */
-    public ProductStock addStock(int addedStock) {
+    public ProductStock addStock(Integer addedStock) {
         if (!(isStockValidate(addedStock))) {
             throw new IllegalArgumentException("Added stock must be a positive integer.");
         }
@@ -51,12 +52,12 @@ public record ProductStock(int stock) {
      * @param subtractedStock The amount of stock to be subtracted from the current stock.
      * @return A new instance of ProductStock with the updated stock.
      */
-    public ProductStock subtractStock(int subtractedStock) {
-        if (!(isStockValidate(subtractedStock))) {
-            throw new IllegalArgumentException("Subtracted stock must be a non-negative integer.");
+    public ProductStock subtractStock(Integer subtractedStock) {
+        if (subtractedStock <= 0) {
+            throw new IllegalArgumentException("Subtracted stock must be a positive integer.");
         }
-        if (this.stock - subtractedStock < 0) {
-            throw new IllegalArgumentException("Subtracted stock cannot exceed current stock.");
+        if (this.stock < subtractedStock) {
+            throw new IllegalArgumentException("Subtracted to decrease by the specified quantity.");
         }
         return new ProductStock(this.stock - subtractedStock);
     }
