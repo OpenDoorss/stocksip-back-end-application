@@ -211,11 +211,11 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
             String severity = determineExpirationSeverity(daysUntilExpiration);
             // Generate alert only if the product falls within a warning range
             if (severity != null) {
-                ProductProblemDetectedEvent event = new ProductProblemDetectedEvent(
-                    this,
+                return new ProductProblemDetectedEvent(
+                        this,
                     "Product Expiration Warning",
-                    String.format("The product %s in warehouse %s expires in %d days.", 
-                        product.getProductId(), 
+                    String.format("The product %s in warehouse %s expires in %d days.",
+                        product.getProductId(),
                         warehouse.getWarehouseId(),
                         daysUntilExpiration),
                     severity,
@@ -224,7 +224,6 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
                     product.getProductId().toString(),
                     warehouse.getWarehouseId().toString()
                 );
-                return event;
             }
         }
         return null;
@@ -239,11 +238,11 @@ public class Inventory extends AuditableAbstractAggregateRoot<Inventory> {
     private String determineExpirationSeverity(long daysUntilExpiration) {
         if (daysUntilExpiration <= 3) {
             return "WARNING";  // Critical - immediate action required
-        } else if (daysUntilExpiration >= 4 && daysUntilExpiration <= 7) {
+        } else if (daysUntilExpiration <= 7) {
             return "HIGH";     // High priority - urgent attention needed
-        } else if (daysUntilExpiration >= 8 && daysUntilExpiration <= 14) {
+        } else if (daysUntilExpiration <= 14) {
             return "MEDIUM";   // Moderate - plan action
-        } else if (daysUntilExpiration >= 15 && daysUntilExpiration <= 30) {
+        } else if (daysUntilExpiration <= 30) {
             return "LOW";      // Low - informational
         }
         return null; // No warning generated if outside the warning ranges
