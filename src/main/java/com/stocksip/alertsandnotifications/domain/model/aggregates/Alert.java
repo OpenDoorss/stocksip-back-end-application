@@ -149,14 +149,14 @@ public class Alert extends AuditableAbstractAggregateRoot<Alert> {
      * Enum for alert severity types.
      */
     public enum SeverityTypes {
-        LOW, MEDIUM, HIGH, CRITICAL
+        LOW, MEDIUM, HIGH, WARNING
     }
 
     /**
      * Enum for alert types.
      */
     public enum AlertTypes {
-        STOCK_LOW, EXPIRATION_WARNING, SYSTEM_ALERT, MAINTENANCE
+        PRODUCTLOWSTOCK, EXPIRATION_WARNING, SYSTEM_ALERT, MAINTENANCE
     }
 
     /**

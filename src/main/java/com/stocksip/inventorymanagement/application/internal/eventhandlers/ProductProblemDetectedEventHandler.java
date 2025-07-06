@@ -35,14 +35,32 @@ public class ProductProblemDetectedEventHandler {
      */
     @EventListener
     public void handle(ProductProblemDetectedEvent event) {
-        alertsAndNotificationsService.createAlert(
-            event.getTitle(),
-            event.getMessage(),
-            event.getSeverity(),
-            event.getType(),
-            event.getAccountId(),
-            event.getProductId(),
-            event.getWarehouseId()
-        );
+        System.out.println("=== PRODUCT PROBLEM EVENT HANDLER STARTED ===");
+        System.out.println("Event received:");
+        System.out.println("  - Title: " + event.getTitle());
+        System.out.println("  - Message: " + event.getMessage());
+        System.out.println("  - Severity: " + event.getSeverity());
+        System.out.println("  - Type: " + event.getType());
+        System.out.println("  - AccountId: " + event.getAccountId());
+        System.out.println("  - ProductId: " + event.getProductId());
+        System.out.println("  - WarehouseId: " + event.getWarehouseId());
+        
+        try {
+            alertsAndNotificationsService.createAlert(
+                event.getTitle(),
+                event.getMessage(),
+                event.getSeverity(),
+                event.getType(),
+                event.getAccountId(),
+                event.getProductId(),
+                event.getWarehouseId()
+            );
+            System.out.println("  - Alert created successfully via ExternalAlertsAndNotificationsService");
+        } catch (Exception e) {
+            System.out.println("  - ERROR creating alert: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        System.out.println("=== PRODUCT PROBLEM EVENT HANDLER COMPLETED ===");
     }
 } 
