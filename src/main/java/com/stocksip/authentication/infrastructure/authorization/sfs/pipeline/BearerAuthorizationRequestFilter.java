@@ -45,14 +45,26 @@ public class BearerAuthorizationRequestFilter extends OncePerRequestFilter {
      * @param filterChain The filter chain object.
      */
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain)
+            throws ServletException, IOException {
+
+        String path = request.getServletPath();
+
+        if (isPublicEndpoint(path)) {
+            filterChain.doFilter(request, response);  // 🔓 deja pasar sin validar token
+            return;
+        }
+
         try {
             String token = tokenService.getBearerTokenFrom(request);
             LOGGER.info("Token: {}", token);
             if (token != null && tokenService.validateToken(token)) {
                 String username = tokenService.getUsernameFromToken(token);
                 var userDetails = userDetailsService.loadUserByUsername(username);
-                SecurityContextHolder.getContext().setAuthentication(UsernamePasswordAuthenticationTokenBuilder.build(userDetails, request));
+                SecurityContextHolder.getContext().setAuthentication(
+                        UsernamePasswordAuthenticationTokenBuilder.build(userDetails, request));
             } else {
                 LOGGER.info("Token is not valid");
             }
@@ -60,6 +72,14 @@ public class BearerAuthorizationRequestFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             LOGGER.error("Cannot set user authentication: {}", e.getMessage());
         }
+
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isPublicEndpoint(String path) {
+        return path.equals("/api/v1/accounts/sign-up")
+                || path.equals("/api/v1/accounts/login")
+                || path.startsWith("/swagger-ui")
+                || path.startsWith("/v3/api-docs");
     }
 }
