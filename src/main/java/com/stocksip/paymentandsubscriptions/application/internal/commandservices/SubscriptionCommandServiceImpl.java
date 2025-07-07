@@ -4,7 +4,9 @@ import com.stocksip.paymentandsubscriptions.application.internal.outboundservice
 import com.stocksip.paymentandsubscriptions.domain.model.aggregates.Account;
 import com.stocksip.paymentandsubscriptions.domain.model.aggregates.Subscription;
 import com.stocksip.paymentandsubscriptions.domain.model.commands.CompleteSubscriptionCommand;
+import com.stocksip.paymentandsubscriptions.domain.model.commands.CompleteUpgradeCommand;
 import com.stocksip.paymentandsubscriptions.domain.model.commands.SubscribeToPlanCommand;
+import com.stocksip.paymentandsubscriptions.domain.model.commands.UpgradeSubscriptionCommand;
 import com.stocksip.paymentandsubscriptions.domain.model.entities.Plan;
 import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.PlanType;
 import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.SubscriptionStatus;
@@ -86,5 +88,32 @@ public class SubscriptionCommandServiceImpl implements SubscriptionCommandServic
 
         subscriptionRepository.save(subscription);
         accountRepository.save(account);
+    }
+
+    @Override
+    public Optional<String> handle(UpgradeSubscriptionCommand command) {
+        Account account = accountRepository.findById(command.accountId())
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        Plan upgradePlan = planRepository.findById(command.planId())
+                .orElseThrow(() -> new RuntimeException("Upgrade plan not found"));
+
+        if (upgradePlan.getPlanType() == PlanType.Free) {
+            throw new RuntimeException("Cannot upgrade to a free plan");
+        }
+
+        String approvalUrl = paymentService.createOrder(
+                upgradePlan.getPlanType().toString(),
+                upgradePlan.getPrice().amount(),
+                frontendProperties.getBaseUrl() + "/payments-upgrade-success?accountId=" + command.accountId() + "&planId=" + command.planId(),
+                frontendProperties.getBaseUrl() + "/payments-cancel"
+        );
+
+        return Optional.ofNullable(approvalUrl);
+    }
+
+    @Override
+    public void handle(CompleteUpgradeCommand command) {
+
     }
 }
