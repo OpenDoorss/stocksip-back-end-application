@@ -3,7 +3,6 @@ package com.stocksip;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Stocksip Back End Application - Stocksip Platform
@@ -16,7 +15,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @since 1.0
  */
 @EnableJpaAuditing
-@EnableScheduling
 @SpringBootApplication
 public class StocksipBackEndApplication {
 
