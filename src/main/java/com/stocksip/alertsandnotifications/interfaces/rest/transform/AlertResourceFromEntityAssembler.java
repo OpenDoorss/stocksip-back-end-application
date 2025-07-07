@@ -31,6 +31,7 @@ public final class AlertResourceFromEntityAssembler {
                 entity.getSeverity().name(),
                 entity.getType().name(),
                 entity.getProductId().productId(),
-                entity.getWarehouseId().warehouseId());
+                entity.getWarehouseId().warehouseId(),
+                entity.getState().name());
     }
 } 
