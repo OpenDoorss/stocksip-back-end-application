@@ -8,6 +8,7 @@ import com.stocksip.orderoperationandmonitoring.domain.services.CatalogQueryServ
 import com.stocksip.orderoperationandmonitoring.infrastructure.clients.AccountClient;
 import com.stocksip.orderoperationandmonitoring.infrastructure.persistence.jpa.repositories.CatalogItemRepository;
 import com.stocksip.orderoperationandmonitoring.infrastructure.persistence.jpa.repositories.CatalogRepository;
+import com.stocksip.paymentandsubscriptions.infrastructure.persistence.jpa.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,8 @@ import java.util.Optional;
 public class CatalogQueryServiceImpl implements CatalogQueryService {
 
     private final CatalogRepository     catalogRepo;
+    private final AccountRepository accountRepository;
+
     private final CatalogItemRepository itemRepo;
     private final AccountClient accountClient;
 
@@ -27,25 +30,18 @@ public class CatalogQueryServiceImpl implements CatalogQueryService {
      * ──────────────────────────────── */
 
     public List<Catalog> getPublishedCatalogsByProviderEmail(String email) {
-        var accountOpt = accountClient.getAccountByEmail(email);
+
+        var accountOpt = accountRepository.findByEmailAndRole(email, "Supplier");
+
         if (accountOpt.isEmpty()) {
-            System.out.println("No se encontró cuenta para el email: " + email);
-            throw new IllegalArgumentException("No se encontró cuenta");
+            throw new IllegalArgumentException("Proveedor inexistente o rol inválido");
         }
 
-        var account = accountOpt.get();
-        System.out.println("Cuenta encontrada: " + account.getAccountId() + ", rol: " + account.getRole());
+        var supplier = accountOpt.get();
 
-        if (!"Supplier".equals(account.getRole())) {
-            System.out.println("El rol no es Supplier");
-            throw new IllegalArgumentException("No es proveedor");
-        }
-
-        Long supplierId = account.getAccountId();
-        return catalogRepo.findByAccountIdAndIsPublishedTrue(new AccountId(supplierId));
+        return catalogRepo.findByAccountIdAndIsPublishedTrue(
+                new AccountId(supplier.getAccountId()));
     }
-
-
 
     @Override
     public List<Catalog> handle(GetCatalogsByAccountQuery q) {

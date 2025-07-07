@@ -3,6 +3,7 @@ package com.stocksip.paymentandsubscriptions.interfaces.rest;
 import com.stocksip.paymentandsubscriptions.domain.model.aggregates.Account;
 import com.stocksip.paymentandsubscriptions.domain.services.AccountCommandService;
 import com.stocksip.paymentandsubscriptions.domain.services.AccountQueryService;
+import com.stocksip.paymentandsubscriptions.infrastructure.persistence.jpa.AccountRepository;
 import com.stocksip.paymentandsubscriptions.interfaces.rest.resources.AccountResource;
 import com.stocksip.paymentandsubscriptions.interfaces.rest.resources.CreateAccountResource;
 import com.stocksip.paymentandsubscriptions.interfaces.rest.transform.AccountResourceFromEntityAssembler;
@@ -35,9 +36,12 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class AccountsController {
 
     private final AccountCommandService accountCommandService;
+    private final AccountRepository accountRepository;
 
-    public AccountsController(AccountCommandService accountCommandService) {
+    public AccountsController(AccountCommandService accountCommandService,
+                              AccountRepository accountRepository)  {
         this.accountCommandService = accountCommandService;
+        this.accountRepository = accountRepository;
     }
 
     /* ────────────── CREATE ────────────── */
@@ -73,6 +77,15 @@ public class AccountsController {
         return accountOpt
                 .map(AccountResourceFromEntityAssembler::toResourceFromEntity)
                 .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/by-email")
+    public ResponseEntity<AccountResource> getByEmail(@RequestParam String email) {
+
+        return accountRepository.findByEmailAndRole(email, "Supplier")
+                .map(a -> ResponseEntity.ok(
+                        AccountResourceFromEntityAssembler.toResourceFromEntity(a)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
