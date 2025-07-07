@@ -1,8 +1,11 @@
 package com.stocksip.paymentandsubscriptions.interfaces.rest;
 
 import com.stocksip.paymentandsubscriptions.domain.model.aggregates.Account;
+import com.stocksip.paymentandsubscriptions.domain.model.queries.GetAccountStatusByIdQuery;
 import com.stocksip.paymentandsubscriptions.domain.services.AccountCommandService;
+import com.stocksip.paymentandsubscriptions.domain.services.AccountQueryService;
 import com.stocksip.paymentandsubscriptions.interfaces.rest.resources.AccountResource;
+import com.stocksip.paymentandsubscriptions.interfaces.rest.resources.AccountStatusResource;
 import com.stocksip.paymentandsubscriptions.interfaces.rest.resources.CreateAccountResource;
 import com.stocksip.paymentandsubscriptions.interfaces.rest.transform.AccountResourceFromEntityAssembler;
 import com.stocksip.paymentandsubscriptions.interfaces.rest.transform.CreateAccountCommandFromResourceAssembler;
@@ -34,9 +37,11 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class AccountsController {
 
     private final AccountCommandService accountCommandService;
+    private final AccountQueryService accountQueryService;
 
-    public AccountsController(AccountCommandService accountCommandService) {
+    public AccountsController(AccountCommandService accountCommandService, AccountQueryService accountQueryService) {
         this.accountCommandService = accountCommandService;
+        this.accountQueryService = accountQueryService;
     }
 
     /* ────────────── CREATE ────────────── */
@@ -55,5 +60,12 @@ public class AccountsController {
         return account
                 .map(a -> new ResponseEntity<>(AccountResourceFromEntityAssembler.toResourceFromEntity(a), CREATED))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    @GetMapping("{accountId}/status")
+    public ResponseEntity<AccountStatusResource> getAccountStatus(@PathVariable Long accountId) {
+        Optional<String> statusOpt = accountQueryService.handle(new GetAccountStatusByIdQuery(accountId));
+        if (statusOpt.isEmpty()) {return ResponseEntity.notFound().build();}
+        return ResponseEntity.ok(new AccountStatusResource(statusOpt.get()));
     }
 }
