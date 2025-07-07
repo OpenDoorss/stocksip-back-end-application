@@ -54,6 +54,10 @@ public class Subscription {
         }
     }
 
+    public void markAsCompleted() {
+        this.subscriptionStatus = SubscriptionStatus.COMPLETED;
+    }
+
     public void upgradePlan(Plan newPlan) {
         if (newPlan == null) throw new IllegalArgumentException("Plan cannot be null");
         if (plan.getPlanId().equals(newPlan.getPlanId())) throw new IllegalStateException("Already on this plan");
