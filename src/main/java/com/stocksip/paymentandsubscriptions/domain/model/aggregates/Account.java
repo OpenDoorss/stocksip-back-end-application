@@ -53,4 +53,12 @@ public class Account {
         this.status       = AccountStatus.INACTIVE;
         this.businessName = new BusinessName(command.businessName());
     }
+
+    public void activateAccount() {
+        this.status = AccountStatus.ACTIVE;
+    }
+
+    public String GetCreatedAt() {
+        return createdAt.toString();
+    }
 }
