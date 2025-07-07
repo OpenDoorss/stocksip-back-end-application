@@ -18,4 +18,7 @@ public interface AccountCommandService {
      * @param command The command containing the necessary information to create an account.
      */
     Optional<Account> handle(CreateAccountCommand command);
+
+    Optional<Account> getById(Long accountId);
+
 }

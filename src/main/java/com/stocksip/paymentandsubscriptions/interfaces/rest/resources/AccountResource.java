@@ -5,5 +5,6 @@ public record AccountResource(
         String username,
         String password,
         String status,
-        String businessName
+        String businessName,
+        String role
 ) {}

@@ -2,6 +2,7 @@ package com.stocksip.paymentandsubscriptions.interfaces.rest;
 
 import com.stocksip.paymentandsubscriptions.domain.model.aggregates.Account;
 import com.stocksip.paymentandsubscriptions.domain.services.AccountCommandService;
+import com.stocksip.paymentandsubscriptions.domain.services.AccountQueryService;
 import com.stocksip.paymentandsubscriptions.interfaces.rest.resources.AccountResource;
 import com.stocksip.paymentandsubscriptions.interfaces.rest.resources.CreateAccountResource;
 import com.stocksip.paymentandsubscriptions.interfaces.rest.transform.AccountResourceFromEntityAssembler;
@@ -55,5 +56,23 @@ public class AccountsController {
         return account
                 .map(a -> new ResponseEntity<>(AccountResourceFromEntityAssembler.toResourceFromEntity(a), CREATED))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    /* ────────────── READ ────────────── */
+    @Operation(summary = "Get account by ID",
+            description = "Returns the account (username, role, status, business name, etc.) with the given ID.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Account found"),
+            @ApiResponse(responseCode = "404", description = "Account not found")
+    })
+    @GetMapping("{accountId}")
+    public ResponseEntity<AccountResource> getAccountById(@PathVariable Long accountId) {
+
+        Optional<Account> accountOpt = accountCommandService.getById(accountId);
+
+        return accountOpt
+                .map(AccountResourceFromEntityAssembler::toResourceFromEntity)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
