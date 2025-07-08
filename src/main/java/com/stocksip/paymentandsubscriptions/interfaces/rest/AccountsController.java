@@ -4,6 +4,7 @@ import com.stocksip.paymentandsubscriptions.domain.model.aggregates.Account;
 import com.stocksip.paymentandsubscriptions.domain.model.queries.GetAccountStatusByIdQuery;
 import com.stocksip.paymentandsubscriptions.domain.services.AccountCommandService;
 import com.stocksip.paymentandsubscriptions.domain.services.AccountQueryService;
+import com.stocksip.paymentandsubscriptions.infrastructure.persistence.jpa.AccountRepository;
 import com.stocksip.paymentandsubscriptions.interfaces.rest.resources.AccountResource;
 import com.stocksip.paymentandsubscriptions.interfaces.rest.resources.AccountStatusResource;
 import com.stocksip.paymentandsubscriptions.interfaces.rest.resources.CreateAccountResource;
@@ -40,9 +41,7 @@ public class AccountsController {
     private final AccountQueryService accountQueryService;
     private final AccountRepository accountRepository;
 
-    public AccountsController(AccountCommandService accountCommandService, AccountQueryService accountQueryService) {
-    public AccountsController(AccountCommandService accountCommandService,
-                              AccountRepository accountRepository)  {
+    public AccountsController(AccountCommandService accountCommandService, AccountQueryService accountQueryService, AccountRepository accountRepository)  {
         this.accountCommandService = accountCommandService;
         this.accountQueryService = accountQueryService;
         this.accountRepository = accountRepository;
