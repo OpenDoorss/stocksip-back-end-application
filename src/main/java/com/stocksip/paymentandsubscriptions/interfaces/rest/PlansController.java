@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "api/v1/plans", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "plans", description = "Available endpoints for plans.")
+@Tag(name = "Plans", description = "Available endpoints for plans.")
 public class PlansController {
 
     private final PlanQueryService planQueryService;
