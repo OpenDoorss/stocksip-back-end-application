@@ -114,6 +114,24 @@ public class SubscriptionCommandServiceImpl implements SubscriptionCommandServic
 
     @Override
     public void handle(CompleteUpgradeCommand command) {
+        Account account = accountRepository.findById(command.accountId())
+                .orElseThrow(() -> new RuntimeException("Account not found"));
 
+        Plan newPlan = planRepository.findById(command.planId())
+                .orElseThrow(() -> new RuntimeException("Plan not found"));
+
+        paymentService.captureOrder(command.token());
+
+        Subscription latestSubscription = subscriptionRepository
+                .findTopByAccount_AccountIdOrderByCreatedDateDesc(command.accountId());
+
+        if (latestSubscription == null) {
+            throw new IllegalStateException("No active subscription found to upgrade");
+        }
+
+        latestSubscription.upgradePlan(newPlan);
+
+        subscriptionRepository.save(latestSubscription);
+        accountRepository.save(account);
     }
 }

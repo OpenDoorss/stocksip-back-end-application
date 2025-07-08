@@ -1,6 +1,7 @@
 package com.stocksip.paymentandsubscriptions.domain.model.aggregates;
 
 import com.stocksip.paymentandsubscriptions.domain.model.entities.Plan;
+import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.AccountStatus;
 import com.stocksip.paymentandsubscriptions.domain.model.valueobjects.SubscriptionStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -49,7 +50,7 @@ public class Subscription {
         this.subscriptionStatus = SubscriptionStatus.COMPLETED;
         this.expiredDate = calculateExpirationDate(newPlan);
 
-        if ("INACTIVE".equals(account.getStatus())) {
+        if (account.getStatus() == AccountStatus.INACTIVE) {
             account.activateAccount();
         }
     }
@@ -75,7 +76,7 @@ public class Subscription {
         return switch (plan.getPaymentFrequency()) {
             case Monthly -> LocalDateTime.now().plusMonths(1);
             case Annual -> LocalDateTime.now().plusYears(1);
-            case None -> LocalDateTime.MAX;
+            case None -> LocalDateTime.of(8888, 11, 15, 0, 0);
         };
     }
 
