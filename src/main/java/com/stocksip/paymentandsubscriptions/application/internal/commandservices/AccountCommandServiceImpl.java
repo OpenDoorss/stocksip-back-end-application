@@ -32,4 +32,9 @@ public class AccountCommandServiceImpl implements com.stocksip.paymentandsubscri
         var createdAccount = accountRepository.save(account);
         return Optional.of(createdAccount);
     }
+
+    @Override
+    public Optional<Account> getById(Long accountId) {
+        return accountRepository.findById(accountId);
+    }
 }

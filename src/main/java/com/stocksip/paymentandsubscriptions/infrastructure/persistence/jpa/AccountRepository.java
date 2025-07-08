@@ -17,6 +17,17 @@ import java.util.Optional;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
+    @Query(value = """
+        SELECT a.* 
+        FROM   accounts a
+        JOIN   users u ON u.user_id = a.user_id     -- FK real
+        WHERE  u.username = :email
+          AND  a.account_role = :role
+        LIMIT  1
+        """, nativeQuery = true)
+
+    Optional<Account> findByEmailAndRole(@Param("email") String email, @Param("role")  String role);
+
     @Query("SELECT a.status FROM Account a WHERE a.accountId = :accountId")
     Optional<String> findStatusByAccountId(@Param("accountId") Long accountId);
 }

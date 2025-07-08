@@ -38,10 +38,14 @@ public class AccountsController {
 
     private final AccountCommandService accountCommandService;
     private final AccountQueryService accountQueryService;
+    private final AccountRepository accountRepository;
 
     public AccountsController(AccountCommandService accountCommandService, AccountQueryService accountQueryService) {
+    public AccountsController(AccountCommandService accountCommandService,
+                              AccountRepository accountRepository)  {
         this.accountCommandService = accountCommandService;
         this.accountQueryService = accountQueryService;
+        this.accountRepository = accountRepository;
     }
 
     /* ────────────── CREATE ────────────── */
@@ -60,6 +64,33 @@ public class AccountsController {
         return account
                 .map(a -> new ResponseEntity<>(AccountResourceFromEntityAssembler.toResourceFromEntity(a), CREATED))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    /* ────────────── READ ────────────── */
+    @Operation(summary = "Get account by ID",
+            description = "Returns the account (username, role, status, business name, etc.) with the given ID.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Account found"),
+            @ApiResponse(responseCode = "404", description = "Account not found")
+    })
+    @GetMapping("{accountId}")
+    public ResponseEntity<AccountResource> getAccountById(@PathVariable Long accountId) {
+
+        Optional<Account> accountOpt = accountCommandService.getById(accountId);
+
+        return accountOpt
+                .map(AccountResourceFromEntityAssembler::toResourceFromEntity)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/by-email")
+    public ResponseEntity<AccountResource> getByEmail(@RequestParam String email) {
+
+        return accountRepository.findByEmailAndRole(email, "Supplier")
+                .map(a -> ResponseEntity.ok(
+                        AccountResourceFromEntityAssembler.toResourceFromEntity(a)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("{accountId}/status")

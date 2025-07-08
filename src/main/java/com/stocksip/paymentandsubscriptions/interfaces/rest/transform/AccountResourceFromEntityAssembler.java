@@ -10,8 +10,9 @@ public class AccountResourceFromEntityAssembler {
                 entity.getAccountId(),
                 entity.getBusinessName().value(),
                 entity.getStatus().name(),
-                entity.getAccountRole().name(),
-                entity.GetCreatedAt().toString()
+                entity.getAccountRole(),
+                entity.getCreatedAt().toString(),
+                entity.getAccountRole()
         );
     }
 

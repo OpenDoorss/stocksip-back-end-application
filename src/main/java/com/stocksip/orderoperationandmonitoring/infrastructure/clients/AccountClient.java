@@ -20,17 +20,28 @@ public class AccountClient {
         this.restTemplate = builder.build();
     }
 
+    /**
+     * Devuelve la cuenta que coincide con el e‑mail o Optional.empty() si no existe
+     * o si el endpoint responde 404.
+     */
     public Optional<AccountDTO> getAccountByEmail(String email) {
-        String url = "http://localhost:8080/api/v1/accounts?email=" + email;
+        // 1️⃣  Ruta del nuevo endpoint (sin token porque es permitAll)
+        String encoded = UriUtils.encode(email, StandardCharsets.UTF_8);
+        String url = "http://localhost:8080/api/v1/accounts/by-email?email=" + encoded;
+
         try {
             ResponseEntity<AccountDTO> response =
-                    restTemplate.getForEntity(url, AccountDTO.class); // ya no array
+                    restTemplate.getForEntity(url, AccountDTO.class);
 
             return Optional.ofNullable(response.getBody());
 
-        } catch (Exception e) {
+        } catch (HttpClientErrorException.NotFound ex) {
+            // 404 → no existe proveedor con ese correo
+            return Optional.empty();
+
+        } catch (Exception ex) {
+            // 400, 500 u otro error → registra o maneja si lo necesitas
             return Optional.empty();
         }
     }
-
 }

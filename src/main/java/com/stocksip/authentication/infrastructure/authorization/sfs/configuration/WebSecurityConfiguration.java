@@ -94,7 +94,7 @@ public class WebSecurityConfiguration {
         http.cors(configurer -> configurer.configurationSource(_ -> {
             var cors = new CorsConfiguration();
             cors.setAllowedOrigins(List.of("*"));
-            cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+            cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
             cors.setAllowedHeaders(List.of("*"));
             return cors;
         }));
@@ -109,7 +109,9 @@ public class WebSecurityConfiguration {
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/swagger-resources/**",
-                                "/webjars/**").permitAll()
+                                "/webjars/**",
+                                "/api/v1/accounts/by-email")
+                        .permitAll()
                         .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authorizationRequestFilter(), UsernamePasswordAuthenticationFilter.class);
