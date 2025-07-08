@@ -29,9 +29,6 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "api/v1/warehouses", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Warehouses", description = "Endpoints for managing warehouses.")
-@CrossOrigin(origins = "http://localhost:4200",
-        allowedHeaders = "*",
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class WarehouseController {
 
     private final WarehouseCommandService warehouseCommandService;

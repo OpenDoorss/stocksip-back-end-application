@@ -39,16 +39,20 @@ public class Account {
 
     public Account(Long userOwnerId, String accountRole, String businessName) {
         this.userOwnerId  = new UserOwnerId(userOwnerId);
-        this.accountRole  = AccountRole.fromJson(accountRole).getDisplayName(); // 👈
+        this.accountRole  = AccountRole.fromJson(accountRole).getDisplayName();
         this.status       = AccountStatus.INACTIVE;
         this.businessName = new BusinessName(businessName);
     }
 
     public Account(CreateAccountCommand command) {
         this.createdAt    = LocalDateTime.now();
-        this.accountRole  = AccountRole.fromJson(command.accountRole()).getDisplayName(); // 👈
+        this.accountRole  = AccountRole.fromJson(command.accountRole()).getDisplayName();
         this.status       = AccountStatus.INACTIVE;
         this.businessName = new BusinessName(command.businessName());
+    }
+
+    public void activateAccount() {
+        this.status = AccountStatus.ACTIVE;
     }
 
     public AccountRole getAccountRoleEnum() {
@@ -57,5 +61,9 @@ public class Account {
 
     public void changeRole(AccountRole newRole) {
         this.accountRole = newRole.getDisplayName();
+    }
+
+    public String getCreatedAt() {
+        return createdAt.toString();
     }
 }

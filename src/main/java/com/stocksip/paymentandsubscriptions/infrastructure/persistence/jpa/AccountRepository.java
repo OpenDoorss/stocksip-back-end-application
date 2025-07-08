@@ -26,7 +26,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
         LIMIT  1
         """, nativeQuery = true)
 
-    Optional<Account> findByEmailAndRole(
-            @Param("email") String email,
-            @Param("role")  String role);
+    Optional<Account> findByEmailAndRole(@Param("email") String email, @Param("role")  String role);
+
+    @Query("SELECT a.status FROM Account a WHERE a.accountId = :accountId")
+    Optional<String> findStatusByAccountId(@Param("accountId") Long accountId);
 }
