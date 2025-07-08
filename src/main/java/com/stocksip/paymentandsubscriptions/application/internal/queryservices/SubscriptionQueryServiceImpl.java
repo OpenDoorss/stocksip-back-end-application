@@ -1,6 +1,6 @@
 package com.stocksip.paymentandsubscriptions.application.internal.queryservices;
 
-import com.stocksip.paymentandsubscriptions.domain.model.queries.GetPlanIdByAccountIdQuery;
+import com.stocksip.paymentandsubscriptions.domain.model.queries.GetPlanTypeByAccountIdQuery;
 import com.stocksip.paymentandsubscriptions.domain.services.SubscriptionQueryService;
 import com.stocksip.paymentandsubscriptions.infrastructure.persistence.jpa.SubscriptionRepository;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,9 @@ public class SubscriptionQueryServiceImpl implements SubscriptionQueryService {
         this.subscriptionRepository = subscriptionRepository;
     }
 
+
     @Override
-    public Optional<Long> handle(GetPlanIdByAccountIdQuery query) {
-        return subscriptionRepository.findPlanIdByAccountId(query.accountId());
+    public Optional<String> handle(GetPlanTypeByAccountIdQuery query) {
+        return subscriptionRepository.findPlanTypeByAccountId(query.accountId());
     }
 }

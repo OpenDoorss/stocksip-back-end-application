@@ -16,14 +16,14 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     Subscription findTopByAccount_AccountIdOrderByCreatedDateDesc(Long accountId);
 
-
     @Query("""
-        SELECT s.plan.planId
-        FROM Subscription s
-        WHERE s.account.accountId = :accountId
-          AND s.subscriptionStatus = 'COMPLETED'
-        ORDER BY s.createdDate DESC
-        LIMIT 1
+    SELECT s.plan.planType
+    FROM Subscription s
+    WHERE s.account.accountId = :accountId
+      AND s.subscriptionStatus = 'COMPLETED'
+    ORDER BY s.createdDate DESC
+    LIMIT 1
     """)
-    Optional<Long> findPlanIdByAccountId(@Param("accountId") Long accountId);
+    Optional<String> findPlanTypeByAccountId(@Param("accountId") Long accountId);
+
 }

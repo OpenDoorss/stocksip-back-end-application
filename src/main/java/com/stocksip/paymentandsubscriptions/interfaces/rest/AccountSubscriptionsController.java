@@ -1,7 +1,8 @@
 package com.stocksip.paymentandsubscriptions.interfaces.rest;
 
-import com.stocksip.paymentandsubscriptions.domain.model.queries.GetPlanIdByAccountIdQuery;
+import com.stocksip.paymentandsubscriptions.domain.model.queries.GetPlanTypeByAccountIdQuery;
 import com.stocksip.paymentandsubscriptions.domain.services.SubscriptionQueryService;
+import com.stocksip.paymentandsubscriptions.interfaces.rest.resources.CurrentPlanResource;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +26,8 @@ public class AccountSubscriptionsController {
 
     @GetMapping("current-plan")
     public ResponseEntity<?> getCurrentPlan(@PathVariable Long accountId) {
-        var currentPlan = new GetPlanIdByAccountIdQuery(accountId);
-        Optional<Long> planId = subscriptionQueryService.handle(currentPlan);
-        return ResponseEntity.ok().body(currentPlan);
+        var currentPlan = new GetPlanTypeByAccountIdQuery(accountId);
+        Optional<String> planType = subscriptionQueryService.handle(currentPlan);
+        return ResponseEntity.ok(planType);
     }
 }

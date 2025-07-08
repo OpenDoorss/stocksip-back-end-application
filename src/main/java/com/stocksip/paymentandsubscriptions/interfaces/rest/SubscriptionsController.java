@@ -58,7 +58,7 @@ public class SubscriptionsController {
             @ApiResponse(responseCode = "200", description = "Subscription completed successfully"),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
-    public ResponseEntity<Map<String, String>> completeSubscription(@RequestParam CompleteSubscriptionResource resource) {
+    public ResponseEntity<Map<String, String>> completeSubscription(@ModelAttribute CompleteSubscriptionResource resource) {
         CompleteSubscriptionCommand command = CompleteSubscriptionFromResourceAssembler.toCommandFromResource(resource);
         subscriptionCommandService.handle(command);
         return ResponseEntity.ok(Map.of("message", "Subscription completed successfully"));
@@ -87,7 +87,7 @@ public class SubscriptionsController {
             @ApiResponse(responseCode = "200", description = "Subscription upgrade completed successfully"),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
-    public ResponseEntity<Map<String, String>> UpgradeSuccess(@RequestParam UpgradeSubscriptionResource resource) {
+    public ResponseEntity<Map<String, String>> UpgradeSuccess(@ModelAttribute UpgradeSubscriptionResource resource) {
         UpgradeSubscriptionCommand command = UpgradeSubscriptionFromResourceAssembler.toCommandFromResource(resource);
         subscriptionCommandService.handle(command);
         return ResponseEntity.ok(Map.of("message", "Subscription upgraded successfully"));

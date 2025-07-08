@@ -1,6 +1,6 @@
 package com.stocksip.paymentandsubscriptions.domain.services;
 
-import com.stocksip.paymentandsubscriptions.domain.model.queries.GetPlanIdByAccountIdQuery;
+import com.stocksip.paymentandsubscriptions.domain.model.queries.GetPlanTypeByAccountIdQuery;
 
 import java.util.Optional;
 
@@ -12,5 +12,5 @@ public interface SubscriptionQueryService {
     /*
     * This method retrieves the plan ID associated with a specific account ID.
     */
-    Optional<Long> handle(GetPlanIdByAccountIdQuery query);
+    Optional<String> handle(GetPlanTypeByAccountIdQuery query);
 }
